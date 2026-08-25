@@ -28,6 +28,11 @@ alcohol consumption.
 > The BAC estimate is for personal, informational use only. It is **not**
 > medical advice and must never be used to judge fitness to drive.
 
+### Leaderboard & streaks
+- Tracks your current and best hydration streak (consecutive days you've
+  logged at least one drink).
+- Streak resets automatically if you miss a day.
+
 ### Settings
 - Reminder interval (minutes).
 - Active hours window (start/end time).
@@ -54,7 +59,7 @@ alcohol consumption.
 
 ### Setup
 ```bash
-git clone <this-repo>
+git clone https://github.com/DevTimmOfTO/BetterDrink.git
 cd BetterDrink
 flutter pub get
 flutter run
@@ -80,7 +85,7 @@ lib/
   models/       # plain data classes
   navigation/   # bottom-nav shell switching between tabs
   providers/    # Riverpod Notifier state
-  screens/      # Home, Alcohol, Settings tabs
+  screens/      # Home, Alcohol, Leaderboard, Settings tabs
   services/     # persistence + business logic (pure where possible)
   theme/        # Material 3 theme
   widgets/      # reusable UI pieces
@@ -90,8 +95,9 @@ test/           # unit tests for pure logic, one widget test
 
 ## Roadmap
 
-Deferred for a future release: drink history charts/trends and
-gamification for the hydration side of the app.
+- Drink history charts and trends
+- Gamification / achievements for hydration goals
+- Social leaderboard (compare streaks with friends)
 
 ## License
 
