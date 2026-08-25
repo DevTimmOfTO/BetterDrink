@@ -1,3 +1,4 @@
+import 'package:betterdrink/screens/leaderboard_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../screens/alcohol_screen.dart';
@@ -17,7 +18,7 @@ class RootShell extends StatefulWidget {
 class _RootShellState extends State<RootShell> {
   int _index = 0;
 
-  static const _screens = [HomeScreen(), AlcoholScreen(), SettingsScreen()];
+  static const _screens = [HomeScreen(), AlcoholScreen(), LeaderboardScreen(), SettingsScreen()];
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +31,17 @@ class _RootShellState extends State<RootShell> {
           NavigationDestination(
             icon: Icon(Icons.water_drop_outlined),
             selectedIcon: Icon(Icons.water_drop_rounded),
-            label: 'Home',
+            label: 'Alcohol-free', 
           ),
           NavigationDestination(
             icon: Icon(Icons.local_bar_outlined),
             selectedIcon: Icon(Icons.local_bar_rounded),
             label: 'Alcohol',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.leaderboard_outlined),
+            selectedIcon: Icon(Icons.leaderboard_rounded),
+            label: 'Leaderboard',
           ),
           NavigationDestination(
             icon: Icon(Icons.settings_outlined),

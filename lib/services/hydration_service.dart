@@ -1,3 +1,4 @@
+import 'package:betterdrink/services/leaderboard_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Persists today's hydration total and the next scheduled reminder time,
@@ -27,6 +28,7 @@ class HydrationService {
     final prefs = await SharedPreferences.getInstance();
     await _resetIfNewDay(prefs);
     final updated = (prefs.getInt(_keyTodayMl) ?? 0) + ml;
+    await LeaderboardService.instance.recordDrink();
     await prefs.setInt(_keyTodayMl, updated);
     return updated;
   }

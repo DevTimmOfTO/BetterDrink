@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/hydration_state.dart';
 import '../services/hydration_service.dart';
 import '../services/notification_service.dart';
+import 'leaderboard_provider.dart';
 
 /// Holds today's hydration total and the next reminder time, keeping
 /// persistence and the notification schedule in sync with the UI.
@@ -24,6 +25,7 @@ class HydrationNotifier extends Notifier<HydrationState> {
     final updated = await HydrationService.instance.logDrink(ml);
     final next = await NotificationService.instance.rescheduleFromNow();
     state = state.copyWith(todayMl: updated, nextReminderAt: next);
+    await ref.read(leaderboardProvider.notifier).reload();
   }
 }
 
