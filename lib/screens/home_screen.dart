@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../l10n/gen/app_localizations.dart';
 import '../models/achievement.dart';
 import '../providers/hydration_history_provider.dart';
 import '../providers/hydration_provider.dart';
@@ -43,6 +44,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     final hydration = ref.watch(hydrationProvider);
     final settings = ref.watch(settingsProvider);
     final history = ref.watch(hydrationHistoryProvider);
@@ -55,7 +57,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final trendPoints = fillMissingDays(history, days: _trendWindowDays);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('BetterDrink')),
+      appBar: AppBar(title: Text(loc.homeAppBarTitle)),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
@@ -64,8 +66,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               child: CountdownRing(
                 remaining: remaining.isNegative ? Duration.zero : remaining,
                 total: total,
-                timeLabel: _formatRemaining(remaining),
-                subLabel: remaining.isNegative ? 'reminder due' : 'until next reminder',
+                timeLabel: _formatRemaining(remaining, loc),
+                subLabel: remaining.isNegative
+                    ? loc.homeReminderDue
+                    : loc.homeUntilNextReminder,
               ),
             ),
             const SizedBox(height: 24),
@@ -76,14 +80,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 final unlocked =
                     await ref.read(hydrationProvider.notifier).logDrink(ml);
                 if (unlocked.isNotEmpty && context.mounted) {
-                  _showUnlockSnackBar(context, unlocked);
+                  _showUnlockSnackBar(context, loc, unlocked);
                 }
               },
             ),
             const SizedBox(height: 28),
-            Text('Trends', style: Theme.of(context).textTheme.titleMedium),
+            Text(loc.trends, style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 12),
-            HistoryChart(points: trendPoints, unit: 'ml'),
+            HistoryChart(points: trendPoints, unit: loc.mlUnit),
             const SizedBox(height: 8),
           ],
         ),
@@ -109,7 +113,7 @@ class _TodayTotalCard extends StatelessWidget {
             Icon(Icons.water_drop_rounded, color: colorScheme.primary),
             const SizedBox(width: 10),
             Text(
-              '$todayMl ml today',
+              AppLocalizations.of(context)!.homeTodayMl(todayMl),
               style: Theme.of(context).textTheme.titleMedium,
             ),
           ],
@@ -119,17 +123,21 @@ class _TodayTotalCard extends StatelessWidget {
   }
 }
 
-void _showUnlockSnackBar(BuildContext context, List<AchievementId> unlocked) {
+void _showUnlockSnackBar(
+  BuildContext context,
+  AppLocalizations loc,
+  List<AchievementId> unlocked,
+) {
   final titles = unlocked
-      .map((id) => achievementCatalog.firstWhere((a) => a.id == id).title)
+      .map((id) => achievementCatalog(loc).firstWhere((a) => a.id == id).title)
       .join(', ');
   ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(content: Text('Achievement unlocked: $titles')),
+    SnackBar(content: Text(loc.homeAchievementUnlocked(titles))),
   );
 }
 
-String _formatRemaining(Duration remaining) {
-  if (remaining.isNegative || remaining == Duration.zero) return 'Now';
+String _formatRemaining(Duration remaining, AppLocalizations loc) {
+  if (remaining.isNegative || remaining == Duration.zero) return loc.homeNow;
   final hours = remaining.inHours;
   final minutes = remaining.inMinutes.remainder(60);
   final seconds = remaining.inSeconds.remainder(60);

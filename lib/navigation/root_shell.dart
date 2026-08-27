@@ -1,6 +1,7 @@
 import 'package:betterdrink/screens/leaderboard_screen.dart';
 import 'package:flutter/material.dart';
 
+import '../l10n/gen/app_localizations.dart';
 import '../screens/alcohol_screen.dart';
 import '../screens/home_screen.dart';
 import '../screens/settings_screen.dart';
@@ -22,31 +23,32 @@ class _RootShellState extends State<RootShell> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     return Scaffold(
       body: IndexedStack(index: _index, children: _screens),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _index,
         onDestinationSelected: (index) => setState(() => _index = index),
-        destinations: const [
+        destinations: [
           NavigationDestination(
-            icon: Icon(Icons.water_drop_outlined),
-            selectedIcon: Icon(Icons.water_drop_rounded),
-            label: 'Alcohol-free', 
+            icon: const Icon(Icons.water_drop_outlined),
+            selectedIcon: const Icon(Icons.water_drop_rounded),
+            label: loc.navAlcoholFree,
           ),
           NavigationDestination(
-            icon: Icon(Icons.local_bar_outlined),
-            selectedIcon: Icon(Icons.local_bar_rounded),
-            label: 'Alcohol',
+            icon: const Icon(Icons.local_bar_outlined),
+            selectedIcon: const Icon(Icons.local_bar_rounded),
+            label: loc.navAlcohol,
           ),
           NavigationDestination(
-            icon: Icon(Icons.leaderboard_outlined),
-            selectedIcon: Icon(Icons.leaderboard_rounded),
-            label: 'Leaderboard',
+            icon: const Icon(Icons.leaderboard_outlined),
+            selectedIcon: const Icon(Icons.leaderboard_rounded),
+            label: loc.navLeaderboard,
           ),
           NavigationDestination(
-            icon: Icon(Icons.settings_outlined),
-            selectedIcon: Icon(Icons.settings_rounded),
-            label: 'Settings',
+            icon: const Icon(Icons.settings_outlined),
+            selectedIcon: const Icon(Icons.settings_rounded),
+            label: loc.navSettings,
           ),
         ],
       ),

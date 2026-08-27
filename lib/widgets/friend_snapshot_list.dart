@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/gen/app_localizations.dart';
 import '../models/friend_snapshot.dart';
 import '../services/relative_time.dart';
 
@@ -19,12 +20,13 @@ class FriendSnapshotList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     if (friends.isEmpty) {
       return Card(
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Text(
-            'No friends imported yet.',
+            loc.noFriendsImportedYet,
             style: Theme.of(context).textTheme.bodyMedium,
           ),
         ),
@@ -54,8 +56,11 @@ class FriendSnapshotList extends StatelessWidget {
               child: ListTile(
                 title: Text(friend.displayName),
                 subtitle: Text(
-                  'current: ${friend.currentStreak} · best: ${friend.bestStreak} · '
-                  'imported ${formatRelativeTime(friend.importedAt)}',
+                  loc.friendSubtitle(
+                    friend.currentStreak,
+                    friend.bestStreak,
+                    formatRelativeTime(friend.importedAt, loc),
+                  ),
                 ),
               ),
             ),

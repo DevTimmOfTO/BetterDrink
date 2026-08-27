@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../l10n/gen/app_localizations.dart';
 import '../models/reminder_settings.dart';
 import '../models/user_profile.dart';
 import '../providers/profile_provider.dart';
@@ -81,24 +82,24 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     });
   }
 
-  Future<void> _save() async {
+  Future<void> _save(AppLocalizations loc) async {
     final interval = int.tryParse(_intervalController.text);
     if (interval == null || interval <= 0) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Enter a reminder interval in minutes')),
+        SnackBar(content: Text(loc.errorEnterInterval)),
       );
       return;
     }
     if (_activeStartMinutes >= _activeEndMinutes) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Active start time must be before end time')),
+        SnackBar(content: Text(loc.errorActiveWindowOrder)),
       );
       return;
     }
     final dailyGoalMl = int.tryParse(_dailyGoalController.text);
     if (dailyGoalMl == null || dailyGoalMl <= 0) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Enter a daily hydration goal in ml')),
+        SnackBar(content: Text(loc.errorDailyGoal)),
       );
       return;
     }
@@ -106,7 +107,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final weight = double.tryParse(_weightController.text);
     if (age == null || age <= 0 || weight == null || weight <= 0) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Enter a valid age and weight')),
+        SnackBar(content: Text(loc.errorAgeWeight)),
       );
       return;
     }
@@ -128,13 +129,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         );
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Settings saved')),
+        SnackBar(content: Text(loc.settingsSaved)),
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     final settings = ref.watch(settingsProvider);
     final profile = ref.watch(profileProvider);
     if (!_initializedFromState) {
@@ -144,27 +146,26 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(title: Text(loc.settingsTitle)),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.all(24),
           children: [
-            Text('Reminder interval', style: Theme.of(context).textTheme.titleMedium),
+            Text(loc.reminderIntervalTitle, style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 8),
             TextField(
               controller: _intervalController,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                suffixText: 'minutes',
-                hintText: 'e.g. 45',
+              decoration: InputDecoration(
+                suffixText: loc.minutesUnit,
+                hintText: loc.intervalHint,
               ),
             ),
             const SizedBox(height: 28),
-            Text('Active hours', style: Theme.of(context).textTheme.titleMedium),
+            Text(loc.activeHoursTitle, style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 4),
             Text(
-              'Reminders only fire during this window, so you won\'t be '
-              'woken up at night.',
+              loc.activeHoursDescription,
               style: Theme.of(context).textTheme.bodySmall,
             ),
             const SizedBox(height: 12),
@@ -172,7 +173,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               children: [
                 Expanded(
                   child: _TimeField(
-                    label: 'From',
+                    label: loc.fromLabel,
                     minutes: _activeStartMinutes,
                     onTap: () => _pickTime(true),
                   ),
@@ -180,7 +181,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 const SizedBox(width: 16),
                 Expanded(
                   child: _TimeField(
-                    label: 'Until',
+                    label: loc.untilLabel,
                     minutes: _activeEndMinutes,
                     onTap: () => _pickTime(false),
                   ),
@@ -188,44 +189,43 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               ],
             ),
             const SizedBox(height: 28),
-            Text('Daily hydration goal', style: Theme.of(context).textTheme.titleMedium),
+            Text(loc.dailyGoalTitle, style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 4),
             Text(
-              'Used to track goal-hit achievements on the Leaderboard tab.',
+              loc.dailyGoalDescription,
               style: Theme.of(context).textTheme.bodySmall,
             ),
             const SizedBox(height: 8),
             TextField(
               controller: _dailyGoalController,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                suffixText: 'ml',
-                hintText: 'e.g. 2000',
+              decoration: InputDecoration(
+                suffixText: loc.mlUnit,
+                hintText: loc.dailyGoalHint,
               ),
             ),
             const SizedBox(height: 28),
-            Text('Notification message', style: Theme.of(context).textTheme.titleMedium),
+            Text(loc.notificationMessageTitle, style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 8),
             TextField(
               controller: _messageController,
-              decoration: const InputDecoration(
-                hintText: 'Time to drink some water 💧',
+              decoration: InputDecoration(
+                hintText: ReminderSettings.defaults.message,
               ),
             ),
             const SizedBox(height: 28),
-            Text('Alcohol profile', style: Theme.of(context).textTheme.titleMedium),
+            Text(loc.alcoholProfileTitle, style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 4),
             Text(
-              'Used only to personalize the blood-alcohol estimate on the '
-              'Alcohol tab — it never leaves your device.',
+              loc.alcoholProfileDescription,
               style: Theme.of(context).textTheme.bodySmall,
             ),
             const SizedBox(height: 12),
             SegmentedButton<Sex>(
-              segments: const [
-                ButtonSegment(value: Sex.male, label: Text('Male')),
-                ButtonSegment(value: Sex.female, label: Text('Female')),
-                ButtonSegment(value: Sex.other, label: Text('Other')),
+              segments: [
+                ButtonSegment(value: Sex.male, label: Text(loc.maleLabel)),
+                ButtonSegment(value: Sex.female, label: Text(loc.femaleLabel)),
+                ButtonSegment(value: Sex.other, label: Text(loc.otherLabel)),
               ],
               selected: {_sex},
               onSelectionChanged: (selection) =>
@@ -238,9 +238,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   child: TextField(
                     controller: _ageController,
                     keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      labelText: 'Age',
-                      suffixText: 'years',
+                    decoration: InputDecoration(
+                      labelText: loc.ageLabel,
+                      suffixText: loc.yearsUnit,
                     ),
                   ),
                 ),
@@ -250,9 +250,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     controller: _weightController,
                     keyboardType:
                         const TextInputType.numberWithOptions(decimal: true),
-                    decoration: const InputDecoration(
-                      labelText: 'Weight',
-                      suffixText: 'kg',
+                    decoration: InputDecoration(
+                      labelText: loc.weightLabel,
+                      suffixText: loc.kgUnit,
                     ),
                   ),
                 ),
@@ -260,10 +260,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             ),
             const SizedBox(height: 32),
             FilledButton(
-              onPressed: _save,
-              child: const Padding(
-                padding: EdgeInsets.symmetric(vertical: 4),
-                child: Text('Save'),
+              onPressed: () => _save(loc),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: Text(loc.save),
               ),
             ),
           ],

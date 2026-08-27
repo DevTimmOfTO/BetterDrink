@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
+import '../l10n/gen/app_localizations.dart';
 import '../models/chart_point.dart';
 
 /// A themed bar chart for day-bucketed trend data (e.g. hydration ml/day
@@ -21,7 +22,7 @@ class HistoryChart extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
           child: Center(
             child: Text(
-              'No data yet — log a few days to see your trend.',
+              AppLocalizations.of(context)!.noTrendDataYet,
               style: Theme.of(context).textTheme.bodySmall,
               textAlign: TextAlign.center,
             ),

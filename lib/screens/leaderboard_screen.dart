@@ -10,6 +10,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../l10n/gen/app_localizations.dart';
+
 class LeaderboardScreen extends ConsumerStatefulWidget {
   const LeaderboardScreen({super.key});
 
@@ -20,17 +22,18 @@ class LeaderboardScreen extends ConsumerStatefulWidget {
 class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     final data = ref.watch(leaderboardProvider);
     final unlockedAchievements = ref.watch(achievementProvider);
     final friends = ref.watch(friendsProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Leaderboard'),
+        title: Text(loc.leaderboardTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.ios_share_rounded),
-            tooltip: 'Share your streak',
+            tooltip: loc.shareStreakTooltip,
             onPressed: () => showModalBottomSheet(
               context: context,
               isScrollControlled: true,
@@ -39,7 +42,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
           ),
           IconButton(
             icon: const Icon(Icons.person_add_alt_rounded),
-            tooltip: 'Add a friend',
+            tooltip: loc.addFriendTooltip,
             onPressed: () => showModalBottomSheet(
               context: context,
               isScrollControlled: true,
@@ -52,37 +55,36 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
         child: ListView(
           padding: const EdgeInsets.all(24),
           children: [
-            Text('Your streaks', style: Theme.of(context).textTheme.titleMedium),
+            Text(loc.yourStreaks, style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 12),
             Row(
               children: [
                 Expanded(
                   child: _StatCard(
                     icon: Icons.local_fire_department_rounded,
-                    label: 'Current streak',
-                    value: '${data.currentStreak} days',
+                    label: loc.currentStreakLabel,
+                    value: loc.daysCount(data.currentStreak),
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: _StatCard(
                     icon: Icons.emoji_events_rounded,
-                    label: 'Best streak',
-                    value: '${data.bestStreak} days',
+                    label: loc.bestStreakLabel,
+                    value: loc.daysCount(data.bestStreak),
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 28),
-            Text('Achievements', style: Theme.of(context).textTheme.titleMedium),
+            Text(loc.achievementsTitle, style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 12),
             AchievementGrid(unlocked: unlockedAchievements),
             const SizedBox(height: 28),
-            Text('Friends', style: Theme.of(context).textTheme.titleMedium),
+            Text(loc.friendsTitle, style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 4),
             Text(
-              'Compare streaks by sharing a code — nothing here syncs '
-              'automatically, so re-share to refresh.',
+              loc.friendsDescription,
               style: Theme.of(context).textTheme.bodySmall,
             ),
             const SizedBox(height: 12),
@@ -175,17 +177,18 @@ class _ExportSheetState extends ConsumerState<_ExportSheet> {
     super.dispose();
   }
 
-  Future<void> _copyCode(String name, String code) async {
+  Future<void> _copyCode(String name, String code, AppLocalizations loc) async {
     await Clipboard.setData(ClipboardData(text: code));
     await FriendsService.instance.saveOwnDisplayName(name);
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Code copied')),
+      SnackBar(content: Text(loc.codeCopiedSnackbar)),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     final leaderboard = ref.watch(leaderboardProvider);
     final name = _nameController.text.trim();
     final code = name.isEmpty
@@ -208,17 +211,16 @@ class _ExportSheetState extends ConsumerState<_ExportSheet> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Share your streak', style: Theme.of(context).textTheme.titleMedium),
+          Text(loc.exportSheetTitle, style: Theme.of(context).textTheme.titleMedium),
           const SizedBox(height: 4),
           Text(
-            'Generates a text code you can send a friend through any app. '
-            'Nothing leaves this device unless you share it yourself.',
+            loc.exportSheetDescription,
             style: Theme.of(context).textTheme.bodySmall,
           ),
           const SizedBox(height: 16),
           TextField(
             controller: _nameController,
-            decoration: const InputDecoration(labelText: 'Your name'),
+            decoration: InputDecoration(labelText: loc.yourNameLabel),
             onChanged: (_) => setState(() {}),
           ),
           const SizedBox(height: 16),
@@ -231,8 +233,8 @@ class _ExportSheetState extends ConsumerState<_ExportSheet> {
                 ),
                 IconButton(
                   icon: const Icon(Icons.copy_rounded),
-                  tooltip: 'Copy code',
-                  onPressed: () => _copyCode(name, code),
+                  tooltip: loc.copyCodeTooltip,
+                  onPressed: () => _copyCode(name, code, loc),
                 ),
               ],
             ),
@@ -266,13 +268,11 @@ class _ImportSheetState extends ConsumerState<_ImportSheet> {
     super.dispose();
   }
 
-  Future<void> _save() async {
+  Future<void> _save(AppLocalizations loc) async {
     final snapshot = decodeStreakCode(_codeController.text);
     if (snapshot == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('That code doesn\'t look right — check it and try again.'),
-        ),
+        SnackBar(content: Text(loc.invalidCodeError)),
       );
       return;
     }
@@ -290,6 +290,7 @@ class _ImportSheetState extends ConsumerState<_ImportSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     return Padding(
       padding: EdgeInsets.only(
         left: 24,
@@ -301,24 +302,24 @@ class _ImportSheetState extends ConsumerState<_ImportSheet> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Add a friend', style: Theme.of(context).textTheme.titleMedium),
+          Text(loc.importSheetTitle, style: Theme.of(context).textTheme.titleMedium),
           const SizedBox(height: 4),
           Text(
-            'Paste the code a friend shared with you.',
+            loc.importSheetDescription,
             style: Theme.of(context).textTheme.bodySmall,
           ),
           const SizedBox(height: 16),
           TextField(
             controller: _codeController,
             maxLines: 3,
-            decoration: const InputDecoration(hintText: 'Paste code here'),
+            decoration: InputDecoration(hintText: loc.pasteCodeHint),
           ),
           const SizedBox(height: 16),
           FilledButton(
-            onPressed: _save,
-            child: const Padding(
-              padding: EdgeInsets.symmetric(vertical: 4),
-              child: Text('Save'),
+            onPressed: () => _save(loc),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Text(loc.save),
             ),
           ),
         ],

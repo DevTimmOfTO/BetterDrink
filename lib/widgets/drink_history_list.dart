@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/gen/app_localizations.dart';
 import '../models/drink_entry.dart';
 import '../services/relative_time.dart';
 
@@ -17,12 +18,13 @@ class DrinkHistoryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     if (drinks.isEmpty) {
       return Card(
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Text(
-            'No drinks logged yet.',
+            loc.noDrinksLoggedYet,
             style: Theme.of(context).textTheme.bodyMedium,
           ),
         ),
@@ -52,9 +54,11 @@ class DrinkHistoryList extends StatelessWidget {
               child: ListTile(
                 title: Text(drink.name),
                 subtitle: Text(
-                  '${drink.volumeMl.toStringAsFixed(0)} ml · '
-                  '${drink.abvPercent.toStringAsFixed(0)}% · '
-                  '${formatRelativeTime(drink.timestamp)}',
+                  loc.drinkHistorySubtitle(
+                    drink.volumeMl.toStringAsFixed(0),
+                    drink.abvPercent.toStringAsFixed(0),
+                    formatRelativeTime(drink.timestamp, loc),
+                  ),
                 ),
               ),
             ),

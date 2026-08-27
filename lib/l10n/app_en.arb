@@ -1,0 +1,170 @@
+{
+  "@@locale": "en",
+
+  "navAlcoholFree": "Alcohol-free",
+  "navAlcohol": "Alcohol",
+  "navLeaderboard": "Leaderboard",
+  "navSettings": "Settings",
+
+  "homeAppBarTitle": "BetterDrink",
+  "homeReminderDue": "reminder due",
+  "homeUntilNextReminder": "until next reminder",
+  "homeNow": "Now",
+  "homeTodayMl": "{ml} ml today",
+  "@homeTodayMl": {
+    "placeholders": { "ml": { "type": "int" } }
+  },
+  "homeAchievementUnlocked": "Achievement unlocked: {titles}",
+  "@homeAchievementUnlocked": {
+    "placeholders": { "titles": { "type": "String" } }
+  },
+  "trends": "Trends",
+  "noTrendDataYet": "No data yet — log a few days to see your trend.",
+
+  "cancel": "Cancel",
+  "add": "Add",
+  "save": "Save",
+  "mlUnit": "ml",
+
+  "customButton": "Custom",
+  "addWaterDialogTitle": "Add water",
+  "addWaterHint": "e.g. 330",
+  "mlAmount": "{ml} ml",
+  "@mlAmount": {
+    "placeholders": { "ml": { "type": "int" } }
+  },
+
+  "alcoholTabTitle": "Alcohol",
+  "getHelpTooltip": "Get help",
+  "alcoholWarningBanner": "Alcohol is a drug. It can be addictive and harmful to your health. Tap the help icon above if you'd like support.",
+  "bacSoberLabel": "0.0‰ · sober",
+  "bacSoberHint": "Log a drink below to start tracking.",
+  "bacUntilZero": "{bac}‰ · until 0.0‰",
+  "@bacUntilZero": {
+    "placeholders": { "bac": { "type": "String" } }
+  },
+  "bacDisclaimer": "Estimate only — not medical advice. Never drive on alcohol.",
+  "logADrink": "Log a drink",
+  "historyTitle": "History",
+
+  "customDrinkButton": "Custom drink",
+  "customDrinkDialogTitle": "Custom drink",
+  "customDrinkNameHint": "e.g. IPA",
+  "volumeHint": "Volume",
+  "abvSuffix": "% ABV",
+  "abvHint": "Alcohol strength",
+  "defaultDrinkName": "Drink",
+
+  "drinkBeer": "Beer",
+  "drinkSmallBeer": "Small beer",
+  "drinkWine": "Wine",
+  "drinkSparklingWine": "Sparkling wine",
+  "drinkShotSpirit": "Shot / spirit",
+  "drinkMixedDrink": "Mixed drink",
+  "drinkCocktail": "Cocktail",
+
+  "helpSheetTitle": "Need support?",
+  "helpSheetIntro": "If drinking feels hard to control, you're not alone — these are a few starting points. If you're in immediate danger, contact local emergency services.",
+  "copyLinkTooltip": "Copy link",
+  "copiedToClipboard": "Copied to clipboard",
+  "resourceAaDetail": "Peer support meetings worldwide",
+  "resourceSamhsaDetail": "Free, confidential, 24/7 — 1-800-662-4357",
+  "resourceDhsDetail": "Addiction counselling and info",
+
+  "noDrinksLoggedYet": "No drinks logged yet.",
+  "drinkHistorySubtitle": "{volumeMl} ml · {abvPercent}% · {relTime}",
+  "@drinkHistorySubtitle": {
+    "placeholders": {
+      "volumeMl": { "type": "String" },
+      "abvPercent": { "type": "String" },
+      "relTime": { "type": "String" }
+    }
+  },
+
+  "relativeTimeJustNow": "just now",
+  "relativeTimeMinutesAgo": "{m}m ago",
+  "@relativeTimeMinutesAgo": {
+    "placeholders": { "m": { "type": "int" } }
+  },
+  "relativeTimeHoursAgo": "{h}h ago",
+  "@relativeTimeHoursAgo": {
+    "placeholders": { "h": { "type": "int" } }
+  },
+
+  "achievementStreak3Title": "3-day streak",
+  "achievementStreak3Desc": "Log a drink on 3 days in a row.",
+  "achievementStreak7Title": "7-day streak",
+  "achievementStreak7Desc": "Log a drink on 7 days in a row.",
+  "achievementStreak30Title": "30-day streak",
+  "achievementStreak30Desc": "Log a drink on 30 days in a row.",
+  "achievementGoalHit5Title": "Goal getter",
+  "achievementGoalHit5Desc": "Hit your daily hydration goal 5 times.",
+  "achievementGoalHit30Title": "Goal master",
+  "achievementGoalHit30Desc": "Hit your daily hydration goal 30 times.",
+  "achievementDrinksLogged50Title": "Well hydrated",
+  "achievementDrinksLogged50Desc": "Log 50 drinks in total.",
+
+  "leaderboardTitle": "Leaderboard",
+  "shareStreakTooltip": "Share your streak",
+  "addFriendTooltip": "Add a friend",
+  "yourStreaks": "Your streaks",
+  "currentStreakLabel": "Current streak",
+  "bestStreakLabel": "Best streak",
+  "daysCount": "{n, plural, one {{n} day} other {{n} days}}",
+  "@daysCount": {
+    "placeholders": { "n": { "type": "int" } }
+  },
+  "achievementsTitle": "Achievements",
+  "friendsTitle": "Friends",
+  "friendsDescription": "Compare streaks by sharing a code — nothing here syncs automatically, so re-share to refresh.",
+  "noFriendsImportedYet": "No friends imported yet.",
+  "friendSubtitle": "current: {current} · best: {best} · imported {importedRel}",
+  "@friendSubtitle": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "best": { "type": "int" },
+      "importedRel": { "type": "String" }
+    }
+  },
+
+  "exportSheetTitle": "Share your streak",
+  "exportSheetDescription": "Generates a text code you can send a friend through any app. Nothing leaves this device unless you share it yourself.",
+  "yourNameLabel": "Your name",
+  "copyCodeTooltip": "Copy code",
+  "codeCopiedSnackbar": "Code copied",
+  "importSheetTitle": "Add a friend",
+  "importSheetDescription": "Paste the code a friend shared with you.",
+  "pasteCodeHint": "Paste code here",
+  "invalidCodeError": "That code doesn't look right — check it and try again.",
+
+  "settingsTitle": "Settings",
+  "reminderIntervalTitle": "Reminder interval",
+  "minutesUnit": "minutes",
+  "intervalHint": "e.g. 45",
+  "activeHoursTitle": "Active hours",
+  "activeHoursDescription": "Reminders only fire during this window, so you won't be woken up at night.",
+  "fromLabel": "From",
+  "untilLabel": "Until",
+  "dailyGoalTitle": "Daily hydration goal",
+  "dailyGoalDescription": "Used to track goal-hit achievements on the Leaderboard tab.",
+  "dailyGoalHint": "e.g. 2000",
+  "notificationMessageTitle": "Notification message",
+  "alcoholProfileTitle": "Alcohol profile",
+  "alcoholProfileDescription": "Used only to personalize the blood-alcohol estimate on the Alcohol tab — it never leaves your device.",
+  "maleLabel": "Male",
+  "femaleLabel": "Female",
+  "otherLabel": "Other",
+  "ageLabel": "Age",
+  "yearsUnit": "years",
+  "weightLabel": "Weight",
+  "kgUnit": "kg",
+  "settingsSaved": "Settings saved",
+  "errorEnterInterval": "Enter a reminder interval in minutes",
+  "errorActiveWindowOrder": "Active start time must be before end time",
+  "errorDailyGoal": "Enter a daily hydration goal in ml",
+  "errorAgeWeight": "Enter a valid age and weight",
+
+  "notificationTitle": "Stay hydrated 💧",
+  "notificationActionLabel": "Drank it 💧",
+  "notificationChannelDescription": "Reminders to drink water"
+}

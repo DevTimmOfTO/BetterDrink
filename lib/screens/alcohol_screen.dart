@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../l10n/gen/app_localizations.dart';
 import '../providers/alcohol_history_provider.dart';
 import '../providers/alcohol_provider.dart';
 import '../providers/profile_provider.dart';
@@ -48,6 +49,7 @@ class _AlcoholScreenState extends ConsumerState<AlcoholScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     final drinks = ref.watch(alcoholProvider);
     final profile = ref.watch(profileProvider);
     final alcoholHistory = ref.watch(alcoholHistoryProvider);
@@ -60,11 +62,11 @@ class _AlcoholScreenState extends ConsumerState<AlcoholScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Alcohol'),
+        title: Text(loc.alcoholTabTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.help_outline_rounded),
-            tooltip: 'Get help',
+            tooltip: loc.getHelpTooltip,
             onPressed: () => showAlcoholHelpSheet(context),
           ),
         ],
@@ -77,7 +79,7 @@ class _AlcoholScreenState extends ConsumerState<AlcoholScreen> {
             const SizedBox(height: 20),
             _BacOverview(currentBac: currentBac, peakBac: peakBac),
             const SizedBox(height: 28),
-            Text('Log a drink', style: Theme.of(context).textTheme.titleMedium),
+            Text(loc.logADrink, style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 12),
             DrinkPresetGrid(
               onAdd: (name, volumeMl, abvPercent) => ref
@@ -85,14 +87,14 @@ class _AlcoholScreenState extends ConsumerState<AlcoholScreen> {
                   .addDrink(name: name, volumeMl: volumeMl, abvPercent: abvPercent),
             ),
             const SizedBox(height: 28),
-            Text('History', style: Theme.of(context).textTheme.titleMedium),
+            Text(loc.historyTitle, style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 12),
             DrinkHistoryList(
               drinks: drinks,
               onDelete: (id) => ref.read(alcoholProvider.notifier).removeDrink(id),
             ),
             const SizedBox(height: 28),
-            Text('Trends', style: Theme.of(context).textTheme.titleMedium),
+            Text(loc.trends, style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 12),
             HistoryChart(points: trendPoints, unit: 'g'),
           ],
@@ -120,8 +122,7 @@ class _AlcoholWarningBanner extends StatelessWidget {
           const SizedBox(width: 12),
           Expanded(
             child: Text(
-              'Alcohol is a drug. It can be addictive and harmful to your '
-              'health. Tap the help icon above if you\'d like support.',
+              AppLocalizations.of(context)!.alcoholWarningBanner,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: colorScheme.onErrorContainer,
                   ),
@@ -141,6 +142,7 @@ class _BacOverview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
     if (currentBac <= 0) {
       return Card(
@@ -150,10 +152,10 @@ class _BacOverview extends StatelessWidget {
             children: [
               Icon(Icons.check_circle_rounded, color: colorScheme.primary, size: 40),
               const SizedBox(height: 12),
-              Text('0.0‰ · sober', style: Theme.of(context).textTheme.titleMedium),
+              Text(loc.bacSoberLabel, style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 4),
               Text(
-                'Log a drink below to start tracking.',
+                loc.bacSoberHint,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             ],
@@ -172,11 +174,11 @@ class _BacOverview extends StatelessWidget {
             remaining: remaining,
             total: total,
             timeLabel: _formatDuration(remaining),
-            subLabel: '${currentBac.toStringAsFixed(2)}‰ · until 0.0‰',
+            subLabel: loc.bacUntilZero(currentBac.toStringAsFixed(2)),
           ),
           const SizedBox(height: 12),
           Text(
-            'Estimate only — not medical advice. Never drive on alcohol.',
+            loc.bacDisclaimer,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: colorScheme.onSurfaceVariant,
                 ),

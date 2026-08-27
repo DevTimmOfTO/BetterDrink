@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/gen/app_localizations.dart';
 import '../models/achievement.dart';
 
 /// Two-column grid of achievement cards, styled like the leaderboard's
@@ -12,6 +13,7 @@ class AchievementGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     return LayoutBuilder(
       builder: (context, constraints) {
         const spacing = 12.0;
@@ -20,7 +22,7 @@ class AchievementGrid extends StatelessWidget {
           spacing: spacing,
           runSpacing: spacing,
           children: [
-            for (final achievement in achievementCatalog)
+            for (final achievement in achievementCatalog(loc))
               SizedBox(
                 width: cardWidth,
                 child: _AchievementCard(

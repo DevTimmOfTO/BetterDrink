@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../data/typical_drinks.dart';
+import '../l10n/gen/app_localizations.dart';
 
 typedef AddDrink = void Function(
     String name, double volumeMl, double abvPercent);
@@ -14,6 +15,7 @@ class DrinkPresetGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     return Column(
       children: [
         GridView.count(
@@ -24,7 +26,7 @@ class DrinkPresetGrid extends StatelessWidget {
           crossAxisSpacing: 12,
           childAspectRatio: 2.4,
           children: [
-            for (final drink in typicalDrinks)
+            for (final drink in typicalDrinks(loc))
               _PresetButton(
                 drink: drink,
                 onTap: () => onAdd(drink.name, drink.volumeMl, drink.abvPercent),
@@ -35,15 +37,15 @@ class DrinkPresetGrid extends StatelessWidget {
         SizedBox(
           width: double.infinity,
           child: OutlinedButton(
-            onPressed: () => _promptCustomDrink(context),
-            child: const Text('Custom drink'),
+            onPressed: () => _promptCustomDrink(context, loc),
+            child: Text(loc.customDrinkButton),
           ),
         ),
       ],
     );
   }
 
-  Future<void> _promptCustomDrink(BuildContext context) async {
+  Future<void> _promptCustomDrink(BuildContext context, AppLocalizations loc) async {
     final nameController = TextEditingController();
     final volumeController = TextEditingController();
     final abvController = TextEditingController();
@@ -51,30 +53,30 @@ class DrinkPresetGrid extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Custom drink'),
+          title: Text(loc.customDrinkDialogTitle),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: nameController,
-                decoration: const InputDecoration(hintText: 'e.g. IPA'),
+                decoration: InputDecoration(hintText: loc.customDrinkNameHint),
               ),
               const SizedBox(height: 12),
               TextField(
                 controller: volumeController,
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  suffixText: 'ml',
-                  hintText: 'Volume',
+                decoration: InputDecoration(
+                  suffixText: loc.mlUnit,
+                  hintText: loc.volumeHint,
                 ),
               ),
               const SizedBox(height: 12),
               TextField(
                 controller: abvController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                decoration: const InputDecoration(
-                  suffixText: '% ABV',
-                  hintText: 'Alcohol strength',
+                decoration: InputDecoration(
+                  suffixText: loc.abvSuffix,
+                  hintText: loc.abvHint,
                 ),
               ),
             ],
@@ -82,7 +84,7 @@ class DrinkPresetGrid extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
+              child: Text(loc.cancel),
             ),
             FilledButton(
               onPressed: () {
@@ -94,10 +96,10 @@ class DrinkPresetGrid extends StatelessWidget {
                 }
                 final name = nameController.text.trim();
                 Navigator.of(context).pop(
-                  _CustomDrinkResult(name.isEmpty ? 'Drink' : name, volume, abv),
+                  _CustomDrinkResult(name.isEmpty ? loc.defaultDrinkName : name, volume, abv),
                 );
               },
-              child: const Text('Add'),
+              child: Text(loc.add),
             ),
           ],
         );

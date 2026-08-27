@@ -1,11 +1,28 @@
+import 'dart:io';
+import 'dart:ui';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/data/latest_all.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
 
+import '../l10n/gen/app_localizations.dart';
 import 'hydration_service.dart';
 import 'reminder_scheduler.dart';
 import 'settings_service.dart';
+
+/// Resolves the device's language to localized notification text. Uses
+/// [Platform.localeName] rather than a [BuildContext] since this runs both
+/// from the main isolate (before the widget tree exists, at app startup)
+/// and from the background notification-response isolate, neither of
+/// which has a Flutter widget tree to look a locale up from.
+Future<AppLocalizations> _loadNotificationLocalizations() {
+  final languageCode = Platform.localeName.split(RegExp('[_-]')).first;
+  final supported = AppLocalizations.supportedLocales
+      .map((l) => l.languageCode)
+      .contains(languageCode);
+  return AppLocalizations.delegate.load(Locale(supported ? languageCode : 'en'));
+}
 
 const String reminderChannelId = 'hydration_reminders';
 const String reminderChannelName = 'Hydration reminders';
@@ -52,10 +69,11 @@ class NotificationService {
       onDidReceiveBackgroundNotificationResponse: notificationBackgroundHandler,
     );
 
-    const channel = AndroidNotificationChannel(
+    final loc = await _loadNotificationLocalizations();
+    final channel = AndroidNotificationChannel(
       reminderChannelId,
       reminderChannelName,
-      description: 'Reminders to drink water',
+      description: loc.notificationChannelDescription,
       importance: Importance.high,
     );
     await _plugin
@@ -102,22 +120,23 @@ class NotificationService {
   Future<void> _scheduleAt(DateTime at, String message) async {
     await _ensureTimezone();
     await cancelReminder();
+    final loc = await _loadNotificationLocalizations();
     await _plugin.zonedSchedule(
       id: reminderNotificationId,
-      title: 'Stay hydrated 💧',
+      title: loc.notificationTitle,
       body: message,
       scheduledDate: tz.TZDateTime.from(at, tz.local),
-      notificationDetails: const NotificationDetails(
+      notificationDetails: NotificationDetails(
         android: AndroidNotificationDetails(
           reminderChannelId,
           reminderChannelName,
-          channelDescription: 'Reminders to drink water',
+          channelDescription: loc.notificationChannelDescription,
           importance: Importance.high,
           priority: Priority.high,
           actions: [
             AndroidNotificationAction(
               drankActionId,
-              'Drank it 💧',
+              loc.notificationActionLabel,
               showsUserInterface: false,
             ),
           ],
