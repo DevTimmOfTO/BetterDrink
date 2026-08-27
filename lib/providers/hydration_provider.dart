@@ -5,6 +5,7 @@ import '../models/hydration_state.dart';
 import '../services/hydration_service.dart';
 import '../services/notification_service.dart';
 import 'achievement_provider.dart';
+import 'hydration_history_provider.dart';
 import 'leaderboard_provider.dart';
 
 /// Holds today's hydration total and the next reminder time, keeping
@@ -20,6 +21,7 @@ class HydrationNotifier extends Notifier<HydrationState> {
     final todayMl = await HydrationService.instance.loadTodayMl();
     final next = await NotificationService.instance.ensureScheduled();
     state = HydrationState(todayMl: todayMl, nextReminderAt: next);
+    await ref.read(hydrationHistoryProvider.notifier).reload();
   }
 
   /// Logs a drink, restarts the countdown to the next reminder, and checks

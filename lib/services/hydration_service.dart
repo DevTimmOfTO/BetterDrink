@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:betterdrink/services/date_key.dart';
 import 'package:betterdrink/services/leaderboard_service.dart';
 import 'package:betterdrink/services/settings_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,11 +16,11 @@ class HydrationService {
   static const _keyNextReminderAt = 'hydration_next_reminder_at';
   static const _keyGoalHitDays = 'settings_goal_hit_days';
   static const _keyTotalDrinksLogged = 'hydration_total_drinks_logged';
+  static const _keyHistory = 'hydration_history';
 
-  String _dateKey(DateTime date) =>
-      '${date.year.toString().padLeft(4, '0')}-'
-      '${date.month.toString().padLeft(2, '0')}-'
-      '${date.day.toString().padLeft(2, '0')}';
+  /// Day-bucketed totals older than this no longer affect the trend chart,
+  /// so they're dropped instead of growing the history forever.
+  static const _historyRetention = Duration(days: 90);
 
   Future<int> loadTodayMl() async {
     final prefs = await SharedPreferences.getInstance();
@@ -48,10 +51,40 @@ class HydrationService {
     );
   }
 
+  /// Day-bucketed hydration totals (date key -> ml), pruned to the last
+  /// [_historyRetention], for the Trends chart on the Home tab.
+  Future<Map<String, int>> loadHistory() async {
+    final prefs = await SharedPreferences.getInstance();
+    return _pruneHistory(await _readHistory(prefs));
+  }
+
+  Future<Map<String, int>> _readHistory(SharedPreferences prefs) async {
+    final raw = prefs.getString(_keyHistory);
+    if (raw == null) return {};
+    final decoded = jsonDecode(raw) as Map<String, dynamic>;
+    return decoded.map((key, value) => MapEntry(key, value as int));
+  }
+
+  Map<String, int> _pruneHistory(Map<String, int> history) {
+    final cutoffKey = dateKey(DateTime.now().subtract(_historyRetention));
+    return {
+      for (final entry in history.entries)
+        if (entry.key.compareTo(cutoffKey) >= 0) entry.key: entry.value,
+    };
+  }
+
   Future<void> _resetIfNewDay(SharedPreferences prefs) async {
-    final today = _dateKey(DateTime.now());
-    if (prefs.getString(_keyLastResetDate) != today) {
+    final today = dateKey(DateTime.now());
+    final lastResetDate = prefs.getString(_keyLastResetDate);
+    if (lastResetDate != today) {
       final finishedDayMl = prefs.getInt(_keyTodayMl) ?? 0;
+
+      if (lastResetDate != null) {
+        final history = _pruneHistory(await _readHistory(prefs));
+        history[lastResetDate] = finishedDayMl;
+        await prefs.setString(_keyHistory, jsonEncode(history));
+      }
+
       final goalMl = (await SettingsService.instance.load()).dailyGoalMl;
       if (finishedDayMl >= goalMl) {
         final hits = prefs.getInt(_keyGoalHitDays) ?? 0;

@@ -4,10 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/achievement.dart';
+import '../providers/hydration_history_provider.dart';
 import '../providers/hydration_provider.dart';
 import '../providers/settings_provider.dart';
+import '../services/history_aggregator.dart';
 import '../widgets/countdown_ring.dart';
+import '../widgets/history_chart.dart';
 import '../widgets/quick_add_row.dart';
+
+/// Number of trailing days shown in the Trends chart.
+const int _trendWindowDays = 14;
 
 /// Hydration tab: a depleting countdown ring to the next reminder, today's
 /// total intake, and quick-add buttons for logging a drink.
@@ -39,46 +45,47 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final hydration = ref.watch(hydrationProvider);
     final settings = ref.watch(settingsProvider);
+    final history = ref.watch(hydrationHistoryProvider);
 
     final nextReminderAt = hydration.nextReminderAt;
     final remaining = nextReminderAt == null
         ? Duration.zero
         : nextReminderAt.difference(DateTime.now());
     final total = Duration(minutes: settings.intervalMinutes);
+    final trendPoints = fillMissingDays(history, days: _trendWindowDays);
 
     return Scaffold(
       appBar: AppBar(title: const Text('BetterDrink')),
       body: SafeArea(
-        child: Padding(
+        child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          child: Column(
-            children: [
-              Expanded(
-                child: Center(
-                  child: CountdownRing(
-                    remaining: remaining.isNegative ? Duration.zero : remaining,
-                    total: total,
-                    timeLabel: _formatRemaining(remaining),
-                    subLabel: remaining.isNegative
-                        ? 'reminder due'
-                        : 'until next reminder',
-                  ),
-                ),
+          children: [
+            Center(
+              child: CountdownRing(
+                remaining: remaining.isNegative ? Duration.zero : remaining,
+                total: total,
+                timeLabel: _formatRemaining(remaining),
+                subLabel: remaining.isNegative ? 'reminder due' : 'until next reminder',
               ),
-              _TodayTotalCard(todayMl: hydration.todayMl),
-              const SizedBox(height: 20),
-              QuickAddRow(
-                onAdd: (ml) async {
-                  final unlocked =
-                      await ref.read(hydrationProvider.notifier).logDrink(ml);
-                  if (unlocked.isNotEmpty && context.mounted) {
-                    _showUnlockSnackBar(context, unlocked);
-                  }
-                },
-              ),
-              const SizedBox(height: 8),
-            ],
-          ),
+            ),
+            const SizedBox(height: 24),
+            _TodayTotalCard(todayMl: hydration.todayMl),
+            const SizedBox(height: 20),
+            QuickAddRow(
+              onAdd: (ml) async {
+                final unlocked =
+                    await ref.read(hydrationProvider.notifier).logDrink(ml);
+                if (unlocked.isNotEmpty && context.mounted) {
+                  _showUnlockSnackBar(context, unlocked);
+                }
+              },
+            ),
+            const SizedBox(height: 28),
+            Text('Trends', style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 12),
+            HistoryChart(points: trendPoints, unit: 'ml'),
+            const SizedBox(height: 8),
+          ],
         ),
       ),
     );

@@ -3,14 +3,20 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../providers/alcohol_history_provider.dart';
 import '../providers/alcohol_provider.dart';
 import '../providers/profile_provider.dart';
 import '../services/alcohol_calculator.dart';
+import '../services/history_aggregator.dart';
 import '../theme/app_theme.dart';
 import '../widgets/alcohol_help_sheet.dart';
 import '../widgets/countdown_ring.dart';
 import '../widgets/drink_history_list.dart';
 import '../widgets/drink_preset_grid.dart';
+import '../widgets/history_chart.dart';
+
+/// Number of trailing days shown in the Trends chart.
+const int _trendWindowDays = 14;
 
 /// Alcohol-consumption tab: an estimated blood-alcohol overview, one-tap
 /// logging for typical drinks, and a history of what's been logged.
@@ -44,6 +50,8 @@ class _AlcoholScreenState extends ConsumerState<AlcoholScreen> {
   Widget build(BuildContext context) {
     final drinks = ref.watch(alcoholProvider);
     final profile = ref.watch(profileProvider);
+    final alcoholHistory = ref.watch(alcoholHistoryProvider);
+    final trendPoints = fillMissingDays(alcoholHistory, days: _trendWindowDays);
     final now = DateTime.now();
     final currentBac = estimateBac(drinks: drinks, at: now, profile: profile);
     final peakBac = drinks.isEmpty
@@ -83,6 +91,10 @@ class _AlcoholScreenState extends ConsumerState<AlcoholScreen> {
               drinks: drinks,
               onDelete: (id) => ref.read(alcoholProvider.notifier).removeDrink(id),
             ),
+            const SizedBox(height: 28),
+            Text('Trends', style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 12),
+            HistoryChart(points: trendPoints, unit: 'g'),
           ],
         ),
       ),
