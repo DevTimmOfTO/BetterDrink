@@ -1,28 +1,30 @@
 import 'package:flutter/material.dart';
 
-import '../models/drink_entry.dart';
+import '../models/friend_snapshot.dart';
 import '../services/relative_time.dart';
 
-/// List of previously logged drinks, most recent first. Swipe to delete a
-/// mistaken entry.
-class DrinkHistoryList extends StatelessWidget {
-  const DrinkHistoryList({
+/// List of imported friend streak snapshots, most recently imported first.
+/// Swipe to remove one. Each snapshot is a point-in-time copy — the
+/// subtitle always shows when it was imported so stale data reads as
+/// stale.
+class FriendSnapshotList extends StatelessWidget {
+  const FriendSnapshotList({
     super.key,
-    required this.drinks,
-    required this.onDelete,
+    required this.friends,
+    required this.onRemove,
   });
 
-  final List<DrinkEntry> drinks;
-  final ValueChanged<String> onDelete;
+  final List<FriendSnapshot> friends;
+  final ValueChanged<String> onRemove;
 
   @override
   Widget build(BuildContext context) {
-    if (drinks.isEmpty) {
+    if (friends.isEmpty) {
       return Card(
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Text(
-            'No drinks logged yet.',
+            'No friends imported yet.',
             style: Theme.of(context).textTheme.bodyMedium,
           ),
         ),
@@ -30,9 +32,9 @@ class DrinkHistoryList extends StatelessWidget {
     }
     return Column(
       children: [
-        for (final drink in drinks)
+        for (final friend in friends)
           Dismissible(
-            key: ValueKey(drink.id),
+            key: ValueKey(friend.id),
             direction: DismissDirection.endToStart,
             background: Container(
               alignment: Alignment.centerRight,
@@ -46,15 +48,14 @@ class DrinkHistoryList extends StatelessWidget {
                 color: Theme.of(context).colorScheme.onErrorContainer,
               ),
             ),
-            onDismissed: (_) => onDelete(drink.id),
+            onDismissed: (_) => onRemove(friend.id),
             child: Card(
               margin: const EdgeInsets.only(bottom: 10),
               child: ListTile(
-                title: Text(drink.name),
+                title: Text(friend.displayName),
                 subtitle: Text(
-                  '${drink.volumeMl.toStringAsFixed(0)} ml · '
-                  '${drink.abvPercent.toStringAsFixed(0)}% · '
-                  '${formatRelativeTime(drink.timestamp)}',
+                  'current: ${friend.currentStreak} · best: ${friend.bestStreak} · '
+                  'imported ${formatRelativeTime(friend.importedAt)}',
                 ),
               ),
             ),
