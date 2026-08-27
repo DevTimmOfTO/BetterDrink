@@ -69,6 +69,10 @@ class NotificationService {
       onDidReceiveBackgroundNotificationResponse: notificationBackgroundHandler,
     );
 
+    await _createChannel();
+  }
+
+  Future<void> _createChannel() async {
     final loc = await _loadNotificationLocalizations();
     final channel = AndroidNotificationChannel(
       reminderChannelId,
@@ -80,6 +84,17 @@ class NotificationService {
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
+  }
+
+  /// Re-localizes the notification channel description and re-schedules
+  /// the next reminder in the current locale. A reminder's text is baked
+  /// in at schedule time rather than resolved when it fires, so without
+  /// this an already-scheduled reminder stays in whatever language was
+  /// active the last time it was (re)scheduled -- call this whenever the
+  /// app's locale changes (e.g. from [WidgetsBindingObserver.didChangeLocales]).
+  Future<void> refreshLocale() async {
+    await _createChannel();
+    await rescheduleFromNow();
   }
 
   Future<void> requestPermissions() async {

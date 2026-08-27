@@ -17,8 +17,34 @@ void main() async {
 }
 
 /// Root widget: wires up the Material 3 theme and the tabbed [RootShell].
-class BetterDrinkApp extends StatelessWidget {
+class BetterDrinkApp extends StatefulWidget {
   const BetterDrinkApp({super.key});
+
+  @override
+  State<BetterDrinkApp> createState() => _BetterDrinkAppState();
+}
+
+class _BetterDrinkAppState extends State<BetterDrinkApp> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  /// Re-localizes the reminder notification (channel description + the
+  /// next scheduled reminder's text) when the device or per-app language
+  /// changes, since its text would otherwise stay stuck in whatever
+  /// language was active when it was last scheduled.
+  @override
+  void didChangeLocales(List<Locale>? locales) {
+    NotificationService.instance.refreshLocale();
+  }
 
   @override
   Widget build(BuildContext context) {
