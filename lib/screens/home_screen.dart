@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../models/achievement.dart';
 import '../providers/hydration_provider.dart';
 import '../providers/settings_provider.dart';
 import '../widgets/countdown_ring.dart';
@@ -67,7 +68,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               _TodayTotalCard(todayMl: hydration.todayMl),
               const SizedBox(height: 20),
               QuickAddRow(
-                onAdd: (ml) => ref.read(hydrationProvider.notifier).logDrink(ml),
+                onAdd: (ml) async {
+                  final unlocked =
+                      await ref.read(hydrationProvider.notifier).logDrink(ml);
+                  if (unlocked.isNotEmpty && context.mounted) {
+                    _showUnlockSnackBar(context, unlocked);
+                  }
+                },
               ),
               const SizedBox(height: 8),
             ],
@@ -103,6 +110,15 @@ class _TodayTotalCard extends StatelessWidget {
       ),
     );
   }
+}
+
+void _showUnlockSnackBar(BuildContext context, List<AchievementId> unlocked) {
+  final titles = unlocked
+      .map((id) => achievementCatalog.firstWhere((a) => a.id == id).title)
+      .join(', ');
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text('Achievement unlocked: $titles')),
+  );
 }
 
 String _formatRemaining(Duration remaining) {

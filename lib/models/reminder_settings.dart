@@ -6,6 +6,7 @@ class ReminderSettings {
     required this.activeStartMinutes,
     required this.activeEndMinutes,
     required this.message,
+    required this.dailyGoalMl,
   });
 
   static const ReminderSettings defaults = ReminderSettings(
@@ -13,6 +14,7 @@ class ReminderSettings {
     activeStartMinutes: 8 * 60,
     activeEndMinutes: 22 * 60,
     message: 'Time to drink some water 💧',
+    dailyGoalMl: 2000,
   );
 
   /// How often a reminder should fire, in minutes.
@@ -29,17 +31,23 @@ class ReminderSettings {
   /// The body text shown in the reminder notification.
   final String message;
 
+  /// Daily hydration goal, in millilitres, used to track goal-hit
+  /// achievements.
+  final int dailyGoalMl;
+
   ReminderSettings copyWith({
     int? intervalMinutes,
     int? activeStartMinutes,
     int? activeEndMinutes,
     String? message,
+    int? dailyGoalMl,
   }) {
     return ReminderSettings(
       intervalMinutes: intervalMinutes ?? this.intervalMinutes,
       activeStartMinutes: activeStartMinutes ?? this.activeStartMinutes,
       activeEndMinutes: activeEndMinutes ?? this.activeEndMinutes,
       message: message ?? this.message,
+      dailyGoalMl: dailyGoalMl ?? this.dailyGoalMl,
     );
   }
 }

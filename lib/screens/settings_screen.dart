@@ -19,6 +19,7 @@ class SettingsScreen extends ConsumerStatefulWidget {
 class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   late final TextEditingController _intervalController;
   late final TextEditingController _messageController;
+  late final TextEditingController _dailyGoalController;
   late final TextEditingController _ageController;
   late final TextEditingController _weightController;
   late int _activeStartMinutes;
@@ -31,6 +32,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     super.initState();
     _intervalController = TextEditingController();
     _messageController = TextEditingController();
+    _dailyGoalController = TextEditingController();
     _ageController = TextEditingController();
     _weightController = TextEditingController();
     _activeStartMinutes = ReminderSettings.defaults.activeStartMinutes;
@@ -42,6 +44,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   void dispose() {
     _intervalController.dispose();
     _messageController.dispose();
+    _dailyGoalController.dispose();
     _ageController.dispose();
     _weightController.dispose();
     super.dispose();
@@ -50,6 +53,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   void _syncFromSettings(ReminderSettings settings) {
     _intervalController.text = settings.intervalMinutes.toString();
     _messageController.text = settings.message;
+    _dailyGoalController.text = settings.dailyGoalMl.toString();
     _activeStartMinutes = settings.activeStartMinutes;
     _activeEndMinutes = settings.activeEndMinutes;
   }
@@ -91,6 +95,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       );
       return;
     }
+    final dailyGoalMl = int.tryParse(_dailyGoalController.text);
+    if (dailyGoalMl == null || dailyGoalMl <= 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Enter a daily hydration goal in ml')),
+      );
+      return;
+    }
     final age = int.tryParse(_ageController.text);
     final weight = double.tryParse(_weightController.text);
     if (age == null || age <= 0 || weight == null || weight <= 0) {
@@ -109,6 +120,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             message: message.isEmpty
                 ? ReminderSettings.defaults.message
                 : message,
+            dailyGoalMl: dailyGoalMl,
           ),
         );
     await ref.read(profileProvider.notifier).update(
@@ -174,6 +186,22 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   ),
                 ),
               ],
+            ),
+            const SizedBox(height: 28),
+            Text('Daily hydration goal', style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 4),
+            Text(
+              'Used to track goal-hit achievements on the Leaderboard tab.',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+            const SizedBox(height: 8),
+            TextField(
+              controller: _dailyGoalController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                suffixText: 'ml',
+                hintText: 'e.g. 2000',
+              ),
             ),
             const SizedBox(height: 28),
             Text('Notification message', style: Theme.of(context).textTheme.titleMedium),

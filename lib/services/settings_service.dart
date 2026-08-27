@@ -11,6 +11,7 @@ class SettingsService {
   static const _keyActiveStart = 'settings_active_start_minutes';
   static const _keyActiveEnd = 'settings_active_end_minutes';
   static const _keyMessage = 'settings_message';
+  static const _keyDailyGoalMl = 'settings_daily_goal_ml';
 
   Future<ReminderSettings> load() async {
     final prefs = await SharedPreferences.getInstance();
@@ -22,6 +23,8 @@ class SettingsService {
       activeEndMinutes: prefs.getInt(_keyActiveEnd) ??
           ReminderSettings.defaults.activeEndMinutes,
       message: prefs.getString(_keyMessage) ?? ReminderSettings.defaults.message,
+      dailyGoalMl: prefs.getInt(_keyDailyGoalMl) ??
+          ReminderSettings.defaults.dailyGoalMl,
     );
   }
 
@@ -31,5 +34,6 @@ class SettingsService {
     await prefs.setInt(_keyActiveStart, settings.activeStartMinutes);
     await prefs.setInt(_keyActiveEnd, settings.activeEndMinutes);
     await prefs.setString(_keyMessage, settings.message);
+    await prefs.setInt(_keyDailyGoalMl, settings.dailyGoalMl);
   }
 }

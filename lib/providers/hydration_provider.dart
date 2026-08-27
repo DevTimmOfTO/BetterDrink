@@ -1,8 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../models/achievement.dart';
 import '../models/hydration_state.dart';
 import '../services/hydration_service.dart';
 import '../services/notification_service.dart';
+import 'achievement_provider.dart';
 import 'leaderboard_provider.dart';
 
 /// Holds today's hydration total and the next reminder time, keeping
@@ -20,12 +22,23 @@ class HydrationNotifier extends Notifier<HydrationState> {
     state = HydrationState(todayMl: todayMl, nextReminderAt: next);
   }
 
-  /// Logs a drink and restarts the countdown to the next reminder.
-  Future<void> logDrink(int ml) async {
+  /// Logs a drink, restarts the countdown to the next reminder, and checks
+  /// for newly-earned achievements. Returns any achievements unlocked by
+  /// this log so the UI can show unlock feedback.
+  Future<List<AchievementId>> logDrink(int ml) async {
     final updated = await HydrationService.instance.logDrink(ml);
     final next = await NotificationService.instance.rescheduleFromNow();
     state = state.copyWith(todayMl: updated, nextReminderAt: next);
     await ref.read(leaderboardProvider.notifier).reload();
+
+    final leaderboard = ref.read(leaderboardProvider);
+    final stats = await HydrationService.instance.loadGoalStats();
+    return ref.read(achievementProvider.notifier).checkForNewUnlocks(
+          currentStreak: leaderboard.currentStreak,
+          bestStreak: leaderboard.bestStreak,
+          goalHitDays: stats.goalHitDays,
+          totalDrinksLogged: stats.totalDrinksLogged,
+        );
   }
 }
 

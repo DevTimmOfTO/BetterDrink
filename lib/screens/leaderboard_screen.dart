@@ -1,4 +1,6 @@
+import 'package:betterdrink/providers/achievement_provider.dart';
 import 'package:betterdrink/providers/leaderboard_provider.dart';
+import 'package:betterdrink/widgets/achievement_grid.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 
@@ -13,38 +15,40 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   @override
   Widget build(BuildContext context) {
     final data = ref.watch(leaderboardProvider);
+    final unlockedAchievements = ref.watch(achievementProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Leaderboard')),
       body: SafeArea(
-        child: Padding(
+        child: ListView(
           padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Your streaks', style: Theme.of(context).textTheme.titleMedium),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  Expanded(
-                    child: _StatCard(
-                      icon: Icons.local_fire_department_rounded,
-                      label: 'Current streak',
-                      value: '${data.currentStreak} days',
-                    ),
+          children: [
+            Text('Your streaks', style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(
+                  child: _StatCard(
+                    icon: Icons.local_fire_department_rounded,
+                    label: 'Current streak',
+                    value: '${data.currentStreak} days',
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: _StatCard(
-                      icon: Icons.emoji_events_rounded,
-                      label: 'Best streak',
-                      value: '${data.bestStreak} days',
-                    ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _StatCard(
+                    icon: Icons.emoji_events_rounded,
+                    label: 'Best streak',
+                    value: '${data.bestStreak} days',
                   ),
-                ],
-              ),
-            ],
-          ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 28),
+            Text('Achievements', style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 12),
+            AchievementGrid(unlocked: unlockedAchievements),
+          ],
         ),
       ),
     );
