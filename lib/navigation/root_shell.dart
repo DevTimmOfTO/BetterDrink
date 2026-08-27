@@ -5,6 +5,7 @@ import '../l10n/gen/app_localizations.dart';
 import '../screens/alcohol_screen.dart';
 import '../screens/home_screen.dart';
 import '../screens/settings_screen.dart';
+import '../screens/sugar_screen.dart';
 
 /// Bottom-navigation shell switching between the Home, Alcohol, and
 /// Settings tabs. Uses an [IndexedStack] so each tab keeps its state
@@ -19,7 +20,13 @@ class RootShell extends StatefulWidget {
 class _RootShellState extends State<RootShell> {
   int _index = 0;
 
-  static const _screens = [HomeScreen(), AlcoholScreen(), LeaderboardScreen(), SettingsScreen()];
+  static const _screens = [
+    HomeScreen(),
+    SugarScreen(),
+    AlcoholScreen(),
+    LeaderboardScreen(),
+    SettingsScreen(),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +41,11 @@ class _RootShellState extends State<RootShell> {
             icon: const Icon(Icons.water_drop_outlined),
             selectedIcon: const Icon(Icons.water_drop_rounded),
             label: loc.navAlcoholFree,
+          ),
+          NavigationDestination(
+            icon: const Icon(Icons.local_drink_outlined),
+            selectedIcon: const Icon(Icons.local_drink_rounded),
+            label: loc.navSugar,
           ),
           NavigationDestination(
             icon: const Icon(Icons.local_bar_outlined),

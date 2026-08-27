@@ -12,6 +12,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get navAlcoholFree => 'Alkoholfrei';
 
   @override
+  String get navSugar => 'Zucker';
+
+  @override
   String get navAlcohol => 'Alkohol';
 
   @override
@@ -148,6 +151,63 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get drinkCocktail => 'Cocktail';
+
+  @override
+  String get sugarTabTitle => 'Zucker';
+
+  @override
+  String sugarTodayGrams(String g) {
+    return '$g g Zucker heute';
+  }
+
+  @override
+  String get logASugarDrink => 'Zuckerhaltiges Getränk loggen';
+
+  @override
+  String get customSugarDrinkButton => 'Eigenes Getränk';
+
+  @override
+  String get customSugarDrinkDialogTitle => 'Eigenes Getränk';
+
+  @override
+  String get customSugarDrinkNameHint => 'z. B. Eiskaffee';
+
+  @override
+  String get sugarPer100mlSuffix => 'g/100ml';
+
+  @override
+  String get sugarPer100mlHint => 'Zuckergehalt';
+
+  @override
+  String get noSugarDrinksLoggedYet =>
+      'Noch keine zuckerhaltigen Getränke geloggt.';
+
+  @override
+  String sugarHistorySubtitle(
+    String volumeMl,
+    String sugarPer100ml,
+    String relTime,
+  ) {
+    return '$volumeMl ml · $sugarPer100ml g/100ml · $relTime';
+  }
+
+  @override
+  String get drinkCola => 'Cola';
+
+  @override
+  String get drinkLemonade => 'Limonade';
+
+  @override
+  String get drinkEnergyDrink => 'Energydrink';
+
+  @override
+  String get drinkOrangeJuice => 'Orangensaft';
+
+  @override
+  String get drinkIcedTea => 'Eistee';
+
+  @override
+  String get drinkSportsDrink => 'Sportgetränk';
 
   @override
   String get helpSheetTitle => 'Brauchst du Unterstützung?';

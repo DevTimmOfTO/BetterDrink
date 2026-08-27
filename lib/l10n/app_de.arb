@@ -2,6 +2,7 @@
   "@@locale": "de",
 
   "navAlcoholFree": "Alkoholfrei",
+  "navSugar": "Zucker",
   "navAlcohol": "Alkohol",
   "navLeaderboard": "Bestenliste",
   "navSettings": "Einstellungen",
@@ -50,6 +51,24 @@
   "drinkShotSpirit": "Shot / Spirituose",
   "drinkMixedDrink": "Mixgetränk",
   "drinkCocktail": "Cocktail",
+
+  "sugarTabTitle": "Zucker",
+  "sugarTodayGrams": "{g} g Zucker heute",
+  "logASugarDrink": "Zuckerhaltiges Getränk loggen",
+  "customSugarDrinkButton": "Eigenes Getränk",
+  "customSugarDrinkDialogTitle": "Eigenes Getränk",
+  "customSugarDrinkNameHint": "z. B. Eiskaffee",
+  "sugarPer100mlSuffix": "g/100ml",
+  "sugarPer100mlHint": "Zuckergehalt",
+  "noSugarDrinksLoggedYet": "Noch keine zuckerhaltigen Getränke geloggt.",
+  "sugarHistorySubtitle": "{volumeMl} ml · {sugarPer100ml} g/100ml · {relTime}",
+
+  "drinkCola": "Cola",
+  "drinkLemonade": "Limonade",
+  "drinkEnergyDrink": "Energydrink",
+  "drinkOrangeJuice": "Orangensaft",
+  "drinkIcedTea": "Eistee",
+  "drinkSportsDrink": "Sportgetränk",
 
   "helpSheetTitle": "Brauchst du Unterstützung?",
   "helpSheetIntro": "Wenn dir das Trinken schwerfällt zu kontrollieren, bist du nicht allein — hier ein paar Anlaufstellen. Bei akuter Gefahr kontaktiere den lokalen Notruf.",

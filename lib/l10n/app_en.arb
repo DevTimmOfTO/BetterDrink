@@ -2,6 +2,7 @@
   "@@locale": "en",
 
   "navAlcoholFree": "Alcohol-free",
+  "navSugar": "Sugar",
   "navAlcohol": "Alcohol",
   "navLeaderboard": "Leaderboard",
   "navSettings": "Settings",
@@ -62,6 +63,34 @@
   "drinkShotSpirit": "Shot / spirit",
   "drinkMixedDrink": "Mixed drink",
   "drinkCocktail": "Cocktail",
+
+  "sugarTabTitle": "Sugar",
+  "sugarTodayGrams": "{g} g sugar today",
+  "@sugarTodayGrams": {
+    "placeholders": { "g": { "type": "String" } }
+  },
+  "logASugarDrink": "Log a sugary drink",
+  "customSugarDrinkButton": "Custom drink",
+  "customSugarDrinkDialogTitle": "Custom drink",
+  "customSugarDrinkNameHint": "e.g. Iced coffee",
+  "sugarPer100mlSuffix": "g/100ml",
+  "sugarPer100mlHint": "Sugar content",
+  "noSugarDrinksLoggedYet": "No sugary drinks logged yet.",
+  "sugarHistorySubtitle": "{volumeMl} ml · {sugarPer100ml} g/100ml · {relTime}",
+  "@sugarHistorySubtitle": {
+    "placeholders": {
+      "volumeMl": { "type": "String" },
+      "sugarPer100ml": { "type": "String" },
+      "relTime": { "type": "String" }
+    }
+  },
+
+  "drinkCola": "Cola",
+  "drinkLemonade": "Lemonade",
+  "drinkEnergyDrink": "Energy drink",
+  "drinkOrangeJuice": "Orange juice",
+  "drinkIcedTea": "Iced tea",
+  "drinkSportsDrink": "Sports drink",
 
   "helpSheetTitle": "Need support?",
   "helpSheetIntro": "If drinking feels hard to control, you're not alone — these are a few starting points. If you're in immediate danger, contact local emergency services.",

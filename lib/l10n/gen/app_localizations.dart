@@ -106,6 +106,12 @@ abstract class AppLocalizations {
   /// **'Alcohol-free'**
   String get navAlcoholFree;
 
+  /// No description provided for @navSugar.
+  ///
+  /// In en, this message translates to:
+  /// **'Sugar'**
+  String get navSugar;
+
   /// No description provided for @navAlcohol.
   ///
   /// In en, this message translates to:
@@ -357,6 +363,106 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cocktail'**
   String get drinkCocktail;
+
+  /// No description provided for @sugarTabTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sugar'**
+  String get sugarTabTitle;
+
+  /// No description provided for @sugarTodayGrams.
+  ///
+  /// In en, this message translates to:
+  /// **'{g} g sugar today'**
+  String sugarTodayGrams(String g);
+
+  /// No description provided for @logASugarDrink.
+  ///
+  /// In en, this message translates to:
+  /// **'Log a sugary drink'**
+  String get logASugarDrink;
+
+  /// No description provided for @customSugarDrinkButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom drink'**
+  String get customSugarDrinkButton;
+
+  /// No description provided for @customSugarDrinkDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom drink'**
+  String get customSugarDrinkDialogTitle;
+
+  /// No description provided for @customSugarDrinkNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Iced coffee'**
+  String get customSugarDrinkNameHint;
+
+  /// No description provided for @sugarPer100mlSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **'g/100ml'**
+  String get sugarPer100mlSuffix;
+
+  /// No description provided for @sugarPer100mlHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Sugar content'**
+  String get sugarPer100mlHint;
+
+  /// No description provided for @noSugarDrinksLoggedYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No sugary drinks logged yet.'**
+  String get noSugarDrinksLoggedYet;
+
+  /// No description provided for @sugarHistorySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{volumeMl} ml · {sugarPer100ml} g/100ml · {relTime}'**
+  String sugarHistorySubtitle(
+    String volumeMl,
+    String sugarPer100ml,
+    String relTime,
+  );
+
+  /// No description provided for @drinkCola.
+  ///
+  /// In en, this message translates to:
+  /// **'Cola'**
+  String get drinkCola;
+
+  /// No description provided for @drinkLemonade.
+  ///
+  /// In en, this message translates to:
+  /// **'Lemonade'**
+  String get drinkLemonade;
+
+  /// No description provided for @drinkEnergyDrink.
+  ///
+  /// In en, this message translates to:
+  /// **'Energy drink'**
+  String get drinkEnergyDrink;
+
+  /// No description provided for @drinkOrangeJuice.
+  ///
+  /// In en, this message translates to:
+  /// **'Orange juice'**
+  String get drinkOrangeJuice;
+
+  /// No description provided for @drinkIcedTea.
+  ///
+  /// In en, this message translates to:
+  /// **'Iced tea'**
+  String get drinkIcedTea;
+
+  /// No description provided for @drinkSportsDrink.
+  ///
+  /// In en, this message translates to:
+  /// **'Sports drink'**
+  String get drinkSportsDrink;
 
   /// No description provided for @helpSheetTitle.
   ///
