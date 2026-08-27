@@ -54,6 +54,7 @@
 
   "sugarTabTitle": "Sucre",
   "sugarTodayGrams": "{g} g de sucre aujourd'hui",
+  "sugarLimitWarning": "Vous avez dépassé la limite quotidienne de sucre recommandée par l'OMS de {limit} g.",
   "logASugarDrink": "Enregistrer une boisson sucrée",
   "customSugarDrinkButton": "Boisson personnalisée",
   "customSugarDrinkDialogTitle": "Boisson personnalisée",

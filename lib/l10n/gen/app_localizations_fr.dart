@@ -161,6 +161,11 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String sugarLimitWarning(String limit) {
+    return 'Vous avez dépassé la limite quotidienne de sucre recommandée par l\'OMS de $limit g.';
+  }
+
+  @override
   String get logASugarDrink => 'Enregistrer une boisson sucrée';
 
   @override

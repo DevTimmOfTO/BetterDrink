@@ -7,6 +7,7 @@ import '../providers/sugar_provider.dart';
 import '../services/history_aggregator.dart';
 import '../services/sugar_calculator.dart';
 import '../services/date_key.dart';
+import '../theme/app_theme.dart';
 import '../widgets/history_chart.dart';
 import '../widgets/sugar_history_list.dart';
 import '../widgets/sugar_preset_grid.dart';
@@ -42,6 +43,10 @@ class SugarScreen extends ConsumerWidget {
           padding: const EdgeInsets.all(24),
           children: [
             _TodayTotalCard(todayGrams: todayGrams),
+            if (todayGrams > recommendedDailySugarLimitG) ...[
+              const SizedBox(height: 12),
+              const _SugarLimitBanner(),
+            ],
             const SizedBox(height: 28),
             Text(loc.logASugarDrink, style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 12),
@@ -63,6 +68,38 @@ class SugarScreen extends ConsumerWidget {
             HistoryChart(points: trendPoints, unit: 'g'),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _SugarLimitBanner extends StatelessWidget {
+  const _SugarLimitBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: colorScheme.secondaryContainer,
+        borderRadius: BorderRadius.circular(appCornerRadius),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.info_outline_rounded, color: colorScheme.onSecondaryContainer),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              AppLocalizations.of(context)!.sugarLimitWarning(
+                recommendedDailySugarLimitG.toStringAsFixed(0),
+              ),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: colorScheme.onSecondaryContainer,
+                  ),
+            ),
+          ),
+        ],
       ),
     );
   }

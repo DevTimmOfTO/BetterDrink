@@ -161,6 +161,11 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String sugarLimitWarning(String limit) {
+    return 'Du liegst über der von der WHO empfohlenen täglichen Zucker-Obergrenze von $limit g.';
+  }
+
+  @override
   String get logASugarDrink => 'Zuckerhaltiges Getränk loggen';
 
   @override

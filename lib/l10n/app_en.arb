@@ -69,6 +69,10 @@
   "@sugarTodayGrams": {
     "placeholders": { "g": { "type": "String" } }
   },
+  "sugarLimitWarning": "You've passed the WHO-recommended daily sugar limit of {limit} g.",
+  "@sugarLimitWarning": {
+    "placeholders": { "limit": { "type": "String" } }
+  },
   "logASugarDrink": "Log a sugary drink",
   "customSugarDrinkButton": "Custom drink",
   "customSugarDrinkDialogTitle": "Custom drink",

@@ -376,6 +376,12 @@ abstract class AppLocalizations {
   /// **'{g} g sugar today'**
   String sugarTodayGrams(String g);
 
+  /// No description provided for @sugarLimitWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve passed the WHO-recommended daily sugar limit of {limit} g.'**
+  String sugarLimitWarning(String limit);
+
   /// No description provided for @logASugarDrink.
   ///
   /// In en, this message translates to:

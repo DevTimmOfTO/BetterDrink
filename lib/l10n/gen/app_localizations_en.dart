@@ -160,6 +160,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String sugarLimitWarning(String limit) {
+    return 'You\'ve passed the WHO-recommended daily sugar limit of $limit g.';
+  }
+
+  @override
   String get logASugarDrink => 'Log a sugary drink';
 
   @override

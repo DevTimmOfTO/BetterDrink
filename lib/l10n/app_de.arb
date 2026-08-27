@@ -54,6 +54,7 @@
 
   "sugarTabTitle": "Zucker",
   "sugarTodayGrams": "{g} g Zucker heute",
+  "sugarLimitWarning": "Du liegst über der von der WHO empfohlenen täglichen Zucker-Obergrenze von {limit} g.",
   "logASugarDrink": "Zuckerhaltiges Getränk loggen",
   "customSugarDrinkButton": "Eigenes Getränk",
   "customSugarDrinkDialogTitle": "Eigenes Getränk",
