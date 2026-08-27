@@ -7,10 +7,18 @@ import '../models/chart_point.dart';
 /// A themed bar chart for day-bucketed trend data (e.g. hydration ml/day
 /// or alcohol g/day), labeled with a [unit] suffix in tooltips.
 class HistoryChart extends StatelessWidget {
-  const HistoryChart({super.key, required this.points, required this.unit});
+  const HistoryChart({
+    super.key,
+    required this.points,
+    required this.unit,
+    this.goalLine,
+  });
 
   final List<ChartPoint> points;
   final String unit;
+
+  /// Optional reference line (e.g. the daily goal) drawn across the chart.
+  final double? goalLine;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +40,8 @@ class HistoryChart extends StatelessWidget {
     }
 
     final maxValue = points.map((point) => point.value).reduce((a, b) => a > b ? a : b);
+    final goalLine = this.goalLine;
+    final maxY = (goalLine == null ? maxValue : (maxValue > goalLine ? maxValue : goalLine)) * 1.2;
     final labelEvery = (points.length / 6).ceil().clamp(1, points.length);
     final barWidth = (280 / points.length).clamp(4.0, 18.0);
 
@@ -39,7 +49,19 @@ class HistoryChart extends StatelessWidget {
       height: 180,
       child: BarChart(
         BarChartData(
-          maxY: maxValue * 1.2,
+          maxY: maxY,
+          extraLinesData: goalLine == null
+              ? const ExtraLinesData()
+              : ExtraLinesData(
+                  horizontalLines: [
+                    HorizontalLine(
+                      y: goalLine,
+                      color: colorScheme.outline,
+                      strokeWidth: 1,
+                      dashArray: [6, 4],
+                    ),
+                  ],
+                ),
           barTouchData: BarTouchData(
             touchTooltipData: BarTouchTooltipData(
               getTooltipColor: (_) => colorScheme.inverseSurface,

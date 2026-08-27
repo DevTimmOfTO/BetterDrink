@@ -346,7 +346,7 @@ class AppLocalizationsDe extends AppLocalizations {
       'Wird genutzt, um Zielerreichungs-Erfolge auf dem Bestenliste-Tab zu tracken.';
 
   @override
-  String get dailyGoalHint => 'z. B. 2000';
+  String get dailyGoalHint => 'z. B. 2000 (500-10000)';
 
   @override
   String get notificationMessageTitle => 'Benachrichtigungstext';
@@ -391,7 +391,9 @@ class AppLocalizationsDe extends AppLocalizations {
       'Die Startzeit muss vor der Endzeit liegen';
 
   @override
-  String get errorDailyGoal => 'Gib ein tägliches Trinkziel in ml ein';
+  String errorDailyGoalRange(int min, int max) {
+    return 'Gib ein tägliches Trinkziel zwischen $min und $max ml ein';
+  }
 
   @override
   String get errorAgeWeight => 'Gib ein gültiges Alter und Gewicht ein';

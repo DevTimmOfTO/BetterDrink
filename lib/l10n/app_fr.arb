@@ -112,7 +112,7 @@
   "untilLabel": "À",
   "dailyGoalTitle": "Objectif d'hydratation quotidien",
   "dailyGoalDescription": "Utilisé pour suivre les succès liés à l'objectif dans l'onglet Classement.",
-  "dailyGoalHint": "ex. 2000",
+  "dailyGoalHint": "ex. 2000 (500-10000)",
   "notificationMessageTitle": "Message de notification",
   "alcoholProfileTitle": "Profil alcool",
   "alcoholProfileDescription": "Utilisé uniquement pour personnaliser l'estimation d'alcoolémie dans l'onglet Alcool — ne quitte jamais votre appareil.",
@@ -126,7 +126,10 @@
   "settingsSaved": "Réglages enregistrés",
   "errorEnterInterval": "Entrez un intervalle de rappel en minutes",
   "errorActiveWindowOrder": "L'heure de début doit précéder l'heure de fin",
-  "errorDailyGoal": "Entrez un objectif d'hydratation quotidien en ml",
+  "errorDailyGoalRange": "Entrez un objectif d'hydratation quotidien entre {min} et {max} ml",
+  "@errorDailyGoalRange": {
+    "placeholders": { "min": { "type": "int" }, "max": { "type": "int" } }
+  },
   "errorAgeWeight": "Entrez un âge et un poids valides",
 
   "notificationTitle": "Restez hydraté·e 💧",

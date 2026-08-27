@@ -17,6 +17,12 @@ class ReminderSettings {
     dailyGoalMl: 2000,
   );
 
+  /// Sane bounds for a daily hydration goal, in millilitres — below
+  /// [minDailyGoalMl] or above [maxDailyGoalMl] isn't a realistic target
+  /// and is most likely a typo or leftover test value.
+  static const int minDailyGoalMl = 500;
+  static const int maxDailyGoalMl = 10000;
+
   /// How often a reminder should fire, in minutes.
   final int intervalMinutes;
 

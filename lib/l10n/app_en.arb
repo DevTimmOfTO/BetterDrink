@@ -147,7 +147,7 @@
   "untilLabel": "Until",
   "dailyGoalTitle": "Daily hydration goal",
   "dailyGoalDescription": "Used to track goal-hit achievements on the Leaderboard tab.",
-  "dailyGoalHint": "e.g. 2000",
+  "dailyGoalHint": "e.g. 2000 (500-10000)",
   "notificationMessageTitle": "Notification message",
   "alcoholProfileTitle": "Alcohol profile",
   "alcoholProfileDescription": "Used only to personalize the blood-alcohol estimate on the Alcohol tab — it never leaves your device.",
@@ -161,7 +161,10 @@
   "settingsSaved": "Settings saved",
   "errorEnterInterval": "Enter a reminder interval in minutes",
   "errorActiveWindowOrder": "Active start time must be before end time",
-  "errorDailyGoal": "Enter a daily hydration goal in ml",
+  "errorDailyGoalRange": "Enter a daily hydration goal between {min} and {max} ml",
+  "@errorDailyGoalRange": {
+    "placeholders": { "min": { "type": "int" }, "max": { "type": "int" } }
+  },
   "errorAgeWeight": "Enter a valid age and weight",
 
   "notificationTitle": "Stay hydrated 💧",

@@ -695,7 +695,7 @@ abstract class AppLocalizations {
   /// No description provided for @dailyGoalHint.
   ///
   /// In en, this message translates to:
-  /// **'e.g. 2000'**
+  /// **'e.g. 2000 (500-10000)'**
   String get dailyGoalHint;
 
   /// No description provided for @notificationMessageTitle.
@@ -776,11 +776,11 @@ abstract class AppLocalizations {
   /// **'Active start time must be before end time'**
   String get errorActiveWindowOrder;
 
-  /// No description provided for @errorDailyGoal.
+  /// No description provided for @errorDailyGoalRange.
   ///
   /// In en, this message translates to:
-  /// **'Enter a daily hydration goal in ml'**
-  String get errorDailyGoal;
+  /// **'Enter a daily hydration goal between {min} and {max} ml'**
+  String errorDailyGoalRange(int min, int max);
 
   /// No description provided for @errorAgeWeight.
   ///

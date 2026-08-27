@@ -344,7 +344,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Used to track goal-hit achievements on the Leaderboard tab.';
 
   @override
-  String get dailyGoalHint => 'e.g. 2000';
+  String get dailyGoalHint => 'e.g. 2000 (500-10000)';
 
   @override
   String get notificationMessageTitle => 'Notification message';
@@ -388,7 +388,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'Active start time must be before end time';
 
   @override
-  String get errorDailyGoal => 'Enter a daily hydration goal in ml';
+  String errorDailyGoalRange(int min, int max) {
+    return 'Enter a daily hydration goal between $min and $max ml';
+  }
 
   @override
   String get errorAgeWeight => 'Enter a valid age and weight';

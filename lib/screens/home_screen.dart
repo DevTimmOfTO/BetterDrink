@@ -8,6 +8,7 @@ import '../models/achievement.dart';
 import '../providers/hydration_history_provider.dart';
 import '../providers/hydration_provider.dart';
 import '../providers/settings_provider.dart';
+import '../services/date_key.dart';
 import '../services/history_aggregator.dart';
 import '../widgets/countdown_ring.dart';
 import '../widgets/history_chart.dart';
@@ -54,7 +55,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ? Duration.zero
         : nextReminderAt.difference(DateTime.now());
     final total = Duration(minutes: settings.intervalMinutes);
-    final trendPoints = fillMissingDays(history, days: _trendWindowDays);
+    final historyWithToday = {
+      ...history,
+      dateKey(DateTime.now()): hydration.todayMl,
+    };
+    final trendPoints = fillMissingDays(historyWithToday, days: _trendWindowDays);
 
     return Scaffold(
       appBar: AppBar(title: Text(loc.homeAppBarTitle)),
@@ -87,7 +92,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             const SizedBox(height: 28),
             Text(loc.trends, style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 12),
-            HistoryChart(points: trendPoints, unit: loc.mlUnit),
+            HistoryChart(
+              points: trendPoints,
+              unit: loc.mlUnit,
+              goalLine: settings.dailyGoalMl.toDouble(),
+            ),
             const SizedBox(height: 8),
           ],
         ),

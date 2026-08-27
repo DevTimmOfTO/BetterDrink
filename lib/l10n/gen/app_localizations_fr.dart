@@ -349,7 +349,7 @@ class AppLocalizationsFr extends AppLocalizations {
       'Utilisé pour suivre les succès liés à l\'objectif dans l\'onglet Classement.';
 
   @override
-  String get dailyGoalHint => 'ex. 2000';
+  String get dailyGoalHint => 'ex. 2000 (500-10000)';
 
   @override
   String get notificationMessageTitle => 'Message de notification';
@@ -393,8 +393,9 @@ class AppLocalizationsFr extends AppLocalizations {
       'L\'heure de début doit précéder l\'heure de fin';
 
   @override
-  String get errorDailyGoal =>
-      'Entrez un objectif d\'hydratation quotidien en ml';
+  String errorDailyGoalRange(int min, int max) {
+    return 'Entrez un objectif d\'hydratation quotidien entre $min et $max ml';
+  }
 
   @override
   String get errorAgeWeight => 'Entrez un âge et un poids valides';

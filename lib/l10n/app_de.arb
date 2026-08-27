@@ -112,7 +112,7 @@
   "untilLabel": "Bis",
   "dailyGoalTitle": "Tägliches Trinkziel",
   "dailyGoalDescription": "Wird genutzt, um Zielerreichungs-Erfolge auf dem Bestenliste-Tab zu tracken.",
-  "dailyGoalHint": "z. B. 2000",
+  "dailyGoalHint": "z. B. 2000 (500-10000)",
   "notificationMessageTitle": "Benachrichtigungstext",
   "alcoholProfileTitle": "Alkoholprofil",
   "alcoholProfileDescription": "Wird nur genutzt, um die Blutalkohol-Schätzung im Alkohol-Tab zu personalisieren — verlässt niemals dein Gerät.",
@@ -126,7 +126,10 @@
   "settingsSaved": "Einstellungen gespeichert",
   "errorEnterInterval": "Gib ein Erinnerungsintervall in Minuten ein",
   "errorActiveWindowOrder": "Die Startzeit muss vor der Endzeit liegen",
-  "errorDailyGoal": "Gib ein tägliches Trinkziel in ml ein",
+  "errorDailyGoalRange": "Gib ein tägliches Trinkziel zwischen {min} und {max} ml ein",
+  "@errorDailyGoalRange": {
+    "placeholders": { "min": { "type": "int" }, "max": { "type": "int" } }
+  },
   "errorAgeWeight": "Gib ein gültiges Alter und Gewicht ein",
 
   "notificationTitle": "Bleib hydriert 💧",

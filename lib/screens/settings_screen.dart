@@ -97,9 +97,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       return;
     }
     final dailyGoalMl = int.tryParse(_dailyGoalController.text);
-    if (dailyGoalMl == null || dailyGoalMl <= 0) {
+    if (dailyGoalMl == null ||
+        dailyGoalMl < ReminderSettings.minDailyGoalMl ||
+        dailyGoalMl > ReminderSettings.maxDailyGoalMl) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(loc.errorDailyGoal)),
+        SnackBar(
+          content: Text(
+            loc.errorDailyGoalRange(
+              ReminderSettings.minDailyGoalMl,
+              ReminderSettings.maxDailyGoalMl,
+            ),
+          ),
+        ),
       );
       return;
     }
