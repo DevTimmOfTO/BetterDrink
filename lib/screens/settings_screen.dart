@@ -53,7 +53,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
   void _syncFromSettings(ReminderSettings settings) {
     _intervalController.text = settings.intervalMinutes.toString();
-    _messageController.text = settings.message;
+    _messageController.text = settings.message ?? '';
     _dailyGoalController.text = settings.dailyGoalMl.toString();
     _activeStartMinutes = settings.activeStartMinutes;
     _activeEndMinutes = settings.activeEndMinutes;
@@ -127,9 +127,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             intervalMinutes: interval,
             activeStartMinutes: _activeStartMinutes,
             activeEndMinutes: _activeEndMinutes,
-            message: message.isEmpty
-                ? ReminderSettings.defaults.message
-                : message,
+            message: message.isEmpty ? null : message,
             dailyGoalMl: dailyGoalMl,
           ),
         );
@@ -219,7 +217,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             TextField(
               controller: _messageController,
               decoration: InputDecoration(
-                hintText: ReminderSettings.defaults.message,
+                hintText: loc.notificationDefaultMessage,
               ),
             ),
             const SizedBox(height: 28),

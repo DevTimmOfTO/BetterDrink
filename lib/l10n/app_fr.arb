@@ -133,6 +133,7 @@
   "errorAgeWeight": "Entrez un âge et un poids valides",
 
   "notificationTitle": "Restez hydraté·e 💧",
+  "notificationDefaultMessage": "Il est temps de boire de l'eau 💧",
   "notificationActionLabel": "Bu 💧",
   "notificationChannelDescription": "Rappels pour boire de l'eau"
 }

@@ -399,6 +399,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notificationTitle => 'Stay hydrated 💧';
 
   @override
+  String get notificationDefaultMessage => 'Time to drink some water 💧';
+
+  @override
   String get notificationActionLabel => 'Drank it 💧';
 
   @override

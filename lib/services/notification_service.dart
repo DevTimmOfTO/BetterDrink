@@ -132,14 +132,14 @@ class NotificationService {
     return rescheduleFromNow();
   }
 
-  Future<void> _scheduleAt(DateTime at, String message) async {
+  Future<void> _scheduleAt(DateTime at, String? message) async {
     await _ensureTimezone();
     await cancelReminder();
     final loc = await _loadNotificationLocalizations();
     await _plugin.zonedSchedule(
       id: reminderNotificationId,
       title: loc.notificationTitle,
-      body: message,
+      body: message ?? loc.notificationDefaultMessage,
       scheduledDate: tz.TZDateTime.from(at, tz.local),
       notificationDetails: NotificationDetails(
         android: AndroidNotificationDetails(

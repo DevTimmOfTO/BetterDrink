@@ -794,6 +794,12 @@ abstract class AppLocalizations {
   /// **'Stay hydrated 💧'**
   String get notificationTitle;
 
+  /// No description provided for @notificationDefaultMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Time to drink some water 💧'**
+  String get notificationDefaultMessage;
+
   /// No description provided for @notificationActionLabel.
   ///
   /// In en, this message translates to:

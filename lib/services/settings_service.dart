@@ -22,7 +22,7 @@ class SettingsService {
           ReminderSettings.defaults.activeStartMinutes,
       activeEndMinutes: prefs.getInt(_keyActiveEnd) ??
           ReminderSettings.defaults.activeEndMinutes,
-      message: prefs.getString(_keyMessage) ?? ReminderSettings.defaults.message,
+      message: prefs.getString(_keyMessage),
       dailyGoalMl: prefs.getInt(_keyDailyGoalMl) ??
           ReminderSettings.defaults.dailyGoalMl,
     );
@@ -33,7 +33,12 @@ class SettingsService {
     await prefs.setInt(_keyInterval, settings.intervalMinutes);
     await prefs.setInt(_keyActiveStart, settings.activeStartMinutes);
     await prefs.setInt(_keyActiveEnd, settings.activeEndMinutes);
-    await prefs.setString(_keyMessage, settings.message);
+    final message = settings.message;
+    if (message == null) {
+      await prefs.remove(_keyMessage);
+    } else {
+      await prefs.setString(_keyMessage, message);
+    }
     await prefs.setInt(_keyDailyGoalMl, settings.dailyGoalMl);
   }
 }

@@ -5,7 +5,7 @@ class ReminderSettings {
     required this.intervalMinutes,
     required this.activeStartMinutes,
     required this.activeEndMinutes,
-    required this.message,
+    this.message,
     required this.dailyGoalMl,
   });
 
@@ -13,7 +13,6 @@ class ReminderSettings {
     intervalMinutes: 60,
     activeStartMinutes: 8 * 60,
     activeEndMinutes: 22 * 60,
-    message: 'Time to drink some water 💧',
     dailyGoalMl: 2000,
   );
 
@@ -34,8 +33,9 @@ class ReminderSettings {
   /// expressed as minutes since midnight (e.g. 22:00 -> 1320).
   final int activeEndMinutes;
 
-  /// The body text shown in the reminder notification.
-  final String message;
+  /// Custom body text for the reminder notification. Null means the user
+  /// hasn't set one, so the localized default is used instead.
+  final String? message;
 
   /// Daily hydration goal, in millilitres, used to track goal-hit
   /// achievements.

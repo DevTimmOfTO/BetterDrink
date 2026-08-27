@@ -133,6 +133,7 @@
   "errorAgeWeight": "Gib ein gültiges Alter und Gewicht ein",
 
   "notificationTitle": "Bleib hydriert 💧",
+  "notificationDefaultMessage": "Zeit, etwas Wasser zu trinken 💧",
   "notificationActionLabel": "Getrunken 💧",
   "notificationChannelDescription": "Erinnerungen zum Trinken"
 }

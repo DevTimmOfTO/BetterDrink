@@ -168,6 +168,7 @@
   "errorAgeWeight": "Enter a valid age and weight",
 
   "notificationTitle": "Stay hydrated 💧",
+  "notificationDefaultMessage": "Time to drink some water 💧",
   "notificationActionLabel": "Drank it 💧",
   "notificationChannelDescription": "Reminders to drink water"
 }

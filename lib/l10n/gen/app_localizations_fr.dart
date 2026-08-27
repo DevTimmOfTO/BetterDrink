@@ -404,6 +404,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get notificationTitle => 'Restez hydraté·e 💧';
 
   @override
+  String get notificationDefaultMessage => 'Il est temps de boire de l\'eau 💧';
+
+  @override
   String get notificationActionLabel => 'Bu 💧';
 
   @override
