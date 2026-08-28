@@ -26,7 +26,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   late int _activeStartMinutes;
   late int _activeEndMinutes;
   late Sex _sex;
-  bool _initializedFromState = false;
+  bool _settingsInitialized = false;
+  bool _profileInitialized = false;
 
   @override
   void initState() {
@@ -146,10 +147,21 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final loc = AppLocalizations.of(context)!;
     final settings = ref.watch(settingsProvider);
     final profile = ref.watch(profileProvider);
-    if (!_initializedFromState) {
+    // The notifiers return a synchronous placeholder (.defaults) from
+    // build() and only replace it with the real persisted values a tick
+    // later, once their async load resolves (see CLAUDE.md). Syncing on
+    // the very first build would seed these controllers from that
+    // placeholder instead — identical() reliably tells them apart, since
+    // load() always constructs a fresh instance rather than returning the
+    // const .defaults singleton, even when the persisted values happen to
+    // match it.
+    if (!_settingsInitialized && !identical(settings, ReminderSettings.defaults)) {
       _syncFromSettings(settings);
+      _settingsInitialized = true;
+    }
+    if (!_profileInitialized && !identical(profile, UserProfile.defaults)) {
       _syncFromProfile(profile);
-      _initializedFromState = true;
+      _profileInitialized = true;
     }
 
     return Scaffold(
