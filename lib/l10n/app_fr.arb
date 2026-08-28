@@ -24,6 +24,8 @@
   "customButton": "Personnalisé",
   "addWaterDialogTitle": "Ajouter de l'eau",
   "addWaterHint": "ex. 330",
+  "editWaterDialogTitle": "Modifier la quantité",
+  "noWaterLoggedYet": "Aucune eau enregistrée pour l'instant.",
   "mlAmount": "{ml} ml",
 
   "alcoholTabTitle": "Alcool",

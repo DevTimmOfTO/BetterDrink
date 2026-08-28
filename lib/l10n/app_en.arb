@@ -30,6 +30,8 @@
   "customButton": "Custom",
   "addWaterDialogTitle": "Add water",
   "addWaterHint": "e.g. 330",
+  "editWaterDialogTitle": "Edit amount",
+  "noWaterLoggedYet": "No water logged yet.",
   "mlAmount": "{ml} ml",
   "@mlAmount": {
     "placeholders": { "ml": { "type": "int" } }

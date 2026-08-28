@@ -1,9 +1,32 @@
 import 'package:betterdrink/models/drink_entry.dart';
+import 'package:betterdrink/models/water_entry.dart';
 import 'package:betterdrink/services/alcohol_calculator.dart';
 import 'package:betterdrink/services/history_aggregator.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  group('bucketWaterByDay', () {
+    test('sums ml of water for entries on the same day', () {
+      final entries = [
+        WaterEntry(id: '1', volumeMl: 250, timestamp: DateTime(2026, 1, 1, 8)),
+        WaterEntry(id: '2', volumeMl: 500, timestamp: DateTime(2026, 1, 1, 14)),
+      ];
+      expect(bucketWaterByDay(entries), {'2026-01-01': 750});
+    });
+
+    test('keeps entries on different days in separate buckets', () {
+      final entries = [
+        WaterEntry(id: '1', volumeMl: 250, timestamp: DateTime(2026, 1, 1, 8)),
+        WaterEntry(id: '2', volumeMl: 250, timestamp: DateTime(2026, 1, 2, 8)),
+      ];
+      expect(bucketWaterByDay(entries).keys, {'2026-01-01', '2026-01-02'});
+    });
+
+    test('returns an empty map for no entries', () {
+      expect(bucketWaterByDay(const []), isEmpty);
+    });
+  });
+
   group('bucketDrinksByDay', () {
     test('sums grams of alcohol for drinks on the same day', () {
       final drinks = [

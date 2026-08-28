@@ -220,6 +220,18 @@ abstract class AppLocalizations {
   /// **'e.g. 330'**
   String get addWaterHint;
 
+  /// No description provided for @editWaterDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit amount'**
+  String get editWaterDialogTitle;
+
+  /// No description provided for @noWaterLoggedYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No water logged yet.'**
+  String get noWaterLoggedYet;
+
   /// No description provided for @mlAmount.
   ///
   /// In en, this message translates to:

@@ -74,6 +74,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get addWaterHint => 'z. B. 330';
 
   @override
+  String get editWaterDialogTitle => 'Menge bearbeiten';
+
+  @override
+  String get noWaterLoggedYet => 'Noch kein Wasser geloggt.';
+
+  @override
   String mlAmount(int ml) {
     return '$ml ml';
   }

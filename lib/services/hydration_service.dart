@@ -5,37 +5,65 @@ import 'package:betterdrink/services/leaderboard_service.dart';
 import 'package:betterdrink/services/settings_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// Persists today's hydration total and the next scheduled reminder time,
-/// resetting the daily total automatically when a new day starts.
+import '../models/water_entry.dart';
+
+/// Persists logged water entries and the next scheduled reminder time.
+/// Today's total and day-bucketed history are derived from the entry list
+/// rather than tracked separately (see [HydrationEntriesNotifier] and
+/// `bucketWaterByDay`).
 class HydrationService {
   HydrationService._();
   static final HydrationService instance = HydrationService._();
 
-  static const _keyTodayMl = 'hydration_today_ml';
+  static const _keyEntries = 'hydration_entries';
   static const _keyLastResetDate = 'hydration_last_reset_date';
   static const _keyNextReminderAt = 'hydration_next_reminder_at';
   static const _keyGoalHitDays = 'settings_goal_hit_days';
   static const _keyTotalDrinksLogged = 'hydration_total_drinks_logged';
-  static const _keyHistory = 'hydration_history';
 
-  /// Day-bucketed totals older than this no longer affect the trend chart,
-  /// so they're dropped instead of growing the history forever.
-  static const _historyRetention = Duration(days: 90);
+  /// Pre-#1 storage keys: a single cumulative today total plus a
+  /// day-bucketed history map, with no per-entry detail. Migrated into
+  /// synthetic entries the first time [loadEntries] runs after upgrading,
+  /// so upgrading doesn't silently drop existing history.
+  static const _keyLegacyTodayMl = 'hydration_today_ml';
+  static const _keyLegacyHistory = 'hydration_history';
 
-  Future<int> loadTodayMl() async {
+  /// Entries older than this no longer affect the trend chart, so they're
+  /// dropped on load instead of growing the history forever.
+  static const _historyRetention = Duration(days: 30);
+
+  Future<List<WaterEntry>> loadEntries() async {
     final prefs = await SharedPreferences.getInstance();
-    await _resetIfNewDay(prefs);
-    return prefs.getInt(_keyTodayMl) ?? 0;
+    final entries = await _readEntries(prefs);
+    await _checkGoalOnDayChange(prefs, entries);
+    final cutoff = DateTime.now().subtract(_historyRetention);
+    return entries.where((e) => e.timestamp.isAfter(cutoff)).toList()
+      ..sort((a, b) => b.timestamp.compareTo(a.timestamp));
   }
 
-  /// Adds [ml] to today's total, resetting the total first if the stored
-  /// value is from a previous day. Returns the new total.
-  Future<int> logDrink(int ml) async {
+  Future<void> saveEntries(List<WaterEntry> entries) async {
     final prefs = await SharedPreferences.getInstance();
-    await _resetIfNewDay(prefs);
-    final updated = (prefs.getInt(_keyTodayMl) ?? 0) + ml;
+    await prefs.setStringList(
+      _keyEntries,
+      entries.map((e) => jsonEncode(e.toJson())).toList(),
+    );
+  }
+
+  /// Adds an entry of [ml] logged now, records it toward the streak and
+  /// lifetime drink count, and returns the updated entry list.
+  Future<List<WaterEntry>> logDrink(int ml) async {
+    final entries = await loadEntries();
+    final entry = WaterEntry(
+      id: DateTime.now().microsecondsSinceEpoch.toString(),
+      volumeMl: ml,
+      timestamp: DateTime.now(),
+    );
+    final updated = [entry, ...entries]
+      ..sort((a, b) => b.timestamp.compareTo(a.timestamp));
+    await saveEntries(updated);
     await LeaderboardService.instance.recordDrink();
-    await prefs.setInt(_keyTodayMl, updated);
+
+    final prefs = await SharedPreferences.getInstance();
     final totalLogged = (prefs.getInt(_keyTotalDrinksLogged) ?? 0) + 1;
     await prefs.setInt(_keyTotalDrinksLogged, totalLogged);
     return updated;
@@ -51,48 +79,81 @@ class HydrationService {
     );
   }
 
-  /// Day-bucketed hydration totals (date key -> ml), pruned to the last
-  /// [_historyRetention], for the Trends chart on the Home tab.
-  Future<Map<String, int>> loadHistory() async {
-    final prefs = await SharedPreferences.getInstance();
-    return _pruneHistory(await _readHistory(prefs));
+  Future<List<WaterEntry>> _readEntries(SharedPreferences prefs) async {
+    final raw = prefs.getStringList(_keyEntries);
+    if (raw == null) return _migrateLegacyData(prefs);
+    return raw
+        .map((e) => WaterEntry.fromJson(jsonDecode(e) as Map<String, dynamic>))
+        .toList();
   }
 
-  Future<Map<String, int>> _readHistory(SharedPreferences prefs) async {
-    final raw = prefs.getString(_keyHistory);
-    if (raw == null) return {};
-    final decoded = jsonDecode(raw) as Map<String, dynamic>;
-    return decoded.map((key, value) => MapEntry(key, value as int));
+  Future<List<WaterEntry>> _migrateLegacyData(SharedPreferences prefs) async {
+    final entries = <WaterEntry>[];
+    final historyRaw = prefs.getString(_keyLegacyHistory);
+    if (historyRaw != null) {
+      final history = jsonDecode(historyRaw) as Map<String, dynamic>;
+      history.forEach((day, ml) {
+        final volume = (ml as num).toInt();
+        if (volume > 0) {
+          entries.add(WaterEntry(
+            id: 'migrated_$day',
+            volumeMl: volume,
+            timestamp: _middayOf(day),
+          ));
+        }
+      });
+    }
+    final legacyTodayMl = prefs.getInt(_keyLegacyTodayMl) ?? 0;
+    if (legacyTodayMl > 0) {
+      entries.add(WaterEntry(
+        id: 'migrated_today',
+        volumeMl: legacyTodayMl,
+        timestamp: DateTime.now(),
+      ));
+    }
+    await prefs.remove(_keyLegacyTodayMl);
+    await prefs.remove(_keyLegacyHistory);
+    await prefs.setStringList(
+      _keyEntries,
+      entries.map((e) => jsonEncode(e.toJson())).toList(),
+    );
+    return entries;
   }
 
-  Map<String, int> _pruneHistory(Map<String, int> history) {
-    final cutoffKey = dateKey(DateTime.now().subtract(_historyRetention));
-    return {
-      for (final entry in history.entries)
-        if (entry.key.compareTo(cutoffKey) >= 0) entry.key: entry.value,
-    };
+  DateTime _middayOf(String dayKey) {
+    final parts = dayKey.split('-');
+    return DateTime(
+      int.parse(parts[0]),
+      int.parse(parts[1]),
+      int.parse(parts[2]),
+      12,
+    );
   }
 
-  Future<void> _resetIfNewDay(SharedPreferences prefs) async {
+  /// Once per calendar day, checks whether the previous day's total (summed
+  /// from [entries]) hit the daily goal and, if so, credits it toward the
+  /// goal-hit achievement counter. Deferred like this — run lazily whenever
+  /// entries are touched — rather than on a timer, since there's no
+  /// background scheduling for plain persistence checks.
+  Future<void> _checkGoalOnDayChange(
+    SharedPreferences prefs,
+    List<WaterEntry> entries,
+  ) async {
     final today = dateKey(DateTime.now());
-    final lastResetDate = prefs.getString(_keyLastResetDate);
-    if (lastResetDate != today) {
-      final finishedDayMl = prefs.getInt(_keyTodayMl) ?? 0;
+    final lastCheckedDate = prefs.getString(_keyLastResetDate);
+    if (lastCheckedDate == today) return;
 
-      if (lastResetDate != null) {
-        final history = _pruneHistory(await _readHistory(prefs));
-        history[lastResetDate] = finishedDayMl;
-        await prefs.setString(_keyHistory, jsonEncode(history));
-      }
-
+    if (lastCheckedDate != null) {
+      final finishedDayMl = entries
+          .where((e) => dateKey(e.timestamp) == lastCheckedDate)
+          .fold<int>(0, (sum, e) => sum + e.volumeMl);
       final goalMl = (await SettingsService.instance.load()).dailyGoalMl;
       if (finishedDayMl >= goalMl) {
         final hits = prefs.getInt(_keyGoalHitDays) ?? 0;
         await prefs.setInt(_keyGoalHitDays, hits + 1);
       }
-      await prefs.setInt(_keyTodayMl, 0);
-      await prefs.setString(_keyLastResetDate, today);
     }
+    await prefs.setString(_keyLastResetDate, today);
   }
 
   Future<DateTime?> loadNextReminderAt() async {

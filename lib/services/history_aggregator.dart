@@ -1,9 +1,22 @@
 import '../models/chart_point.dart';
 import '../models/drink_entry.dart';
 import '../models/sugar_entry.dart';
+import '../models/water_entry.dart';
 import 'alcohol_calculator.dart';
 import 'date_key.dart';
 import 'sugar_calculator.dart';
+
+/// Sums ml of water per day from [entries], keyed by [dateKey]. Pure and
+/// side-effect free — [entries] is expected to already be the retained
+/// history (see [HydrationService]'s retention window).
+Map<String, int> bucketWaterByDay(List<WaterEntry> entries) {
+  final buckets = <String, int>{};
+  for (final entry in entries) {
+    final key = dateKey(entry.timestamp);
+    buckets[key] = (buckets[key] ?? 0) + entry.volumeMl;
+  }
+  return buckets;
+}
 
 /// Sums grams of pure alcohol per day from [drinks], keyed by [dateKey].
 /// Pure and side-effect free — [drinks] is expected to already be the

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../l10n/gen/app_localizations.dart';
 import '../models/achievement.dart';
+import '../providers/hydration_entries_provider.dart';
 import '../providers/hydration_history_provider.dart';
 import '../providers/hydration_provider.dart';
 import '../providers/settings_provider.dart';
@@ -13,6 +14,7 @@ import '../services/history_aggregator.dart';
 import '../widgets/countdown_ring.dart';
 import '../widgets/history_chart.dart';
 import '../widgets/quick_add_row.dart';
+import '../widgets/water_history_list.dart';
 
 /// Number of trailing days shown in the Trends chart.
 const int _trendWindowDays = 14;
@@ -46,20 +48,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
-    final hydration = ref.watch(hydrationProvider);
+    final nextReminderAt = ref.watch(hydrationProvider);
     final settings = ref.watch(settingsProvider);
+    final entries = ref.watch(hydrationEntriesProvider);
     final history = ref.watch(hydrationHistoryProvider);
 
-    final nextReminderAt = hydration.nextReminderAt;
     final remaining = nextReminderAt == null
         ? Duration.zero
         : nextReminderAt.difference(DateTime.now());
     final total = Duration(minutes: settings.intervalMinutes);
-    final historyWithToday = {
-      ...history,
-      dateKey(DateTime.now()): hydration.todayMl,
-    };
-    final trendPoints = fillMissingDays(historyWithToday, days: _trendWindowDays);
+    final todayKey = dateKey(DateTime.now());
+    final todayMl = entries
+        .where((e) => dateKey(e.timestamp) == todayKey)
+        .fold<int>(0, (sum, e) => sum + e.volumeMl);
+    final trendPoints = fillMissingDays(history, days: _trendWindowDays);
 
     return Scaffold(
       appBar: AppBar(title: Text(loc.homeAppBarTitle)),
@@ -78,7 +80,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
             ),
             const SizedBox(height: 24),
-            _TodayTotalCard(todayMl: hydration.todayMl),
+            _TodayTotalCard(todayMl: todayMl),
             const SizedBox(height: 20),
             QuickAddRow(
               onAdd: (ml) async {
@@ -88,6 +90,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   _showUnlockSnackBar(context, loc, unlocked);
                 }
               },
+            ),
+            const SizedBox(height: 28),
+            Text(loc.historyTitle, style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 12),
+            WaterHistoryList(
+              entries: entries,
+              onDelete: (id) =>
+                  ref.read(hydrationEntriesProvider.notifier).removeEntry(id),
+              onEdit: (id, ml) =>
+                  ref.read(hydrationEntriesProvider.notifier).editEntry(id, ml),
             ),
             const SizedBox(height: 28),
             Text(loc.trends, style: Theme.of(context).textTheme.titleMedium),
