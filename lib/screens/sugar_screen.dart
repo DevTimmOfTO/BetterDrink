@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -17,11 +19,37 @@ const int _trendWindowDays = 14;
 
 /// Sugar-consumption tab: today's total, one-tap logging for typical sugary
 /// drinks, and a history of what's been logged.
-class SugarScreen extends ConsumerWidget {
+class SugarScreen extends ConsumerStatefulWidget {
   const SugarScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SugarScreen> createState() => _SugarScreenState();
+}
+
+class _SugarScreenState extends ConsumerState<SugarScreen> {
+  late final Timer _ticker;
+
+  @override
+  void initState() {
+    super.initState();
+    // Today's total and the trend window are derived from DateTime.now()
+    // on every build, so without a periodic rebuild they'd stay stuck on
+    // whatever day it was at the last rebuild if the app sits open (or
+    // paused in the background) across midnight without a new drink
+    // being logged to trigger one.
+    _ticker = Timer.periodic(const Duration(seconds: 30), (_) {
+      if (mounted) setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _ticker.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
     final drinks = ref.watch(sugarProvider);
     final sugarHistory = ref.watch(sugarHistoryProvider);
