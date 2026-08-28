@@ -52,6 +52,18 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: colorScheme.surfaceContainerHigh,
+        // The base border is invisible (width 0) since fields are
+        // distinguished by their fill color, not an outline — but that
+        // width would carry over to the error state too unless given an
+        // explicit, visible border here.
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(18),
+          borderSide: BorderSide(color: colorScheme.error, width: 2),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(18),
+          borderSide: BorderSide(color: colorScheme.error, width: 2),
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
           borderSide: BorderSide.none,

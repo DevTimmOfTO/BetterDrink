@@ -36,7 +36,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     super.initState();
     _intervalController = TextEditingController();
     _messageController = TextEditingController();
-    _dailyGoalController = TextEditingController();
+    _dailyGoalController = TextEditingController()..addListener(_onDailyGoalChanged);
     _ageController = TextEditingController();
     _weightController = TextEditingController();
     _activeStartMinutes = ReminderSettings.defaults.activeStartMinutes;
@@ -48,10 +48,33 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   void dispose() {
     _intervalController.dispose();
     _messageController.dispose();
+    _dailyGoalController.removeListener(_onDailyGoalChanged);
     _dailyGoalController.dispose();
     _ageController.dispose();
     _weightController.dispose();
     super.dispose();
+  }
+
+  /// Rebuilds on every keystroke so the field's red border/error text
+  /// tracks the value live instead of only surfacing on Save.
+  void _onDailyGoalChanged() => setState(() {});
+
+  /// Null when the daily-goal field is empty (not yet edited, or cleared
+  /// mid-edit) or holds a valid in-range value — the field only shows an
+  /// error once there's actually invalid text to complain about.
+  String? _dailyGoalError(AppLocalizations loc) {
+    final text = _dailyGoalController.text;
+    if (text.isEmpty) return null;
+    final value = int.tryParse(text);
+    if (value != null &&
+        value >= ReminderSettings.minDailyGoalMl &&
+        value <= ReminderSettings.maxDailyGoalMl) {
+      return null;
+    }
+    return loc.errorDailyGoalRange(
+      ReminderSettings.minDailyGoalMl,
+      ReminderSettings.maxDailyGoalMl,
+    );
   }
 
   void _syncFromSettings(ReminderSettings settings) {
@@ -103,16 +126,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     if (dailyGoalMl == null ||
         dailyGoalMl < ReminderSettings.minDailyGoalMl ||
         dailyGoalMl > ReminderSettings.maxDailyGoalMl) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            loc.errorDailyGoalRange(
-              ReminderSettings.minDailyGoalMl,
-              ReminderSettings.maxDailyGoalMl,
-            ),
-          ),
-        ),
-      );
+      // The field already shows this inline via _dailyGoalError's red
+      // border/error text, so no SnackBar needed here too.
       return;
     }
     final age = int.tryParse(_ageController.text);
@@ -223,6 +238,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               decoration: InputDecoration(
                 suffixText: loc.mlUnit,
                 hintText: loc.dailyGoalHint,
+                errorText: _dailyGoalError(loc),
               ),
             ),
             const SizedBox(height: 28),
