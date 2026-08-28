@@ -882,6 +882,54 @@ abstract class AppLocalizations {
   /// **'kg'**
   String get kgUnit;
 
+  /// No description provided for @appearanceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearanceTitle;
+
+  /// No description provided for @useDynamicColorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Use device accent color'**
+  String get useDynamicColorTitle;
+
+  /// No description provided for @useDynamicColorDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme the app from your wallpaper\'s accent color (Android 12+) instead of the built-in teal.'**
+  String get useDynamicColorDescription;
+
+  /// No description provided for @fontFamilyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Font'**
+  String get fontFamilyTitle;
+
+  /// No description provided for @fontFamilyDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get fontFamilyDefault;
+
+  /// No description provided for @fontFamilySerif.
+  ///
+  /// In en, this message translates to:
+  /// **'Serif'**
+  String get fontFamilySerif;
+
+  /// No description provided for @fontFamilyCondensed.
+  ///
+  /// In en, this message translates to:
+  /// **'Condensed'**
+  String get fontFamilyCondensed;
+
+  /// No description provided for @fontFamilyMonospace.
+  ///
+  /// In en, this message translates to:
+  /// **'Monospace'**
+  String get fontFamilyMonospace;
+
   /// No description provided for @settingsSaved.
   ///
   /// In en, this message translates to:

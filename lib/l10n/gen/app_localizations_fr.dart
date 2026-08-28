@@ -454,6 +454,32 @@ class AppLocalizationsFr extends AppLocalizations {
   String get kgUnit => 'kg';
 
   @override
+  String get appearanceTitle => 'Apparence';
+
+  @override
+  String get useDynamicColorTitle =>
+      'Utiliser la couleur d\'accent de l\'appareil';
+
+  @override
+  String get useDynamicColorDescription =>
+      'Colore l\'application avec la couleur d\'accent de votre fond d\'écran (Android 12+) au lieu du turquoise intégré.';
+
+  @override
+  String get fontFamilyTitle => 'Police';
+
+  @override
+  String get fontFamilyDefault => 'Par défaut';
+
+  @override
+  String get fontFamilySerif => 'Serif';
+
+  @override
+  String get fontFamilyCondensed => 'Condensée';
+
+  @override
+  String get fontFamilyMonospace => 'Monospace';
+
+  @override
   String get settingsSaved => 'Réglages enregistrés';
 
   @override

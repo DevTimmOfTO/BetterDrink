@@ -1,23 +1,29 @@
 import 'package:flutter/material.dart';
 
-/// Water-themed seed color driving the whole Material 3 palette.
+/// Water-themed seed color driving the whole Material 3 palette when the
+/// device's dynamic (Material You) color scheme isn't used.
 const Color _seed = Color(0xFF2BB6C4);
 
 const double appCornerRadius = 28;
 
-/// Builds the app's Material 3 [ThemeData] for light and dark mode from a
-/// single seed color, with rounded corners applied throughout.
+/// Builds the app's Material 3 [ThemeData] for light and dark mode, with
+/// rounded corners applied throughout.
 class AppTheme {
   AppTheme._();
 
-  static ThemeData light() => _build(Brightness.light);
-  static ThemeData dark() => _build(Brightness.dark);
+  static ThemeData light({ColorScheme? dynamicScheme, String? fontFamily}) =>
+      _build(Brightness.light, dynamicScheme: dynamicScheme, fontFamily: fontFamily);
 
-  static ThemeData _build(Brightness brightness) {
-    final colorScheme = ColorScheme.fromSeed(
-      seedColor: _seed,
-      brightness: brightness,
-    );
+  static ThemeData dark({ColorScheme? dynamicScheme, String? fontFamily}) =>
+      _build(Brightness.dark, dynamicScheme: dynamicScheme, fontFamily: fontFamily);
+
+  static ThemeData _build(
+    Brightness brightness, {
+    ColorScheme? dynamicScheme,
+    String? fontFamily,
+  }) {
+    final colorScheme = dynamicScheme ??
+        ColorScheme.fromSeed(seedColor: _seed, brightness: brightness);
 
     final shape = RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(appCornerRadius),
@@ -27,6 +33,7 @@ class AppTheme {
       useMaterial3: true,
       brightness: brightness,
       colorScheme: colorScheme,
+      fontFamily: fontFamily,
       scaffoldBackgroundColor: colorScheme.surface,
       cardTheme: CardThemeData(
         elevation: 0,

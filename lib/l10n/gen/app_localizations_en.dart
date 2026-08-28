@@ -448,6 +448,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get kgUnit => 'kg';
 
   @override
+  String get appearanceTitle => 'Appearance';
+
+  @override
+  String get useDynamicColorTitle => 'Use device accent color';
+
+  @override
+  String get useDynamicColorDescription =>
+      'Theme the app from your wallpaper\'s accent color (Android 12+) instead of the built-in teal.';
+
+  @override
+  String get fontFamilyTitle => 'Font';
+
+  @override
+  String get fontFamilyDefault => 'Default';
+
+  @override
+  String get fontFamilySerif => 'Serif';
+
+  @override
+  String get fontFamilyCondensed => 'Condensed';
+
+  @override
+  String get fontFamilyMonospace => 'Monospace';
+
+  @override
   String get settingsSaved => 'Settings saved';
 
   @override

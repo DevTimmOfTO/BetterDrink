@@ -3,9 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../l10n/gen/app_localizations.dart';
 import '../models/reminder_settings.dart';
+import '../models/theme_preferences.dart';
 import '../models/user_profile.dart';
 import '../providers/profile_provider.dart';
 import '../providers/settings_provider.dart';
+import '../providers/theme_provider.dart';
 
 /// Settings tab: hydration reminder configuration (interval, active hours,
 /// notification message) plus the alcohol profile (sex, age, weight) used
@@ -285,6 +287,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 child: Text(loc.save),
               ),
             ),
+            const SizedBox(height: 28),
+            const _AppearanceSection(),
           ],
         ),
       ),
@@ -318,6 +322,62 @@ class _TimeField extends StatelessWidget {
         decoration: InputDecoration(labelText: label),
         child: Text(_formatted, style: Theme.of(context).textTheme.titleMedium),
       ),
+    );
+  }
+}
+
+/// Appearance options (device accent color, font). Applies immediately on
+/// change rather than being gated behind the Save button above, matching
+/// how a live theme preview is normally expected to behave.
+class _AppearanceSection extends ConsumerWidget {
+  const _AppearanceSection();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final loc = AppLocalizations.of(context)!;
+    final theme = ref.watch(themeProvider);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(loc.appearanceTitle, style: Theme.of(context).textTheme.titleMedium),
+        const SizedBox(height: 8),
+        SwitchListTile(
+          contentPadding: EdgeInsets.zero,
+          title: Text(loc.useDynamicColorTitle),
+          subtitle: Text(loc.useDynamicColorDescription),
+          value: theme.useDynamicColor,
+          onChanged: (value) => ref.read(themeProvider.notifier).update(
+                ThemePreferences(
+                  useDynamicColor: value,
+                  fontFamily: theme.fontFamily,
+                ),
+              ),
+        ),
+        const SizedBox(height: 12),
+        DropdownButtonFormField<String?>(
+          initialValue: theme.fontFamily,
+          decoration: InputDecoration(labelText: loc.fontFamilyTitle),
+          items: [
+            DropdownMenuItem(value: null, child: Text(loc.fontFamilyDefault)),
+            DropdownMenuItem(value: 'serif', child: Text(loc.fontFamilySerif)),
+            DropdownMenuItem(
+              value: 'sans-serif-condensed',
+              child: Text(loc.fontFamilyCondensed),
+            ),
+            DropdownMenuItem(
+              value: 'monospace',
+              child: Text(loc.fontFamilyMonospace),
+            ),
+          ],
+          onChanged: (value) => ref.read(themeProvider.notifier).update(
+                ThemePreferences(
+                  useDynamicColor: theme.useDynamicColor,
+                  fontFamily: value,
+                ),
+              ),
+        ),
+      ],
     );
   }
 }

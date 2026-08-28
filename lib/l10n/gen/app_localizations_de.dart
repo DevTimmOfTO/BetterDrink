@@ -451,6 +451,31 @@ class AppLocalizationsDe extends AppLocalizations {
   String get kgUnit => 'kg';
 
   @override
+  String get appearanceTitle => 'Darstellung';
+
+  @override
+  String get useDynamicColorTitle => 'Geräte-Akzentfarbe verwenden';
+
+  @override
+  String get useDynamicColorDescription =>
+      'Themt die App mit der Akzentfarbe deines Hintergrundbilds (Android 12+) statt dem eingebauten Türkis.';
+
+  @override
+  String get fontFamilyTitle => 'Schriftart';
+
+  @override
+  String get fontFamilyDefault => 'Standard';
+
+  @override
+  String get fontFamilySerif => 'Serif';
+
+  @override
+  String get fontFamilyCondensed => 'Schmal';
+
+  @override
+  String get fontFamilyMonospace => 'Monospace';
+
+  @override
   String get settingsSaved => 'Einstellungen gespeichert';
 
   @override

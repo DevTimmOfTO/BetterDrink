@@ -1,9 +1,11 @@
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'l10n/gen/app_localizations.dart';
 import 'navigation/root_shell.dart';
+import 'providers/theme_provider.dart';
 import 'services/notification_service.dart';
 import 'theme/app_theme.dart';
 
@@ -17,14 +19,15 @@ void main() async {
 }
 
 /// Root widget: wires up the Material 3 theme and the tabbed [RootShell].
-class BetterDrinkApp extends StatefulWidget {
+class BetterDrinkApp extends ConsumerStatefulWidget {
   const BetterDrinkApp({super.key});
 
   @override
-  State<BetterDrinkApp> createState() => _BetterDrinkAppState();
+  ConsumerState<BetterDrinkApp> createState() => _BetterDrinkAppState();
 }
 
-class _BetterDrinkAppState extends State<BetterDrinkApp> with WidgetsBindingObserver {
+class _BetterDrinkAppState extends ConsumerState<BetterDrinkApp>
+    with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
@@ -48,19 +51,31 @@ class _BetterDrinkAppState extends State<BetterDrinkApp> with WidgetsBindingObse
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'BetterDrink',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.light(),
-      darkTheme: AppTheme.dark(),
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: AppLocalizations.supportedLocales,
-      home: const RootShell(),
+    final themePrefs = ref.watch(themeProvider);
+    return DynamicColorBuilder(
+      builder: (lightDynamic, darkDynamic) {
+        final useDynamic = themePrefs.useDynamicColor;
+        return MaterialApp(
+          title: 'BetterDrink',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.light(
+            dynamicScheme: useDynamic ? lightDynamic : null,
+            fontFamily: themePrefs.fontFamily,
+          ),
+          darkTheme: AppTheme.dark(
+            dynamicScheme: useDynamic ? darkDynamic : null,
+            fontFamily: themePrefs.fontFamily,
+          ),
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: const RootShell(),
+        );
+      },
     );
   }
 }
