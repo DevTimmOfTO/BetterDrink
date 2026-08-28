@@ -40,7 +40,16 @@ class LeaderboardService {
   }
 
   /// Called whenever the user logs a drink. Updates the streak and saves.
+  ///
+  /// Reloads from disk first: this can run in a fresh background isolate
+  /// (the notification's "Drank it" action fires
+  /// `notificationBackgroundHandler` when the app process isn't running),
+  /// where these in-memory fields default to zero/empty because [load]
+  /// was never called in that isolate. Without reloading here, that
+  /// confirmation would compute the streak from those defaults and
+  /// silently overwrite an existing streak on disk with garbage.
   Future<void> recordDrink() async {
+    await load();
     final today = _today();
 
     if (lastDate == today) {
