@@ -28,6 +28,13 @@ const String reminderChannelId = 'hydration_reminders';
 const String reminderChannelName = 'Hydration reminders';
 const int reminderNotificationId = 1;
 
+/// How many upcoming reminders get scheduled with the OS at once, using
+/// consecutive ids starting at [reminderNotificationId]. Scheduling a whole
+/// batch instead of just the next occurrence means the series keeps firing
+/// on its own if one notification is missed or swiped away, since the app
+/// doesn't need to run again to queue up the next one (GitHub issue #8).
+const int reminderBatchSize = 24;
+
 /// Action id for the "Drank it" button shown on the reminder notification.
 const String drankActionId = 'drank_action';
 
@@ -104,21 +111,34 @@ class NotificationService {
     await android?.requestExactAlarmsPermission();
   }
 
-  Future<void> cancelReminder() => _plugin.cancel(id: reminderNotificationId);
+  /// Cancels every notification in the reminder id pool, not just the next
+  /// one -- the whole batch scheduled by [rescheduleFromNow] needs clearing
+  /// before a fresh batch is scheduled, otherwise stale future occurrences
+  /// from the previous settings/interval would keep firing alongside it.
+  Future<void> cancelReminder() async {
+    for (var i = 0; i < reminderBatchSize; i++) {
+      await _plugin.cancel(id: reminderNotificationId + i);
+    }
+  }
 
-  /// Recomputes the next reminder from now using the saved settings,
-  /// schedules it with the OS, and persists it so the UI can show it.
+  /// Recomputes a batch of upcoming reminders from now using the saved
+  /// settings, schedules all of them with the OS, and persists the
+  /// earliest one so the UI can show it. Scheduling ahead like this (rather
+  /// than just the single next reminder) is what keeps the series going
+  /// even if the app isn't reopened for days after one gets missed or
+  /// dismissed -- see GitHub issue #8.
   Future<DateTime> rescheduleFromNow() async {
     final settings = await SettingsService.instance.load();
-    final next = computeNextReminder(
+    final times = computeReminderBatch(
       from: DateTime.now(),
       intervalMinutes: settings.intervalMinutes,
       activeStartMinutes: settings.activeStartMinutes,
       activeEndMinutes: settings.activeEndMinutes,
+      count: reminderBatchSize,
     );
-    await _scheduleAt(next, settings.message);
-    await HydrationService.instance.saveNextReminderAt(next);
-    return next;
+    await _scheduleBatch(times, settings.message);
+    await HydrationService.instance.saveNextReminderAt(times.first);
+    return times.first;
   }
 
   /// Reuses a still-future stored reminder time instead of resetting the
@@ -132,33 +152,36 @@ class NotificationService {
     return rescheduleFromNow();
   }
 
-  Future<void> _scheduleAt(DateTime at, String? message) async {
+  Future<void> _scheduleBatch(List<DateTime> times, String? message) async {
     await _ensureTimezone();
     await cancelReminder();
     final loc = await _loadNotificationLocalizations();
-    await _plugin.zonedSchedule(
-      id: reminderNotificationId,
-      title: loc.notificationTitle,
-      body: message ?? loc.notificationDefaultMessage,
-      scheduledDate: tz.TZDateTime.from(at, tz.local),
-      notificationDetails: NotificationDetails(
-        android: AndroidNotificationDetails(
-          reminderChannelId,
-          reminderChannelName,
-          channelDescription: loc.notificationChannelDescription,
-          importance: Importance.high,
-          priority: Priority.high,
-          actions: [
-            AndroidNotificationAction(
-              drankActionId,
-              loc.notificationActionLabel,
-              showsUserInterface: false,
-            ),
-          ],
-        ),
+    final details = NotificationDetails(
+      android: AndroidNotificationDetails(
+        reminderChannelId,
+        reminderChannelName,
+        channelDescription: loc.notificationChannelDescription,
+        importance: Importance.high,
+        priority: Priority.high,
+        actions: [
+          AndroidNotificationAction(
+            drankActionId,
+            loc.notificationActionLabel,
+            showsUserInterface: false,
+          ),
+        ],
       ),
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
     );
+    for (var i = 0; i < times.length; i++) {
+      await _plugin.zonedSchedule(
+        id: reminderNotificationId + i,
+        title: loc.notificationTitle,
+        body: message ?? loc.notificationDefaultMessage,
+        scheduledDate: tz.TZDateTime.from(times[i], tz.local),
+        notificationDetails: details,
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      );
+    }
   }
 }
 

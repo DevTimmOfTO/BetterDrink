@@ -39,3 +39,29 @@ DateTime _atMinutesOfDay(DateTime day, int minutesOfDay) {
     minutesOfDay % 60,
   );
 }
+
+/// Computes the next [count] reminder times, each chained off the previous
+/// one via [computeNextReminder]. Scheduling all of them with the OS up
+/// front (rather than just the next one) means the reminder series keeps
+/// firing on its own even if a given notification is missed or dismissed
+/// without the app being reopened -- see GitHub issue #8.
+List<DateTime> computeReminderBatch({
+  required DateTime from,
+  required int intervalMinutes,
+  required int activeStartMinutes,
+  required int activeEndMinutes,
+  required int count,
+}) {
+  final times = <DateTime>[];
+  var current = from;
+  for (var i = 0; i < count; i++) {
+    current = computeNextReminder(
+      from: current,
+      intervalMinutes: intervalMinutes,
+      activeStartMinutes: activeStartMinutes,
+      activeEndMinutes: activeEndMinutes,
+    );
+    times.add(current);
+  }
+  return times;
+}

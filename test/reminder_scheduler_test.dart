@@ -50,4 +50,40 @@ void main() {
     );
     expect(next, DateTime(2026, 1, 2, 8, 0));
   });
+
+  test('computeReminderBatch chains occurrences and returns the requested count', () {
+    final from = DateTime(2026, 1, 1, 10, 0);
+    final batch = computeReminderBatch(
+      from: from,
+      intervalMinutes: 60,
+      activeStartMinutes: activeStart,
+      activeEndMinutes: activeEnd,
+      count: 5,
+    );
+    expect(batch, [
+      DateTime(2026, 1, 1, 11, 0),
+      DateTime(2026, 1, 1, 12, 0),
+      DateTime(2026, 1, 1, 13, 0),
+      DateTime(2026, 1, 1, 14, 0),
+      DateTime(2026, 1, 1, 15, 0),
+    ]);
+  });
+
+  test('computeReminderBatch keeps chaining across the active-window gap', () {
+    // Last occurrence before the cutoff is 21:00; the next one should
+    // jump to the following day's window start rather than stopping.
+    final from = DateTime(2026, 1, 1, 20, 0);
+    final batch = computeReminderBatch(
+      from: from,
+      intervalMinutes: 60,
+      activeStartMinutes: activeStart,
+      activeEndMinutes: activeEnd,
+      count: 3,
+    );
+    expect(batch, [
+      DateTime(2026, 1, 1, 21, 0),
+      DateTime(2026, 1, 2, 8, 0),
+      DateTime(2026, 1, 2, 9, 0),
+    ]);
+  });
 }
