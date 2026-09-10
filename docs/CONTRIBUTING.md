@@ -13,6 +13,35 @@ flutter pub get
 flutter run
 ```
 
+### Release signing (optional, only needed to build a signed release APK)
+
+`flutter run`/`flutter build apk --debug` work out of the box. A `flutter build apk --release`
+build falls back to the debug key unless `android/key.properties` exists — that file is
+gitignored, so each machine that needs to produce a real release build needs its own copy of the
+keystore and a local `android/key.properties` pointing at it:
+
+```properties
+storePassword=...
+keyPassword=...   # same value as storePassword — PKCS12 keystores don't support separate ones
+keyAlias=betterdrink
+storeFile=/absolute/path/to/betterdrink-release.jks
+```
+
+To generate a new keystore from scratch (only do this once, ever, for the project — see the
+warning below):
+
+```bash
+keytool -genkeypair -v -keystore betterdrink-release.jks -alias betterdrink \
+  -keyalg RSA -keysize 2048 -validity 10000
+```
+
+**This keystore is the app's permanent signing identity.** Losing it means every future release
+build has a different identity from what's already installed on users' devices (or already
+published), which Android treats as a different app entirely — there's no recovery path once a
+version is out in the wild. Keep at least one backup of the keystore file somewhere other than
+the machine it's used on (encrypted, e.g. `gpg --symmetric`), and never commit it or
+`key.properties` to git.
+
 ## Before opening a PR
 
 ```bash
