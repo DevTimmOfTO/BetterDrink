@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/branding/logo.svg" alt="BetterDrink logo" width="120">
+</p>
+
 # BetterDrink
 
 A Flutter app for Android that helps you stay hydrated and keep an eye on alcohol and sugar
