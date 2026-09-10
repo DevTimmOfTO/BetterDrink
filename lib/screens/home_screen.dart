@@ -11,16 +11,16 @@ import '../providers/hydration_provider.dart';
 import '../providers/settings_provider.dart';
 import '../services/date_key.dart';
 import '../services/history_aggregator.dart';
+import '../widgets/beverage_quick_add.dart';
 import '../widgets/countdown_ring.dart';
 import '../widgets/history_chart.dart';
-import '../widgets/quick_add_row.dart';
 import '../widgets/water_history_list.dart';
 
 /// Number of trailing days shown in the Trends chart.
 const int _trendWindowDays = 14;
 
 /// Hydration tab: a depleting countdown ring to the next reminder, today's
-/// total intake, and quick-add buttons for logging a drink.
+/// credited intake, and per-drink quick-add buttons (coffee, tea, water).
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
@@ -58,9 +58,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         : nextReminderAt.difference(DateTime.now());
     final total = Duration(minutes: settings.intervalMinutes);
     final todayKey = dateKey(DateTime.now());
-    final todayMl = entries
-        .where((e) => dateKey(e.timestamp) == todayKey)
-        .fold<int>(0, (sum, e) => sum + e.volumeMl);
+    final todayEntries =
+        entries.where((e) => dateKey(e.timestamp) == todayKey);
+    final todayMl =
+        todayEntries.fold<int>(0, (sum, e) => sum + e.hydrationMl);
+    final todayPouredMl =
+        todayEntries.fold<int>(0, (sum, e) => sum + e.volumeMl);
     final trendPoints = fillMissingDays(history, days: _trendWindowDays);
 
     return Scaffold(
@@ -80,12 +83,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
             ),
             const SizedBox(height: 24),
-            _TodayTotalCard(todayMl: todayMl),
+            _TodayTotalCard(todayMl: todayMl, pouredMl: todayPouredMl),
             const SizedBox(height: 20),
-            QuickAddRow(
-              onAdd: (ml) async {
-                final unlocked =
-                    await ref.read(hydrationProvider.notifier).logDrink(ml);
+            BeverageQuickAdd(
+              onAdd: (ml, kind) async {
+                final unlocked = await ref
+                    .read(hydrationProvider.notifier)
+                    .logDrink(ml, kind: kind);
                 if (unlocked.isNotEmpty && context.mounted) {
                   _showUnlockSnackBar(context, loc, unlocked);
                 }
@@ -117,26 +121,45 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 }
 
+/// Today's intake. [todayMl] is what counts toward the goal; [pouredMl] is
+/// what was actually drunk. They differ once coffee or tea is logged, and
+/// the raw amount is spelled out underneath so the credited figure doesn't
+/// look like lost entries.
 class _TodayTotalCard extends StatelessWidget {
-  const _TodayTotalCard({required this.todayMl});
+  const _TodayTotalCard({required this.todayMl, required this.pouredMl});
 
   final int todayMl;
+  final int pouredMl;
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final loc = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     return Card(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Column(
           children: [
-            Icon(Icons.water_drop_rounded, color: colorScheme.primary),
-            const SizedBox(width: 10),
-            Text(
-              AppLocalizations.of(context)!.homeTodayMl(todayMl),
-              style: Theme.of(context).textTheme.titleMedium,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.water_drop_rounded, color: colorScheme.primary),
+                const SizedBox(width: 10),
+                Text(
+                  loc.homeTodayMl(todayMl),
+                  style: theme.textTheme.titleMedium,
+                ),
+              ],
             ),
+            if (pouredMl != todayMl) ...[
+              const SizedBox(height: 4),
+              Text(
+                loc.homeTodayPouredNote(pouredMl),
+                style: theme.textTheme.bodySmall
+                    ?.copyWith(color: colorScheme.onSurfaceVariant),
+              ),
+            ],
           ],
         ),
       ),

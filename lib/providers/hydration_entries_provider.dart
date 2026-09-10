@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../models/beverage_kind.dart';
 import '../models/water_entry.dart';
 import '../services/hydration_service.dart';
 
@@ -18,8 +19,8 @@ class HydrationEntriesNotifier extends Notifier<List<WaterEntry>> {
 
   Future<void> reload() => _load();
 
-  Future<void> addEntry(int volumeMl) async {
-    state = await HydrationService.instance.logDrink(volumeMl);
+  Future<void> addEntry(int volumeMl, {required BeverageKind kind}) async {
+    state = await HydrationService.instance.logDrink(volumeMl, kind: kind);
   }
 
   Future<void> removeEntry(String id) async {
@@ -28,13 +29,12 @@ class HydrationEntriesNotifier extends Notifier<List<WaterEntry>> {
     await HydrationService.instance.saveEntries(updated);
   }
 
+  /// Corrects an entry's amount, keeping its drink kind — the edit dialog
+  /// only offers the volume.
   Future<void> editEntry(String id, int volumeMl) async {
     final updated = [
       for (final e in state)
-        if (e.id == id)
-          WaterEntry(id: e.id, volumeMl: volumeMl, timestamp: e.timestamp)
-        else
-          e,
+        if (e.id == id) e.copyWith(volumeMl: volumeMl) else e,
     ];
     state = updated;
     await HydrationService.instance.saveEntries(updated);

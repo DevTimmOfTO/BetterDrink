@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/achievement.dart';
+import '../models/beverage_kind.dart';
 import '../services/hydration_service.dart';
 import '../services/notification_service.dart';
 import 'achievement_provider.dart';
@@ -22,11 +23,14 @@ class HydrationNotifier extends Notifier<DateTime?> {
     state = await NotificationService.instance.ensureScheduled();
   }
 
-  /// Logs a drink, restarts the countdown to the next reminder, and checks
-  /// for newly-earned achievements. Returns any achievements unlocked by
-  /// this log so the UI can show unlock feedback.
-  Future<List<AchievementId>> logDrink(int ml) async {
-    await ref.read(hydrationEntriesProvider.notifier).addEntry(ml);
+  /// Logs a drink of [kind], restarts the countdown to the next reminder,
+  /// and checks for newly-earned achievements. Returns any achievements
+  /// unlocked by this log so the UI can show unlock feedback.
+  Future<List<AchievementId>> logDrink(
+    int ml, {
+    required BeverageKind kind,
+  }) async {
+    await ref.read(hydrationEntriesProvider.notifier).addEntry(ml, kind: kind);
     state = await NotificationService.instance.rescheduleFromNow();
     await ref.read(leaderboardProvider.notifier).reload();
 

@@ -1,7 +1,7 @@
 {
   "@@locale": "en",
 
-  "navAlcoholFree": "Alcohol-free",
+  "navHydration": "Hydration",
   "navSugar": "Sugar",
   "navAlcohol": "Alcohol",
   "navLeaderboard": "Leaderboard",
@@ -13,6 +13,10 @@
   "homeNow": "Now",
   "homeTodayMl": "{ml} ml today",
   "@homeTodayMl": {
+    "placeholders": { "ml": { "type": "int" } }
+  },
+  "homeTodayPouredNote": "from {ml} ml of drinks",
+  "@homeTodayPouredNote": {
     "placeholders": { "ml": { "type": "int" } }
   },
   "homeAchievementUnlocked": "Achievement unlocked: {titles}",
@@ -28,14 +32,48 @@
   "mlUnit": "ml",
 
   "customButton": "Custom",
-  "addWaterDialogTitle": "Add water",
+  "addBeverageDialogTitle": "Add {beverage}",
+  "@addBeverageDialogTitle": {
+    "placeholders": { "beverage": { "type": "String" } }
+  },
   "addWaterHint": "e.g. 330",
   "editWaterDialogTitle": "Edit amount",
-  "noWaterLoggedYet": "No water logged yet.",
+  "noWaterLoggedYet": "No drinks logged yet.",
   "mlAmount": "{ml} ml",
   "@mlAmount": {
     "placeholders": { "ml": { "type": "int" } }
   },
+
+  "beverageWater": "Water",
+  "beverageCoffee": "Coffee",
+  "beverageTea": "Tea",
+  "beverageCreditedNote": "{ml} ml credited",
+  "@beverageCreditedNote": {
+    "placeholders": { "ml": { "type": "int" } }
+  },
+  "beverageFactorNoteCoffee": "Coffee counts as {percent}% fluid — caffeine is mildly diuretic.",
+  "@beverageFactorNoteCoffee": {
+    "placeholders": { "percent": { "type": "int" } }
+  },
+  "beverageFactorNoteTea": "Black and green tea count as {percent}% fluid — log herbal or fruit tea as water.",
+  "@beverageFactorNoteTea": {
+    "placeholders": { "percent": { "type": "int" } }
+  },
+  "beverageHistorySubtitle": "{beverage} · {relTime}",
+  "@beverageHistorySubtitle": {
+    "placeholders": {
+      "beverage": { "type": "String" },
+      "relTime": { "type": "String" }
+    }
+  },
+
+  "servingEspresso": "Espresso",
+  "servingCup": "Cup",
+  "servingMug": "Mug",
+  "servingPot": "Pot",
+  "servingGlass": "Glass",
+  "servingBottle": "Bottle",
+  "servingLargeBottle": "Large bottle",
 
   "alcoholTabTitle": "Alcohol",
   "getHelpTooltip": "Get help",
@@ -202,8 +240,8 @@
   "fontFamilyCondensed": "Condensed",
   "fontFamilyMonospace": "Monospace",
   "healthConnectTitle": "Health Connect",
-  "healthConnectDescription": "Automatically write logged water intake to Google Health Connect as Hydration records.",
-  "healthConnectSyncTitle": "Sync water to Health Connect",
+  "healthConnectDescription": "Automatically write logged drinks to Google Health Connect as Hydration records.",
+  "healthConnectSyncTitle": "Sync drinks to Health Connect",
   "healthConnectNeedsInstallMessage": "Health Connect isn't installed or needs an update. Install/update it, then try again.",
   "healthConnectPermissionDeniedMessage": "Health Connect permission was denied.",
 

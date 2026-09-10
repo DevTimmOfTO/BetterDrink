@@ -1,7 +1,7 @@
 {
   "@@locale": "fr",
 
-  "navAlcoholFree": "Sans alcool",
+  "navHydration": "Hydratation",
   "navSugar": "Sucre",
   "navAlcohol": "Alcool",
   "navLeaderboard": "Classement",
@@ -12,6 +12,7 @@
   "homeUntilNextReminder": "avant le prochain rappel",
   "homeNow": "Maintenant",
   "homeTodayMl": "{ml} ml aujourd'hui",
+  "homeTodayPouredNote": "sur {ml} ml de boissons",
   "homeAchievementUnlocked": "Succès débloqué : {titles}",
   "trends": "Tendances",
   "noTrendDataYet": "Pas encore de données — enregistrez quelques jours pour voir votre tendance.",
@@ -22,11 +23,27 @@
   "mlUnit": "ml",
 
   "customButton": "Personnalisé",
-  "addWaterDialogTitle": "Ajouter de l'eau",
+  "addBeverageDialogTitle": "Ajouter : {beverage}",
   "addWaterHint": "ex. 330",
   "editWaterDialogTitle": "Modifier la quantité",
-  "noWaterLoggedYet": "Aucune eau enregistrée pour l'instant.",
+  "noWaterLoggedYet": "Aucune boisson enregistrée pour l'instant.",
   "mlAmount": "{ml} ml",
+
+  "beverageWater": "Eau",
+  "beverageCoffee": "Café",
+  "beverageTea": "Thé",
+  "beverageCreditedNote": "{ml} ml comptabilisés",
+  "beverageFactorNoteCoffee": "Le café compte pour {percent} % de liquide — la caféine est légèrement diurétique.",
+  "beverageFactorNoteTea": "Le thé noir et le thé vert comptent pour {percent} % de liquide — enregistrez les infusions aux plantes ou aux fruits comme de l'eau.",
+  "beverageHistorySubtitle": "{beverage} · {relTime}",
+
+  "servingEspresso": "Expresso",
+  "servingCup": "Tasse",
+  "servingMug": "Mug",
+  "servingPot": "Théière",
+  "servingGlass": "Verre",
+  "servingBottle": "Bouteille",
+  "servingLargeBottle": "Grande bouteille",
 
   "alcoholTabTitle": "Alcool",
   "getHelpTooltip": "Obtenir de l'aide",
@@ -154,8 +171,8 @@
   "fontFamilyCondensed": "Condensée",
   "fontFamilyMonospace": "Monospace",
   "healthConnectTitle": "Health Connect",
-  "healthConnectDescription": "Transférer automatiquement l'eau consommée enregistrée vers Google Health Connect sous forme d'entrées d'hydratation.",
-  "healthConnectSyncTitle": "Synchroniser l'eau avec Health Connect",
+  "healthConnectDescription": "Transférer automatiquement les boissons enregistrées vers Google Health Connect sous forme d'entrées d'hydratation.",
+  "healthConnectSyncTitle": "Synchroniser les boissons avec Health Connect",
   "healthConnectNeedsInstallMessage": "Health Connect n'est pas installé ou doit être mis à jour. Installez/mettez à jour l'application, puis réessayez.",
   "healthConnectPermissionDeniedMessage": "L'autorisation pour Health Connect a été refusée.",
 

@@ -9,7 +9,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get navAlcoholFree => 'Alcohol-free';
+  String get navHydration => 'Hydration';
 
   @override
   String get navSugar => 'Sugar';
@@ -41,6 +41,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String homeTodayPouredNote(int ml) {
+    return 'from $ml ml of drinks';
+  }
+
+  @override
   String homeAchievementUnlocked(String titles) {
     return 'Achievement unlocked: $titles';
   }
@@ -68,7 +73,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get customButton => 'Custom';
 
   @override
-  String get addWaterDialogTitle => 'Add water';
+  String addBeverageDialogTitle(String beverage) {
+    return 'Add $beverage';
+  }
 
   @override
   String get addWaterHint => 'e.g. 330';
@@ -77,12 +84,62 @@ class AppLocalizationsEn extends AppLocalizations {
   String get editWaterDialogTitle => 'Edit amount';
 
   @override
-  String get noWaterLoggedYet => 'No water logged yet.';
+  String get noWaterLoggedYet => 'No drinks logged yet.';
 
   @override
   String mlAmount(int ml) {
     return '$ml ml';
   }
+
+  @override
+  String get beverageWater => 'Water';
+
+  @override
+  String get beverageCoffee => 'Coffee';
+
+  @override
+  String get beverageTea => 'Tea';
+
+  @override
+  String beverageCreditedNote(int ml) {
+    return '$ml ml credited';
+  }
+
+  @override
+  String beverageFactorNoteCoffee(int percent) {
+    return 'Coffee counts as $percent% fluid — caffeine is mildly diuretic.';
+  }
+
+  @override
+  String beverageFactorNoteTea(int percent) {
+    return 'Black and green tea count as $percent% fluid — log herbal or fruit tea as water.';
+  }
+
+  @override
+  String beverageHistorySubtitle(String beverage, String relTime) {
+    return '$beverage · $relTime';
+  }
+
+  @override
+  String get servingEspresso => 'Espresso';
+
+  @override
+  String get servingCup => 'Cup';
+
+  @override
+  String get servingMug => 'Mug';
+
+  @override
+  String get servingPot => 'Pot';
+
+  @override
+  String get servingGlass => 'Glass';
+
+  @override
+  String get servingBottle => 'Bottle';
+
+  @override
+  String get servingLargeBottle => 'Large bottle';
 
   @override
   String get alcoholTabTitle => 'Alcohol';
@@ -477,10 +534,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get healthConnectDescription =>
-      'Automatically write logged water intake to Google Health Connect as Hydration records.';
+      'Automatically write logged drinks to Google Health Connect as Hydration records.';
 
   @override
-  String get healthConnectSyncTitle => 'Sync water to Health Connect';
+  String get healthConnectSyncTitle => 'Sync drinks to Health Connect';
 
   @override
   String get healthConnectNeedsInstallMessage =>
