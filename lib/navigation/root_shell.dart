@@ -7,9 +7,9 @@ import '../screens/home_screen.dart';
 import '../screens/settings_screen.dart';
 import '../screens/sugar_screen.dart';
 
-/// Bottom-navigation shell switching between the Home, Alcohol, and
-/// Settings tabs. Uses an [IndexedStack] so each tab keeps its state
-/// (e.g. countdown timers) when switching away and back.
+/// Bottom-navigation shell switching between the Home, Sugar, Alcohol,
+/// Leaderboard, and Settings tabs. Uses an [IndexedStack] so each tab keeps
+/// its state (e.g. countdown timers) when switching away and back.
 class RootShell extends StatefulWidget {
   const RootShell({super.key});
 

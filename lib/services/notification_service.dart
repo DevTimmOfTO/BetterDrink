@@ -56,6 +56,10 @@ Future<void> _ensureTimezone() async {
   _tzReady = true;
 }
 
+/// Wraps `flutter_local_notifications` + `timezone` to schedule and
+/// respond to hydration reminders. See [rescheduleFromNow] and
+/// [ensureScheduled] for the ahead-of-time batching strategy that keeps
+/// reminders firing without the app needing to be reopened.
 class NotificationService {
   NotificationService._();
   static final NotificationService instance = NotificationService._();
@@ -63,6 +67,10 @@ class NotificationService {
   final FlutterLocalNotificationsPlugin _plugin =
       FlutterLocalNotificationsPlugin();
 
+  /// Sets up the timezone database, the notification plugin, and the
+  /// reminder channel. Must run before `runApp`, since a reminder can fire
+  /// — and needs a working plugin/channel to do so — while the app isn't
+  /// running.
   Future<void> init() async {
     await _ensureTimezone();
 
@@ -104,6 +112,9 @@ class NotificationService {
     await rescheduleFromNow();
   }
 
+  /// Requests both the notification-post permission and the exact-alarm
+  /// permission — reminders rely on exact scheduling, which Android gates
+  /// separately from ordinary notification permission.
   Future<void> requestPermissions() async {
     final android = _plugin.resolvePlatformSpecificImplementation<
         AndroidFlutterLocalNotificationsPlugin>();
@@ -152,6 +163,9 @@ class NotificationService {
     return rescheduleFromNow();
   }
 
+  /// Schedules one OS notification per entry in [times], using consecutive
+  /// ids starting at [reminderNotificationId] (see [reminderBatchSize]).
+  /// Cancels any previously scheduled batch first, since ids get reused.
   Future<void> _scheduleBatch(List<DateTime> times, String? message) async {
     await _ensureTimezone();
     await cancelReminder();
@@ -194,6 +208,11 @@ Future<void> handleNotificationResponse(NotificationResponse response) async {
   await NotificationService.instance.rescheduleFromNow();
 }
 
+/// Background-isolate entry point fired when the "Drank it" action is
+/// tapped while the app process isn't running. Must stay annotated with
+/// `@pragma('vm:entry-point')` so it survives tree-shaking as a native
+/// callback target; delegates to [handleNotificationResponse] so
+/// foreground and background taps behave identically.
 @pragma('vm:entry-point')
 void notificationBackgroundHandler(NotificationResponse response) {
   handleNotificationResponse(response);

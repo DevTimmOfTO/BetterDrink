@@ -34,6 +34,10 @@ class HydrationService {
   /// dropped on load instead of growing the history forever.
   static const _historyRetention = Duration(days: 30);
 
+  /// Loads water entries, dropping anything past [_historyRetention],
+  /// migrating legacy pre-#1 storage on first read, and running the
+  /// once-daily goal-hit check as a side effect (see
+  /// [_checkGoalOnDayChange]).
   Future<List<WaterEntry>> loadEntries() async {
     final prefs = await SharedPreferences.getInstance();
     final entries = await _readEntries(prefs);
@@ -94,6 +98,11 @@ class HydrationService {
         .toList();
   }
 
+  /// One-time migration from the pre-#1 storage format (a single
+  /// cumulative today total plus a day-bucketed history map) into
+  /// synthetic per-entry records, so upgrading doesn't silently drop
+  /// existing history. Clears the legacy keys once the conversion is
+  /// persisted.
   Future<List<WaterEntry>> _migrateLegacyData(SharedPreferences prefs) async {
     final entries = <WaterEntry>[];
     final historyRaw = prefs.getString(_keyLegacyHistory);
@@ -127,6 +136,9 @@ class HydrationService {
     return entries;
   }
 
+  /// Reconstructs a synthetic timestamp for a migrated legacy day-bucket
+  /// entry, anchored at noon so it stays clear of the day boundary rather
+  /// than risking landing on the wrong [dateKey] near midnight.
   DateTime _middayOf(String dayKey) {
     final parts = dayKey.split('-');
     return DateTime(

@@ -16,6 +16,9 @@ class AlcoholNotifier extends Notifier<List<DrinkEntry>> {
     state = await AlcoholService.instance.loadDrinks();
   }
 
+  /// Logs a new drink (defaulting its timestamp to now when [at] is
+  /// omitted), prepends it to the in-memory list re-sorted newest-first,
+  /// and persists the updated list.
   Future<void> addDrink({
     required String name,
     required double volumeMl,
@@ -35,6 +38,7 @@ class AlcoholNotifier extends Notifier<List<DrinkEntry>> {
     await AlcoholService.instance.saveDrinks(updated);
   }
 
+  /// Removes the drink with [id] from state and persists the updated list.
   Future<void> removeDrink(String id) async {
     final updated = state.where((d) => d.id != id).toList();
     state = updated;

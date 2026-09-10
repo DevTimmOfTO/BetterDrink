@@ -16,12 +16,16 @@ class FriendsNotifier extends Notifier<List<FriendSnapshot>> {
     state = await FriendsService.instance.loadFriends();
   }
 
+  /// Adds an imported [friend] snapshot to the front of the list and
+  /// persists the updated list.
   Future<void> addFriend(FriendSnapshot friend) async {
     final updated = [friend, ...state];
     state = updated;
     await FriendsService.instance.saveFriends(updated);
   }
 
+  /// Removes the friend snapshot with [id] from state and persists the
+  /// updated list.
   Future<void> removeFriend(String id) async {
     final updated = state.where((f) => f.id != id).toList();
     state = updated;

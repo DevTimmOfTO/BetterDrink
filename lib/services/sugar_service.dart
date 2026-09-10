@@ -4,6 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/sugar_entry.dart';
 
+/// Persists logged sugary drinks, using the same 30-day retention policy
+/// as [AlcoholService].
 class SugarService {
   SugarService._();
   static final SugarService instance = SugarService._();
@@ -14,6 +16,8 @@ class SugarService {
   /// dropped on load instead of growing the history forever.
   static const _historyRetention = Duration(days: 30);
 
+  /// Loads drinks, dropping anything past [_historyRetention] and
+  /// returning newest first.
   Future<List<SugarEntry>> loadDrinks() async {
     final prefs = await SharedPreferences.getInstance();
     final raw = prefs.getStringList(_keyDrinks) ?? const [];

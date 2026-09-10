@@ -1,5 +1,10 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// Tracks the drink-logging streak used by the leaderboard tab. Differs
+/// from the other services in caching streak state in mutable instance
+/// fields (loaded via [load], mutated in place, persisted via [_save])
+/// rather than recomputing from storage on every read — see [recordDrink]
+/// for why that makes reloading before mutating important.
 class LeaderboardService {
   LeaderboardService._();
   static final LeaderboardService instance = LeaderboardService._();

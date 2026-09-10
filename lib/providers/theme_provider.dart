@@ -15,6 +15,7 @@ class ThemeNotifier extends Notifier<ThemePreferences> {
     state = await ThemeService.instance.load();
   }
 
+  /// Persists [preferences] and updates state immediately.
   Future<void> update(ThemePreferences preferences) async {
     state = preferences;
     await ThemeService.instance.save(preferences);

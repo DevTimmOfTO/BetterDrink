@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/drink_entry.dart';
 import '../models/user_profile.dart';
 
+/// Persists logged drinks and the user's BAC-calculation profile.
 class AlcoholService {
   AlcoholService._();
   static final AlcoholService instance = AlcoholService._();
@@ -18,6 +19,8 @@ class AlcoholService {
   /// dropped on load instead of growing the history forever.
   static const _historyRetention = Duration(days: 30);
 
+  /// Loads drinks, dropping anything past [_historyRetention] and
+  /// returning newest first.
   Future<List<DrinkEntry>> loadDrinks() async {
     final prefs = await SharedPreferences.getInstance();
     final raw = prefs.getStringList(_keyDrinks) ?? const [];

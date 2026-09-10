@@ -5,8 +5,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## What this is
 
 BetterDrink is a Flutter app, Android-only (iOS/desktop scaffolding was removed — see git history), that helps
-users stay hydrated and track alcohol consumption. No backend, no accounts — everything is persisted on-device
-via `shared_preferences`.
+users stay hydrated and track alcohol and sugar consumption. No backend, no accounts — everything is persisted
+on-device via `shared_preferences`, with an optional one-way mirror of hydration entries into Google Health
+Connect.
+
+See [docs/](docs/README.md) for deeper reference material (architecture, feature walkthroughs, the full
+`shared_preferences` key inventory, and contributor conventions) than fits in this file.
 
 ## Commands
 
@@ -27,12 +31,16 @@ needs core library desugaring, already configured in `android/app/build.gradle.k
 When creating commits in this repo, do not use the default `Co-Authored-By: Claude ...` trailer. Use
 `Made possible and cleaned up by Claude` instead, and do not include a session link.
 
-Tests live in `test/`. `alcohol_calculator_test.dart` and `reminder_scheduler_test.dart` test pure logic
-(no Flutter/plugin bindings needed); `widget_test.dart` is the one widget-level test.
+Tests live in `test/`, one file per pure-logic module (`alcohol_calculator_test.dart`, `sugar_calculator_test.dart`,
+`reminder_scheduler_test.dart`, `achievement_rules_test.dart`, `history_aggregator_test.dart`, `date_key_test.dart`,
+`streak_code_test.dart`) plus `leaderboard_service_test.dart` and the one widget-level test, `widget_test.dart`.
+See [docs/TESTING.md](docs/TESTING.md) for what's covered and how to add more.
 
 ## Architecture
 
-Each feature (hydration, alcohol, leaderboard, settings) follows the same three-layer stack:
+Each feature (hydration, sugar, alcohol, leaderboard, settings) follows the same three-layer stack. See
+[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the long version and [docs/FEATURES.md](docs/FEATURES.md) for
+a per-feature, file-by-file walkthrough.
 
 ```
 screens/ (UI) → providers/ (Riverpod Notifier) → services/ (singleton, persistence + business logic)
@@ -73,5 +81,5 @@ screens/ (UI) → providers/ (Riverpod Notifier) → services/ (singleton, persi
 - BAC estimation (`alcohol_calculator.dart`) uses the classic Widmark formula: each drink's contribution
   decays independently from its own timestamp and is floored at zero, then summed. It's explicitly
   informational-only, not medical advice — preserve that framing in any UI/copy changes.
-- `RootShell` uses `IndexedStack` (not a route-based nav) so each tab (Home, Alcohol, Leaderboard, Settings)
-  keeps its state — e.g. countdown timers — when switching away and back.
+- `RootShell` uses `IndexedStack` (not a route-based nav) so each tab (Home, Sugar, Alcohol, Leaderboard,
+  Settings) keeps its state — e.g. countdown timers — when switching away and back.
