@@ -1,4 +1,4 @@
-package com.betterdrink.betterdrink
+package dev.timmofto.BetterDrink
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 
