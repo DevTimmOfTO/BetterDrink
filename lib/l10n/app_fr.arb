@@ -153,6 +153,11 @@
   "fontFamilySerif": "Serif",
   "fontFamilyCondensed": "Condensée",
   "fontFamilyMonospace": "Monospace",
+  "healthConnectTitle": "Health Connect",
+  "healthConnectDescription": "Transférer automatiquement l'eau consommée enregistrée vers Google Health Connect sous forme d'entrées d'hydratation.",
+  "healthConnectSyncTitle": "Synchroniser l'eau avec Health Connect",
+  "healthConnectNeedsInstallMessage": "Health Connect n'est pas installé ou doit être mis à jour. Installez/mettez à jour l'application, puis réessayez.",
+  "healthConnectPermissionDeniedMessage": "L'autorisation pour Health Connect a été refusée.",
 
   "settingsSaved": "Réglages enregistrés",
   "errorEnterInterval": "Entrez un intervalle de rappel en minutes",

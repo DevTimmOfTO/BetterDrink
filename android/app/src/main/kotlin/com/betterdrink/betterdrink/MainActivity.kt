@@ -1,5 +1,8 @@
 package com.betterdrink.betterdrink
 
-import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.android.FlutterFragmentActivity
 
-class MainActivity : FlutterActivity()
+// FlutterFragmentActivity instead of FlutterActivity -- required by the
+// health plugin's ActivityResultContract-based Health Connect permission
+// request flow.
+class MainActivity : FlutterFragmentActivity()

@@ -201,6 +201,11 @@
   "fontFamilySerif": "Serif",
   "fontFamilyCondensed": "Condensed",
   "fontFamilyMonospace": "Monospace",
+  "healthConnectTitle": "Health Connect",
+  "healthConnectDescription": "Automatically write logged water intake to Google Health Connect as Hydration records.",
+  "healthConnectSyncTitle": "Sync water to Health Connect",
+  "healthConnectNeedsInstallMessage": "Health Connect isn't installed or needs an update. Install/update it, then try again.",
+  "healthConnectPermissionDeniedMessage": "Health Connect permission was denied.",
 
   "settingsSaved": "Settings saved",
   "errorEnterInterval": "Enter a reminder interval in minutes",

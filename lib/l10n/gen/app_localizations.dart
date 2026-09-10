@@ -930,6 +930,36 @@ abstract class AppLocalizations {
   /// **'Monospace'**
   String get fontFamilyMonospace;
 
+  /// No description provided for @healthConnectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Health Connect'**
+  String get healthConnectTitle;
+
+  /// No description provided for @healthConnectDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatically write logged water intake to Google Health Connect as Hydration records.'**
+  String get healthConnectDescription;
+
+  /// No description provided for @healthConnectSyncTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync water to Health Connect'**
+  String get healthConnectSyncTitle;
+
+  /// No description provided for @healthConnectNeedsInstallMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Health Connect isn\'t installed or needs an update. Install/update it, then try again.'**
+  String get healthConnectNeedsInstallMessage;
+
+  /// No description provided for @healthConnectPermissionDeniedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Health Connect permission was denied.'**
+  String get healthConnectPermissionDeniedMessage;
+
   /// No description provided for @settingsSaved.
   ///
   /// In en, this message translates to:

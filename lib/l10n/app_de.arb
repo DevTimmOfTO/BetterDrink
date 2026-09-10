@@ -153,6 +153,11 @@
   "fontFamilySerif": "Serif",
   "fontFamilyCondensed": "Schmal",
   "fontFamilyMonospace": "Monospace",
+  "healthConnectTitle": "Health Connect",
+  "healthConnectDescription": "Geloggte Wassermenge automatisch als Hydration-Einträge an Google Health Connect übertragen.",
+  "healthConnectSyncTitle": "Wasser mit Health Connect synchronisieren",
+  "healthConnectNeedsInstallMessage": "Health Connect ist nicht installiert oder muss aktualisiert werden. Bitte installieren/aktualisieren und erneut versuchen.",
+  "healthConnectPermissionDeniedMessage": "Die Berechtigung für Health Connect wurde verweigert.",
 
   "settingsSaved": "Einstellungen gespeichert",
   "errorEnterInterval": "Gib ein Erinnerungsintervall in Minuten ein",

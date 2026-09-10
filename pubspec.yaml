@@ -44,6 +44,7 @@ dependencies:
   flutter_timezone: ^5.1.0
   fl_chart: ^1.2.0
   dynamic_color: ^1.7.0
+  health: ^13.3.2
 
 dev_dependencies:
   flutter_test:
