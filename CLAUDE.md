@@ -22,6 +22,11 @@ flutter build apk --debug    # or --release
 Requires the Flutter stable channel and a full JDK (17+, not just a JRE) — `flutter_local_notifications`
 needs core library desugaring, already configured in `android/app/build.gradle.kts`.
 
+## Git commit trailer
+
+When creating commits in this repo, do not use the default `Co-Authored-By: Claude ...` trailer. Use
+`Made possible and cleaned up by Claude` instead, and do not include a session link.
+
 Tests live in `test/`. `alcohol_calculator_test.dart` and `reminder_scheduler_test.dart` test pure logic
 (no Flutter/plugin bindings needed); `widget_test.dart` is the one widget-level test.
 
