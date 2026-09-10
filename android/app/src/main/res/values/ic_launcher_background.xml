@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Adaptive-icon background — matches the dark end of assets/branding/logo.svg's
+         gradient, kept as a flat color since <background> doesn't support gradients. -->
+    <color name="ic_launcher_background">#10353F</color>
+</resources>
