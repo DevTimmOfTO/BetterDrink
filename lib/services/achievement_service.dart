@@ -13,6 +13,9 @@ class AchievementService {
 
   static const _keyUnlocked = 'achievements_unlocked';
 
+  /// Achievement ids unlocked so far. Ids that no longer match a current
+  /// [AchievementId] (e.g. one removed in an app update) are silently
+  /// dropped rather than surfaced as an error.
   Future<Set<AchievementId>> loadUnlocked() async {
     final prefs = await SharedPreferences.getInstance();
     final storedIds = prefs.getStringList(_keyUnlocked) ?? const [];

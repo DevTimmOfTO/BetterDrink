@@ -134,6 +134,11 @@ class _AlcoholWarningBanner extends StatelessWidget {
   }
 }
 
+/// The BAC ring and its supporting copy. Sobriety takes over once
+/// [currentBac] hits zero; otherwise the ring's total span is the time it
+/// would take *this session's peak* BAC to reach zero, not just the current
+/// value, so the ring doesn't jump back to "full" as new drinks are logged
+/// partway through already burning off the earlier ones.
 class _BacOverview extends StatelessWidget {
   const _BacOverview({required this.currentBac, required this.peakBac});
 

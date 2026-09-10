@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 /// device's dynamic (Material You) color scheme isn't used.
 const Color _seed = Color(0xFF2BB6C4);
 
+/// Shared corner radius for large rounded surfaces (cards, sheets) outside
+/// the component themes below — e.g. the quick-add grids on the Alcohol and
+/// Sugar tabs — so they match the rounding [_build] applies to cards.
 const double appCornerRadius = 28;
 
 /// Builds the app's Material 3 [ThemeData] for light and dark mode, with

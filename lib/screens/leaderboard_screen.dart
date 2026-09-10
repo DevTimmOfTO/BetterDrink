@@ -12,6 +12,9 @@ import 'package:flutter/services.dart';
 
 import '../l10n/gen/app_localizations.dart';
 
+/// Leaderboard tab: current/best streak stats, the achievement grid, and
+/// friend streak snapshots exchanged as copy-pasteable text codes (no
+/// backend, so "sharing" is manual export/import rather than live sync).
 class LeaderboardScreen extends ConsumerStatefulWidget {
   const LeaderboardScreen({super.key});
 

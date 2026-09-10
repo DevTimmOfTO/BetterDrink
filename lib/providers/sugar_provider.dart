@@ -16,6 +16,9 @@ class SugarNotifier extends Notifier<List<SugarEntry>> {
     state = await SugarService.instance.loadDrinks();
   }
 
+  /// Logs a new drink (defaulting its timestamp to now when [at] is
+  /// omitted), prepends it to the in-memory list re-sorted newest-first,
+  /// and persists the updated list.
   Future<void> addDrink({
     required String name,
     required double volumeMl,
@@ -35,6 +38,7 @@ class SugarNotifier extends Notifier<List<SugarEntry>> {
     await SugarService.instance.saveDrinks(updated);
   }
 
+  /// Removes the drink with [id] from state and persists the updated list.
   Future<void> removeDrink(String id) async {
     final updated = state.where((d) => d.id != id).toList();
     state = updated;
