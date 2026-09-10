@@ -20,7 +20,9 @@ android {
         applicationId = "com.betterdrink.betterdrink"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
+        // Health Connect's client library requires API 26+; the health
+        // plugin's own example project sets this same override.
+        minSdk = 26
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName

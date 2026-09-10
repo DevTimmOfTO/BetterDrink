@@ -5,9 +5,11 @@ import '../l10n/gen/app_localizations.dart';
 import '../models/reminder_settings.dart';
 import '../models/theme_preferences.dart';
 import '../models/user_profile.dart';
+import '../providers/health_connect_provider.dart';
 import '../providers/profile_provider.dart';
 import '../providers/settings_provider.dart';
 import '../providers/theme_provider.dart';
+import '../services/health_connect_service.dart';
 
 /// Settings tab: hydration reminder configuration (interval, active hours,
 /// notification message) plus the alcohol profile (sex, age, weight) used
@@ -305,6 +307,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             ),
             const SizedBox(height: 28),
             const _AppearanceSection(),
+            const SizedBox(height: 28),
+            const _HealthConnectSection(),
           ],
         ),
       ),
@@ -392,6 +396,56 @@ class _AppearanceSection extends ConsumerWidget {
                   fontFamily: value,
                 ),
               ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Opt-in toggle for mirroring logged water intake into Google Health
+/// Connect. Applies immediately, same as [_AppearanceSection] -- there's
+/// nothing to gate behind the Save button since this doesn't affect the
+/// reminder/profile fields above it.
+class _HealthConnectSection extends ConsumerWidget {
+  const _HealthConnectSection();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final loc = AppLocalizations.of(context)!;
+    final enabled = ref.watch(healthConnectProvider);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(loc.healthConnectTitle, style: Theme.of(context).textTheme.titleMedium),
+        const SizedBox(height: 4),
+        Text(
+          loc.healthConnectDescription,
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+        const SizedBox(height: 8),
+        SwitchListTile(
+          contentPadding: EdgeInsets.zero,
+          title: Text(loc.healthConnectSyncTitle),
+          value: enabled,
+          onChanged: (value) async {
+            final result =
+                await ref.read(healthConnectProvider.notifier).setEnabled(value);
+            if (!context.mounted) return;
+            final message = switch (result) {
+              HealthConnectSyncResult.needsHealthConnectInstall =>
+                loc.healthConnectNeedsInstallMessage,
+              HealthConnectSyncResult.permissionDenied =>
+                loc.healthConnectPermissionDeniedMessage,
+              HealthConnectSyncResult.enabled ||
+              HealthConnectSyncResult.disabled =>
+                null,
+            };
+            if (message != null) {
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text(message)));
+            }
+          },
         ),
       ],
     );

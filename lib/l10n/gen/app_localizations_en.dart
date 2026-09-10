@@ -473,6 +473,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fontFamilyMonospace => 'Monospace';
 
   @override
+  String get healthConnectTitle => 'Health Connect';
+
+  @override
+  String get healthConnectDescription =>
+      'Automatically write logged water intake to Google Health Connect as Hydration records.';
+
+  @override
+  String get healthConnectSyncTitle => 'Sync water to Health Connect';
+
+  @override
+  String get healthConnectNeedsInstallMessage =>
+      'Health Connect isn\'t installed or needs an update. Install/update it, then try again.';
+
+  @override
+  String get healthConnectPermissionDeniedMessage =>
+      'Health Connect permission was denied.';
+
+  @override
   String get settingsSaved => 'Settings saved';
 
   @override

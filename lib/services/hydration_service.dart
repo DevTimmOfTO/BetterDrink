@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:betterdrink/services/date_key.dart';
+import 'package:betterdrink/services/health_connect_service.dart';
 import 'package:betterdrink/services/leaderboard_service.dart';
 import 'package:betterdrink/services/settings_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -62,6 +63,7 @@ class HydrationService {
       ..sort((a, b) => b.timestamp.compareTo(a.timestamp));
     await saveEntries(updated);
     await LeaderboardService.instance.recordDrink();
+    await HealthConnectService.instance.syncWaterEntry(entry);
 
     final prefs = await SharedPreferences.getInstance();
     final totalLogged = (prefs.getInt(_keyTotalDrinksLogged) ?? 0) + 1;
