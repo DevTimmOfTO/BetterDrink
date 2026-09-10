@@ -4,8 +4,9 @@ import '../l10n/gen/app_localizations.dart';
 import '../models/water_entry.dart';
 import '../services/relative_time.dart';
 
-/// List of previously logged water entries, most recent first. Swipe to
-/// delete a mistaken entry, tap to correct its amount.
+/// List of previously logged drinks, most recent first. Swipe to delete a
+/// mistaken entry, tap to correct its amount — the drink kind is fixed at
+/// log time and isn't editable here.
 class WaterHistoryList extends StatelessWidget {
   const WaterHistoryList({
     super.key,
@@ -54,9 +55,18 @@ class WaterHistoryList extends StatelessWidget {
             child: Card(
               margin: const EdgeInsets.only(bottom: 10),
               child: ListTile(
-                leading: const Icon(Icons.water_drop_rounded),
+                leading: Icon(entry.kind.icon),
                 title: Text(loc.mlAmount(entry.volumeMl)),
-                subtitle: Text(formatRelativeTime(entry.timestamp, loc)),
+                subtitle: Text(
+                  entry.kind.hydrationFactor < 1
+                      // Show what actually counted, so a 250 ml coffee
+                      // crediting 200 ml isn't mistaken for a bug.
+                      ? '${loc.beverageHistorySubtitle(entry.kind.label(loc), formatRelativeTime(entry.timestamp, loc))} · ${loc.beverageCreditedNote(entry.hydrationMl)}'
+                      : loc.beverageHistorySubtitle(
+                          entry.kind.label(loc),
+                          formatRelativeTime(entry.timestamp, loc),
+                        ),
+                ),
                 trailing: const Icon(Icons.edit_outlined),
                 onTap: () => _promptEdit(context, loc, entry),
               ),

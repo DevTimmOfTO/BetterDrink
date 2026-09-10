@@ -9,7 +9,7 @@ class AppLocalizationsDe extends AppLocalizations {
   AppLocalizationsDe([String locale = 'de']) : super(locale);
 
   @override
-  String get navAlcoholFree => 'Alkoholfrei';
+  String get navHydration => 'Trinken';
 
   @override
   String get navSugar => 'Zucker';
@@ -41,6 +41,11 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String homeTodayPouredNote(int ml) {
+    return 'aus $ml ml Getränken';
+  }
+
+  @override
   String homeAchievementUnlocked(String titles) {
     return 'Erfolg freigeschaltet: $titles';
   }
@@ -68,7 +73,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get customButton => 'Eigene Menge';
 
   @override
-  String get addWaterDialogTitle => 'Wasser hinzufügen';
+  String addBeverageDialogTitle(String beverage) {
+    return '$beverage hinzufügen';
+  }
 
   @override
   String get addWaterHint => 'z. B. 330';
@@ -77,12 +84,62 @@ class AppLocalizationsDe extends AppLocalizations {
   String get editWaterDialogTitle => 'Menge bearbeiten';
 
   @override
-  String get noWaterLoggedYet => 'Noch kein Wasser geloggt.';
+  String get noWaterLoggedYet => 'Noch keine Getränke geloggt.';
 
   @override
   String mlAmount(int ml) {
     return '$ml ml';
   }
+
+  @override
+  String get beverageWater => 'Wasser';
+
+  @override
+  String get beverageCoffee => 'Kaffee';
+
+  @override
+  String get beverageTea => 'Tee';
+
+  @override
+  String beverageCreditedNote(int ml) {
+    return '$ml ml angerechnet';
+  }
+
+  @override
+  String beverageFactorNoteCoffee(int percent) {
+    return 'Kaffee zählt zu $percent % als Flüssigkeit — Koffein wirkt leicht harntreibend.';
+  }
+
+  @override
+  String beverageFactorNoteTea(int percent) {
+    return 'Schwarz- und Grüntee zählen zu $percent % als Flüssigkeit — Kräuter- und Früchtetee loggst du als Wasser.';
+  }
+
+  @override
+  String beverageHistorySubtitle(String beverage, String relTime) {
+    return '$beverage · $relTime';
+  }
+
+  @override
+  String get servingEspresso => 'Espresso';
+
+  @override
+  String get servingCup => 'Tasse';
+
+  @override
+  String get servingMug => 'Becher';
+
+  @override
+  String get servingPot => 'Kanne';
+
+  @override
+  String get servingGlass => 'Glas';
+
+  @override
+  String get servingBottle => 'Flasche';
+
+  @override
+  String get servingLargeBottle => 'Große Flasche';
 
   @override
   String get alcoholTabTitle => 'Alkohol';
@@ -480,11 +537,11 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get healthConnectDescription =>
-      'Geloggte Wassermenge automatisch als Hydration-Einträge an Google Health Connect übertragen.';
+      'Geloggte Getränke automatisch als Hydration-Einträge an Google Health Connect übertragen.';
 
   @override
   String get healthConnectSyncTitle =>
-      'Wasser mit Health Connect synchronisieren';
+      'Getränke mit Health Connect synchronisieren';
 
   @override
   String get healthConnectNeedsInstallMessage =>

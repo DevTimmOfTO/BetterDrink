@@ -6,6 +6,7 @@ import 'package:betterdrink/services/leaderboard_service.dart';
 import 'package:betterdrink/services/settings_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../models/beverage_kind.dart';
 import '../models/water_entry.dart';
 
 /// Persists logged water entries and the next scheduled reminder time.
@@ -50,14 +51,18 @@ class HydrationService {
     );
   }
 
-  /// Adds an entry of [ml] logged now, records it toward the streak and
-  /// lifetime drink count, and returns the updated entry list.
-  Future<List<WaterEntry>> logDrink(int ml) async {
+  /// Adds an entry of [ml] of [kind] logged now, records it toward the
+  /// streak and lifetime drink count, and returns the updated entry list.
+  Future<List<WaterEntry>> logDrink(
+    int ml, {
+    BeverageKind kind = BeverageKind.water,
+  }) async {
     final entries = await loadEntries();
     final entry = WaterEntry(
       id: DateTime.now().microsecondsSinceEpoch.toString(),
       volumeMl: ml,
       timestamp: DateTime.now(),
+      kind: kind,
     );
     final updated = [entry, ...entries]
       ..sort((a, b) => b.timestamp.compareTo(a.timestamp));
@@ -133,7 +138,8 @@ class HydrationService {
   }
 
   /// Once per calendar day, checks whether the previous day's total (summed
-  /// from [entries]) hit the daily goal and, if so, credits it toward the
+  /// from [entries] as credited hydration, so coffee and tea count at their
+  /// reduced factor) hit the daily goal and, if so, credits it toward the
   /// goal-hit achievement counter. Deferred like this — run lazily whenever
   /// entries are touched — rather than on a timer, since there's no
   /// background scheduling for plain persistence checks.
@@ -148,7 +154,7 @@ class HydrationService {
     if (lastCheckedDate != null) {
       final finishedDayMl = entries
           .where((e) => dateKey(e.timestamp) == lastCheckedDate)
-          .fold<int>(0, (sum, e) => sum + e.volumeMl);
+          .fold<int>(0, (sum, e) => sum + e.hydrationMl);
       final goalMl = (await SettingsService.instance.load()).dailyGoalMl;
       if (finishedDayMl >= goalMl) {
         final hits = prefs.getInt(_keyGoalHitDays) ?? 0;

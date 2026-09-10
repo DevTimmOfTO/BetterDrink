@@ -100,11 +100,11 @@ abstract class AppLocalizations {
     Locale('fr'),
   ];
 
-  /// No description provided for @navAlcoholFree.
+  /// No description provided for @navHydration.
   ///
   /// In en, this message translates to:
-  /// **'Alcohol-free'**
-  String get navAlcoholFree;
+  /// **'Hydration'**
+  String get navHydration;
 
   /// No description provided for @navSugar.
   ///
@@ -160,6 +160,12 @@ abstract class AppLocalizations {
   /// **'{ml} ml today'**
   String homeTodayMl(int ml);
 
+  /// No description provided for @homeTodayPouredNote.
+  ///
+  /// In en, this message translates to:
+  /// **'from {ml} ml of drinks'**
+  String homeTodayPouredNote(int ml);
+
   /// No description provided for @homeAchievementUnlocked.
   ///
   /// In en, this message translates to:
@@ -208,11 +214,11 @@ abstract class AppLocalizations {
   /// **'Custom'**
   String get customButton;
 
-  /// No description provided for @addWaterDialogTitle.
+  /// No description provided for @addBeverageDialogTitle.
   ///
   /// In en, this message translates to:
-  /// **'Add water'**
-  String get addWaterDialogTitle;
+  /// **'Add {beverage}'**
+  String addBeverageDialogTitle(String beverage);
 
   /// No description provided for @addWaterHint.
   ///
@@ -229,7 +235,7 @@ abstract class AppLocalizations {
   /// No description provided for @noWaterLoggedYet.
   ///
   /// In en, this message translates to:
-  /// **'No water logged yet.'**
+  /// **'No drinks logged yet.'**
   String get noWaterLoggedYet;
 
   /// No description provided for @mlAmount.
@@ -237,6 +243,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{ml} ml'**
   String mlAmount(int ml);
+
+  /// No description provided for @beverageWater.
+  ///
+  /// In en, this message translates to:
+  /// **'Water'**
+  String get beverageWater;
+
+  /// No description provided for @beverageCoffee.
+  ///
+  /// In en, this message translates to:
+  /// **'Coffee'**
+  String get beverageCoffee;
+
+  /// No description provided for @beverageTea.
+  ///
+  /// In en, this message translates to:
+  /// **'Tea'**
+  String get beverageTea;
+
+  /// No description provided for @beverageCreditedNote.
+  ///
+  /// In en, this message translates to:
+  /// **'{ml} ml credited'**
+  String beverageCreditedNote(int ml);
+
+  /// No description provided for @beverageFactorNoteCoffee.
+  ///
+  /// In en, this message translates to:
+  /// **'Coffee counts as {percent}% fluid — caffeine is mildly diuretic.'**
+  String beverageFactorNoteCoffee(int percent);
+
+  /// No description provided for @beverageFactorNoteTea.
+  ///
+  /// In en, this message translates to:
+  /// **'Black and green tea count as {percent}% fluid — log herbal or fruit tea as water.'**
+  String beverageFactorNoteTea(int percent);
+
+  /// No description provided for @beverageHistorySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{beverage} · {relTime}'**
+  String beverageHistorySubtitle(String beverage, String relTime);
+
+  /// No description provided for @servingEspresso.
+  ///
+  /// In en, this message translates to:
+  /// **'Espresso'**
+  String get servingEspresso;
+
+  /// No description provided for @servingCup.
+  ///
+  /// In en, this message translates to:
+  /// **'Cup'**
+  String get servingCup;
+
+  /// No description provided for @servingMug.
+  ///
+  /// In en, this message translates to:
+  /// **'Mug'**
+  String get servingMug;
+
+  /// No description provided for @servingPot.
+  ///
+  /// In en, this message translates to:
+  /// **'Pot'**
+  String get servingPot;
+
+  /// No description provided for @servingGlass.
+  ///
+  /// In en, this message translates to:
+  /// **'Glass'**
+  String get servingGlass;
+
+  /// No description provided for @servingBottle.
+  ///
+  /// In en, this message translates to:
+  /// **'Bottle'**
+  String get servingBottle;
+
+  /// No description provided for @servingLargeBottle.
+  ///
+  /// In en, this message translates to:
+  /// **'Large bottle'**
+  String get servingLargeBottle;
 
   /// No description provided for @alcoholTabTitle.
   ///
@@ -939,13 +1029,13 @@ abstract class AppLocalizations {
   /// No description provided for @healthConnectDescription.
   ///
   /// In en, this message translates to:
-  /// **'Automatically write logged water intake to Google Health Connect as Hydration records.'**
+  /// **'Automatically write logged drinks to Google Health Connect as Hydration records.'**
   String get healthConnectDescription;
 
   /// No description provided for @healthConnectSyncTitle.
   ///
   /// In en, this message translates to:
-  /// **'Sync water to Health Connect'**
+  /// **'Sync drinks to Health Connect'**
   String get healthConnectSyncTitle;
 
   /// No description provided for @healthConnectNeedsInstallMessage.

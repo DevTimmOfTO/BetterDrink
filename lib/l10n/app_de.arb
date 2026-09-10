@@ -1,7 +1,7 @@
 {
   "@@locale": "de",
 
-  "navAlcoholFree": "Alkoholfrei",
+  "navHydration": "Trinken",
   "navSugar": "Zucker",
   "navAlcohol": "Alkohol",
   "navLeaderboard": "Bestenliste",
@@ -12,6 +12,7 @@
   "homeUntilNextReminder": "bis zur nächsten Erinnerung",
   "homeNow": "Jetzt",
   "homeTodayMl": "{ml} ml heute",
+  "homeTodayPouredNote": "aus {ml} ml Getränken",
   "homeAchievementUnlocked": "Erfolg freigeschaltet: {titles}",
   "trends": "Trends",
   "noTrendDataYet": "Noch keine Daten — logge ein paar Tage, um deinen Trend zu sehen.",
@@ -22,11 +23,27 @@
   "mlUnit": "ml",
 
   "customButton": "Eigene Menge",
-  "addWaterDialogTitle": "Wasser hinzufügen",
+  "addBeverageDialogTitle": "{beverage} hinzufügen",
   "addWaterHint": "z. B. 330",
   "editWaterDialogTitle": "Menge bearbeiten",
-  "noWaterLoggedYet": "Noch kein Wasser geloggt.",
+  "noWaterLoggedYet": "Noch keine Getränke geloggt.",
   "mlAmount": "{ml} ml",
+
+  "beverageWater": "Wasser",
+  "beverageCoffee": "Kaffee",
+  "beverageTea": "Tee",
+  "beverageCreditedNote": "{ml} ml angerechnet",
+  "beverageFactorNoteCoffee": "Kaffee zählt zu {percent} % als Flüssigkeit — Koffein wirkt leicht harntreibend.",
+  "beverageFactorNoteTea": "Schwarz- und Grüntee zählen zu {percent} % als Flüssigkeit — Kräuter- und Früchtetee loggst du als Wasser.",
+  "beverageHistorySubtitle": "{beverage} · {relTime}",
+
+  "servingEspresso": "Espresso",
+  "servingCup": "Tasse",
+  "servingMug": "Becher",
+  "servingPot": "Kanne",
+  "servingGlass": "Glas",
+  "servingBottle": "Flasche",
+  "servingLargeBottle": "Große Flasche",
 
   "alcoholTabTitle": "Alkohol",
   "getHelpTooltip": "Hilfe holen",
@@ -154,8 +171,8 @@
   "fontFamilyCondensed": "Schmal",
   "fontFamilyMonospace": "Monospace",
   "healthConnectTitle": "Health Connect",
-  "healthConnectDescription": "Geloggte Wassermenge automatisch als Hydration-Einträge an Google Health Connect übertragen.",
-  "healthConnectSyncTitle": "Wasser mit Health Connect synchronisieren",
+  "healthConnectDescription": "Geloggte Getränke automatisch als Hydration-Einträge an Google Health Connect übertragen.",
+  "healthConnectSyncTitle": "Getränke mit Health Connect synchronisieren",
   "healthConnectNeedsInstallMessage": "Health Connect ist nicht installiert oder muss aktualisiert werden. Bitte installieren/aktualisieren und erneut versuchen.",
   "healthConnectPermissionDeniedMessage": "Die Berechtigung für Health Connect wurde verweigert.",
 

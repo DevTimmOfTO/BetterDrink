@@ -78,9 +78,13 @@ class HealthConnectService {
   }
 
   /// Writes [entry] to Health Connect as a Hydration record if sync is
-  /// enabled. Never throws -- Health Connect being uninstalled or a
-  /// permission revoked outside the app must not break logging a drink, so
-  /// any failure here is swallowed rather than propagated to the caller.
+  /// enabled. Syncs the poured volume, not this app's credited hydration --
+  /// a Hydration record documents liquid actually consumed, and other apps
+  /// reading it shouldn't inherit our coffee/tea factors.
+  ///
+  /// Never throws -- Health Connect being uninstalled or a permission
+  /// revoked outside the app must not break logging a drink, so any failure
+  /// here is swallowed rather than propagated to the caller.
   Future<void> syncWaterEntry(WaterEntry entry) async {
     if (!await loadEnabled()) return;
     try {

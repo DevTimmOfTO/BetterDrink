@@ -40,7 +40,7 @@ class _RootShellState extends State<RootShell> {
           NavigationDestination(
             icon: const Icon(Icons.water_drop_outlined),
             selectedIcon: const Icon(Icons.water_drop_rounded),
-            label: loc.navAlcoholFree,
+            label: loc.navHydration,
           ),
           NavigationDestination(
             icon: const Icon(Icons.local_drink_outlined),
