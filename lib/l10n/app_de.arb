@@ -184,6 +184,11 @@
     "placeholders": { "min": { "type": "int" }, "max": { "type": "int" } }
   },
   "errorAgeWeight": "Gib ein gültiges Alter und Gewicht ein",
+  "importFromHealthConnect": "Aus Health Connect importieren",
+  "importFromHealthConnectDescription": "Lade dein Alter, Geschlecht und Gewicht aus Google Health Connect, um deine Alkoholberechnung zu personalisieren.",
+  "healthConnectProfileImportSuccess": "Profil aus Health Connect importiert",
+  "healthConnectProfileImportFailed": "Fehler beim Importieren des Profils aus Health Connect",
+  "healthConnectProfileNoData": "Keine Profildaten in Health Connect verfügbar",
 
   "notificationTitle": "Bleib hydriert 💧",
   "notificationDefaultMessage": "Zeit, etwas Wasser zu trinken 💧",

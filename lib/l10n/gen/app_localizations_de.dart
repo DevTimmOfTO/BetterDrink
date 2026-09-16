@@ -571,6 +571,25 @@ class AppLocalizationsDe extends AppLocalizations {
   String get errorAgeWeight => 'Gib ein gültiges Alter und Gewicht ein';
 
   @override
+  String get importFromHealthConnect => 'Aus Health Connect importieren';
+
+  @override
+  String get importFromHealthConnectDescription =>
+      'Lade dein Alter, Geschlecht und Gewicht aus Google Health Connect, um deine Alkoholberechnung zu personalisieren.';
+
+  @override
+  String get healthConnectProfileImportSuccess =>
+      'Profil aus Health Connect importiert';
+
+  @override
+  String get healthConnectProfileImportFailed =>
+      'Fehler beim Importieren des Profils aus Health Connect';
+
+  @override
+  String get healthConnectProfileNoData =>
+      'Keine Profildaten in Health Connect verfügbar';
+
+  @override
   String get notificationTitle => 'Bleib hydriert 💧';
 
   @override

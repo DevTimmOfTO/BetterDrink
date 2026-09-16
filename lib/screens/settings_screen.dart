@@ -9,6 +9,7 @@ import '../providers/health_connect_provider.dart';
 import '../providers/profile_provider.dart';
 import '../providers/settings_provider.dart';
 import '../providers/theme_provider.dart';
+import '../services/alcohol_service.dart';
 import '../services/health_connect_service.dart';
 
 /// Settings tab: hydration reminder configuration (interval, active hours,
@@ -32,6 +33,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   late Sex _sex;
   bool _settingsInitialized = false;
   bool _profileInitialized = false;
+  bool _isImportingFromHealthConnect = false;
 
   @override
   void initState() {
@@ -161,6 +163,47 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     }
   }
 
+  Future<void> _importProfileFromHealthConnect(AppLocalizations loc) async {
+    setState(() => _isImportingFromHealthConnect = true);
+    
+    try {
+      final profile = await AlcoholService.instance.requestAndLoadProfileFromHealthConnect();
+      
+      if (!mounted) return;
+      
+      if (profile != null) {
+        // Update the UI with the imported profile
+        _syncFromProfile(profile);
+        _profileInitialized = true;
+        
+        // Save the profile to persistence
+        await ref.read(profileProvider.notifier).update(profile);
+        
+        if (!mounted) return;
+        
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(loc.healthConnectProfileImportSuccess)),
+        );
+      } else {
+        if (!mounted) return;
+        
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(loc.healthConnectProfileNoData)),
+        );
+      }
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(loc.healthConnectProfileImportFailed)),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isImportingFromHealthConnect = false);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
@@ -259,6 +302,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               loc.alcoholProfileDescription,
               style: Theme.of(context).textTheme.bodySmall,
             ),
+            const SizedBox(height: 8),
+            OutlinedButton.icon(
+              onPressed: _isImportingFromHealthConnect
+                  ? null
+                  : () => _importProfileFromHealthConnect(loc),
+              icon: const Icon(Icons.download_rounded),
+              label: Text(loc.importFromHealthConnect),
+            ),
+            if (_isImportingFromHealthConnect) ...[
+              const SizedBox(height: 8),
+              const Center(child: CircularProgressIndicator()),
+            ],
             const SizedBox(height: 12),
             SegmentedButton<Sex>(
               segments: [

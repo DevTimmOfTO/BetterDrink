@@ -574,6 +574,25 @@ class AppLocalizationsFr extends AppLocalizations {
   String get errorAgeWeight => 'Entrez un âge et un poids valides';
 
   @override
+  String get importFromHealthConnect => 'Importer depuis Health Connect';
+
+  @override
+  String get importFromHealthConnectDescription =>
+      'Chargez votre âge, votre sexe et votre poids depuis Google Health Connect pour personnaliser votre estimation d\'alcoolémie.';
+
+  @override
+  String get healthConnectProfileImportSuccess =>
+      'Profil importé depuis Health Connect';
+
+  @override
+  String get healthConnectProfileImportFailed =>
+      'Échec de l\'importation du profil depuis Health Connect';
+
+  @override
+  String get healthConnectProfileNoData =>
+      'Aucune donnée de profil disponible dans Health Connect';
+
+  @override
   String get notificationTitle => 'Restez hydraté·e 💧';
 
   @override
