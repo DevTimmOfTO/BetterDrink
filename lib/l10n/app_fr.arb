@@ -184,6 +184,11 @@
     "placeholders": { "min": { "type": "int" }, "max": { "type": "int" } }
   },
   "errorAgeWeight": "Entrez un âge et un poids valides",
+  "importFromHealthConnect": "Importer depuis Health Connect",
+  "importFromHealthConnectDescription": "Chargez votre âge, votre sexe et votre poids depuis Google Health Connect pour personnaliser votre estimation d'alcoolémie.",
+  "healthConnectProfileImportSuccess": "Profil importé depuis Health Connect",
+  "healthConnectProfileImportFailed": "Échec de l'importation du profil depuis Health Connect",
+  "healthConnectProfileNoData": "Aucune donnée de profil disponible dans Health Connect",
 
   "notificationTitle": "Restez hydraté·e 💧",
   "notificationDefaultMessage": "Il est temps de boire de l'eau 💧",

@@ -253,6 +253,11 @@
     "placeholders": { "min": { "type": "int" }, "max": { "type": "int" } }
   },
   "errorAgeWeight": "Enter a valid age and weight",
+  "importFromHealthConnect": "Import from Health Connect",
+  "importFromHealthConnectDescription": "Load your age, gender, and weight from Google Health Connect to personalize your BAC estimate.",
+  "healthConnectProfileImportSuccess": "Profile imported from Health Connect",
+  "healthConnectProfileImportFailed": "Failed to import profile from Health Connect",
+  "healthConnectProfileNoData": "No profile data available in Health Connect",
 
   "notificationTitle": "Stay hydrated 💧",
   "notificationDefaultMessage": "Time to drink some water 💧",

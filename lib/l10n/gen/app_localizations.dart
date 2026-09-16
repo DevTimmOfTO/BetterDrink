@@ -1080,6 +1080,36 @@ abstract class AppLocalizations {
   /// **'Enter a valid age and weight'**
   String get errorAgeWeight;
 
+  /// No description provided for @importFromHealthConnect.
+  ///
+  /// In en, this message translates to:
+  /// **'Import from Health Connect'**
+  String get importFromHealthConnect;
+
+  /// No description provided for @importFromHealthConnectDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Load your age, gender, and weight from Google Health Connect to personalize your BAC estimate.'**
+  String get importFromHealthConnectDescription;
+
+  /// No description provided for @healthConnectProfileImportSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile imported from Health Connect'**
+  String get healthConnectProfileImportSuccess;
+
+  /// No description provided for @healthConnectProfileImportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to import profile from Health Connect'**
+  String get healthConnectProfileImportFailed;
+
+  /// No description provided for @healthConnectProfileNoData.
+  ///
+  /// In en, this message translates to:
+  /// **'No profile data available in Health Connect'**
+  String get healthConnectProfileNoData;
+
   /// No description provided for @notificationTitle.
   ///
   /// In en, this message translates to:

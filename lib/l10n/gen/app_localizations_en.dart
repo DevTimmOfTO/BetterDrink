@@ -566,6 +566,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get errorAgeWeight => 'Enter a valid age and weight';
 
   @override
+  String get importFromHealthConnect => 'Import from Health Connect';
+
+  @override
+  String get importFromHealthConnectDescription =>
+      'Load your age, gender, and weight from Google Health Connect to personalize your BAC estimate.';
+
+  @override
+  String get healthConnectProfileImportSuccess =>
+      'Profile imported from Health Connect';
+
+  @override
+  String get healthConnectProfileImportFailed =>
+      'Failed to import profile from Health Connect';
+
+  @override
+  String get healthConnectProfileNoData =>
+      'No profile data available in Health Connect';
+
+  @override
   String get notificationTitle => 'Stay hydrated 💧';
 
   @override

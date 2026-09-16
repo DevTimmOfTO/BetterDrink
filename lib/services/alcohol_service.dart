@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/drink_entry.dart';
 import '../models/user_profile.dart';
+import 'health_connect_service.dart';
 
 /// Persists logged drinks and the user's BAC-calculation profile.
 class AlcoholService {
@@ -56,5 +57,19 @@ class AlcoholService {
     await prefs.setInt(_keySex, profile.sex.index);
     await prefs.setInt(_keyAge, profile.age);
     await prefs.setDouble(_keyWeight, profile.weightKg);
+  }
+
+  /// Loads the user profile from Health Connect if available.
+  /// Returns the profile from Health Connect, or null if not available or permissions not granted.
+  Future<UserProfile?> loadProfileFromHealthConnect() async {
+    return HealthConnectService.instance.readProfile();
+  }
+
+  /// Requests Health Connect READ permissions for profile data and loads the profile.
+  /// Returns the profile if permissions were granted and data is available, otherwise null.
+  Future<UserProfile?> requestAndLoadProfileFromHealthConnect() async {
+    final permissionsGranted = await HealthConnectService.instance.requestProfileReadPermissions();
+    if (!permissionsGranted) return null;
+    return loadProfileFromHealthConnect();
   }
 }
