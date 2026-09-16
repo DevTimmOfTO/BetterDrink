@@ -51,13 +51,21 @@ android {
 
     buildTypes {
         release {
-            // Falls back to the debug key when android/key.properties isn't present
-            // (e.g. a fresh checkout on a machine without the release keystore set
-            // up yet), so `flutter run --release` keeps working either way.
-            signingConfig = if (hasKeystoreProperties) {
-                signingConfigs.getByName("release")
-            } else {
-                signingConfigs.getByName("debug")
+            // A release build without a real signing key used to fall back to the debug
+            // key silently — that produced release-variant APKs that Android then refuses
+            // to install as an update over a properly release-signed build, with no error
+            // beyond "App not installed". Require an explicit opt-in instead.
+            val allowUnsignedRelease = (findProperty("allowUnsignedRelease") as String?).toBoolean()
+            signingConfig = when {
+                hasKeystoreProperties -> signingConfigs.getByName("release")
+                allowUnsignedRelease -> signingConfigs.getByName("debug")
+                else -> throw GradleException(
+                    "Release build requested but android/key.properties is missing, so there's " +
+                        "no release signing key configured. See docs/CONTRIBUTING.md to set up the " +
+                        "keystore, or set the env var ORG_GRADLE_PROJECT_allowUnsignedRelease=true " +
+                        "to explicitly build a debug-signed release APK for local testing only — " +
+                        "never distribute one."
+                )
             }
         }
     }

@@ -16,9 +16,13 @@ flutter run
 ### Release signing (optional, only needed to build a signed release APK)
 
 `flutter run`/`flutter build apk --debug` work out of the box. A `flutter build apk --release`
-build falls back to the debug key unless `android/key.properties` exists — that file is
-gitignored, so each machine that needs to produce a real release build needs its own copy of the
-keystore and a local `android/key.properties` pointing at it:
+build fails with a clear error unless `android/key.properties` exists — that file is gitignored,
+so each machine that needs to produce a real release build needs its own copy of the keystore and
+a local `android/key.properties` pointing at it. (For local testing only, you can bypass this and
+get a debug-signed release build with
+`ORG_GRADLE_PROJECT_allowUnsignedRelease=true flutter build apk --release` — never distribute one
+of those; Android will refuse to install it as an update over a real release-signed build, or vice
+versa.)
 
 ```properties
 storePassword=...
