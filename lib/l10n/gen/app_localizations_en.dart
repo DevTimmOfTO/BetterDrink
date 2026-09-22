@@ -445,6 +445,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reminderIntervalTitle => 'Reminder interval';
 
   @override
+  String get reminderIntervalChangeNote => 'This will change soon.';
+
+  @override
   String get minutesUnit => 'minutes';
 
   @override
@@ -491,6 +494,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get otherLabel => 'Other';
+
+  @override
+  String get sexLabel => 'Sex';
 
   @override
   String get ageLabel => 'Age';
@@ -583,6 +589,12 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get healthConnectProfileNoData =>
       'No profile data available in Health Connect';
+
+  @override
+  String get healthConnectImportDialogTitle => 'Choose what to import';
+
+  @override
+  String get import => 'Import';
 
   @override
   String get notificationTitle => 'Stay hydrated 💧';

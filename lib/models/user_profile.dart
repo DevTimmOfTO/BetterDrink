@@ -29,3 +29,16 @@ class UserProfile {
     );
   }
 }
+
+/// Per-field snapshot of what Health Connect has available, so the import
+/// picker can offer only the fields that actually have data and let the
+/// user choose which of those to bring in.
+class HealthConnectProfileFields {
+  const HealthConnectProfileFields({this.sex, this.age, this.weightKg});
+
+  final Sex? sex;
+  final int? age;
+  final double? weightKg;
+
+  bool get isEmpty => sex == null && age == null && weightKg == null;
+}

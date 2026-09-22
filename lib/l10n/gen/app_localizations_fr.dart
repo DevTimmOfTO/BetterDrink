@@ -451,6 +451,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get reminderIntervalTitle => 'Intervalle de rappel';
 
   @override
+  String get reminderIntervalChangeNote => 'Cela va bientôt changer.';
+
+  @override
   String get minutesUnit => 'minutes';
 
   @override
@@ -497,6 +500,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get otherLabel => 'Autre';
+
+  @override
+  String get sexLabel => 'Sexe';
 
   @override
   String get ageLabel => 'Âge';
@@ -591,6 +597,12 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get healthConnectProfileNoData =>
       'Aucune donnée de profil disponible dans Health Connect';
+
+  @override
+  String get healthConnectImportDialogTitle => 'Choisissez quoi importer';
+
+  @override
+  String get import => 'Importer';
 
   @override
   String get notificationTitle => 'Restez hydraté·e 💧';

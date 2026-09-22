@@ -207,27 +207,6 @@ class HealthConnectService {
     return age > 0 ? age : null;
   }
 
-  /// Reads all profile data (sex, age, weight) from Health Connect.
-  /// Returns a UserProfile with the available data, or null if no data is available.
-  /// If some data is unavailable, uses the defaults from UserProfile.defaults.
-  Future<UserProfile?> readProfile() async {
-    final sex = await readGender();
-    final age = await readAge();
-    final weightKg = await readWeightKg();
-    
-    // If we couldn't read any data, return null
-    if (sex == null && age == null && weightKg == null) {
-      return null;
-    }
-    
-    // Use available data, fall back to defaults for missing values
-    return UserProfile(
-      sex: sex ?? UserProfile.defaults.sex,
-      age: age ?? UserProfile.defaults.age,
-      weightKg: weightKg ?? UserProfile.defaults.weightKg,
-    );
-  }
-
   /// Turning sync on checks Health Connect availability (prompting a Play
   /// Store install/update if it's missing or outdated) and requests WRITE
   /// access for Hydration, only persisting the opt-in once both succeed.

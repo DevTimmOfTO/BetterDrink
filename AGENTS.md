@@ -1,6 +1,6 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to AI coding agents when working with code in this repository.
 
 ## What this is
 
@@ -28,8 +28,7 @@ needs core library desugaring, already configured in `android/app/build.gradle.k
 
 ## Git commit trailer
 
-When creating commits in this repo, do not use the default `Co-Authored-By: Claude ...` trailer and do not
-add any replacement trailer or session link.
+When creating commits in this repo, do not add any AI-related co-authoring trailers or session links.
 
 Tests live in `test/`, one file per pure-logic module (`alcohol_calculator_test.dart`, `sugar_calculator_test.dart`,
 `reminder_scheduler_test.dart`, `achievement_rules_test.dart`, `history_aggregator_test.dart`, `date_key_test.dart`,
