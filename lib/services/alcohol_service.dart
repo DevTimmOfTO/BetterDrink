@@ -59,17 +59,20 @@ class AlcoholService {
     await prefs.setDouble(_keyWeight, profile.weightKg);
   }
 
-  /// Loads the user profile from Health Connect if available.
-  /// Returns the profile from Health Connect, or null if not available or permissions not granted.
-  Future<UserProfile?> loadProfileFromHealthConnect() async {
-    return HealthConnectService.instance.readProfile();
-  }
-
-  /// Requests Health Connect READ permissions for profile data and loads the profile.
-  /// Returns the profile if permissions were granted and data is available, otherwise null.
-  Future<UserProfile?> requestAndLoadProfileFromHealthConnect() async {
+  /// Requests Health Connect READ permissions and reads each profile field
+  /// individually, so the caller can offer a per-field import picker instead
+  /// of applying everything at once. Returns null if permissions were denied
+  /// or none of the fields have data in Health Connect.
+  Future<HealthConnectProfileFields?> requestProfileFieldsFromHealthConnect() async {
     final permissionsGranted = await HealthConnectService.instance.requestProfileReadPermissions();
     if (!permissionsGranted) return null;
-    return loadProfileFromHealthConnect();
+
+    final service = HealthConnectService.instance;
+    final fields = HealthConnectProfileFields(
+      sex: await service.readGender(),
+      age: await service.readAge(),
+      weightKg: await service.readWeightKg(),
+    );
+    return fields.isEmpty ? null : fields;
   }
 }

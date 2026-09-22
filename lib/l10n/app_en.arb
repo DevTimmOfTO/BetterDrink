@@ -212,6 +212,7 @@
 
   "settingsTitle": "Settings",
   "reminderIntervalTitle": "Reminder interval",
+  "reminderIntervalChangeNote": "This will change soon.",
   "minutesUnit": "minutes",
   "intervalHint": "e.g. 45",
   "activeHoursTitle": "Active hours",
@@ -227,6 +228,7 @@
   "maleLabel": "Male",
   "femaleLabel": "Female",
   "otherLabel": "Other",
+  "sexLabel": "Sex",
   "ageLabel": "Age",
   "yearsUnit": "years",
   "weightLabel": "Weight",
@@ -258,6 +260,8 @@
   "healthConnectProfileImportSuccess": "Profile imported from Health Connect",
   "healthConnectProfileImportFailed": "Failed to import profile from Health Connect",
   "healthConnectProfileNoData": "No profile data available in Health Connect",
+  "healthConnectImportDialogTitle": "Choose what to import",
+  "import": "Import",
 
   "notificationTitle": "Stay hydrated 💧",
   "notificationDefaultMessage": "Time to drink some water 💧",

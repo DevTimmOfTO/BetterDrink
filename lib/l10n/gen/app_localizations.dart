@@ -858,6 +858,12 @@ abstract class AppLocalizations {
   /// **'Reminder interval'**
   String get reminderIntervalTitle;
 
+  /// No description provided for @reminderIntervalChangeNote.
+  ///
+  /// In en, this message translates to:
+  /// **'This will change soon.'**
+  String get reminderIntervalChangeNote;
+
   /// No description provided for @minutesUnit.
   ///
   /// In en, this message translates to:
@@ -947,6 +953,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Other'**
   String get otherLabel;
+
+  /// No description provided for @sexLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Sex'**
+  String get sexLabel;
 
   /// No description provided for @ageLabel.
   ///
@@ -1109,6 +1121,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No profile data available in Health Connect'**
   String get healthConnectProfileNoData;
+
+  /// No description provided for @healthConnectImportDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose what to import'**
+  String get healthConnectImportDialogTitle;
+
+  /// No description provided for @import.
+  ///
+  /// In en, this message translates to:
+  /// **'Import'**
+  String get import;
 
   /// No description provided for @notificationTitle.
   ///

@@ -163,34 +163,122 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     }
   }
 
-  Future<void> _importProfileFromHealthConnect(AppLocalizations loc) async {
+  String _sexLabel(AppLocalizations loc, Sex sex) => switch (sex) {
+        Sex.male => loc.maleLabel,
+        Sex.female => loc.femaleLabel,
+        Sex.other => loc.otherLabel,
+      };
+
+  /// Shows a checkbox picker for whichever fields Health Connect actually
+  /// has data for, pre-checked. Returns the fields the user confirmed
+  /// importing, or null if they cancelled.
+  Future<HealthConnectProfileFields?> _showImportSelectionDialog(
+    AppLocalizations loc,
+    HealthConnectProfileFields available,
+  ) {
+    bool importSex = available.sex != null;
+    bool importAge = available.age != null;
+    bool importWeight = available.weightKg != null;
+
+    return showDialog<HealthConnectProfileFields>(
+      context: context,
+      builder: (dialogContext) => StatefulBuilder(
+        builder: (context, setDialogState) {
+          final anySelected = importSex || importAge || importWeight;
+          return AlertDialog(
+            title: Text(loc.healthConnectImportDialogTitle),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (available.sex != null)
+                  CheckboxListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(loc.sexLabel),
+                    subtitle: Text(_sexLabel(loc, available.sex!)),
+                    value: importSex,
+                    onChanged: (value) =>
+                        setDialogState(() => importSex = value ?? false),
+                  ),
+                if (available.age != null)
+                  CheckboxListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(loc.ageLabel),
+                    subtitle: Text('${available.age} ${loc.yearsUnit}'),
+                    value: importAge,
+                    onChanged: (value) =>
+                        setDialogState(() => importAge = value ?? false),
+                  ),
+                if (available.weightKg != null)
+                  CheckboxListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(loc.weightLabel),
+                    subtitle: Text(
+                      '${available.weightKg!.toStringAsFixed(0)} ${loc.kgUnit}',
+                    ),
+                    value: importWeight,
+                    onChanged: (value) =>
+                        setDialogState(() => importWeight = value ?? false),
+                  ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(),
+                child: Text(loc.cancel),
+              ),
+              FilledButton(
+                onPressed: anySelected
+                    ? () => Navigator.of(dialogContext).pop(
+                          HealthConnectProfileFields(
+                            sex: importSex ? available.sex : null,
+                            age: importAge ? available.age : null,
+                            weightKg: importWeight ? available.weightKg : null,
+                          ),
+                        )
+                    : null,
+                child: Text(loc.import),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  Future<void> _importFromHealthConnect(AppLocalizations loc) async {
     setState(() => _isImportingFromHealthConnect = true);
-    
+
     try {
-      final profile = await AlcoholService.instance.requestAndLoadProfileFromHealthConnect();
-      
+      final available =
+          await AlcoholService.instance.requestProfileFieldsFromHealthConnect();
+
       if (!mounted) return;
-      
-      if (profile != null) {
-        // Update the UI with the imported profile
-        _syncFromProfile(profile);
-        _profileInitialized = true;
-        
-        // Save the profile to persistence
-        await ref.read(profileProvider.notifier).update(profile);
-        
-        if (!mounted) return;
-        
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(loc.healthConnectProfileImportSuccess)),
-        );
-      } else {
-        if (!mounted) return;
-        
+
+      if (available == null) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(loc.healthConnectProfileNoData)),
         );
+        return;
       }
+
+      final selected = await _showImportSelectionDialog(loc, available);
+      if (selected == null || !mounted) return;
+
+      final updated = UserProfile(
+        sex: selected.sex ?? _sex,
+        age: selected.age ?? (int.tryParse(_ageController.text) ?? UserProfile.defaults.age),
+        weightKg: selected.weightKg ??
+            (double.tryParse(_weightController.text) ?? UserProfile.defaults.weightKg),
+      );
+      _syncFromProfile(updated);
+      _profileInitialized = true;
+
+      await ref.read(profileProvider.notifier).update(updated);
+
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(loc.healthConnectProfileImportSuccess)),
+      );
     } catch (_) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -230,129 +318,165 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       appBar: AppBar(title: Text(loc.settingsTitle)),
       body: SafeArea(
         child: ListView(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
           children: [
-            Text(loc.reminderIntervalTitle, style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: 8),
-            TextField(
-              controller: _intervalController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                suffixText: loc.minutesUnit,
-                hintText: loc.intervalHint,
-              ),
-            ),
-            const SizedBox(height: 28),
-            Text(loc.activeHoursTitle, style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: 4),
-            Text(
-              loc.activeHoursDescription,
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(
-                  child: _TimeField(
-                    label: loc.fromLabel,
-                    minutes: _activeStartMinutes,
-                    onTap: () => _pickTime(true),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: _TimeField(
-                    label: loc.untilLabel,
-                    minutes: _activeEndMinutes,
-                    onTap: () => _pickTime(false),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 28),
-            Text(loc.dailyGoalTitle, style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: 4),
-            Text(
-              loc.dailyGoalDescription,
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              controller: _dailyGoalController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                suffixText: loc.mlUnit,
-                hintText: loc.dailyGoalHint,
-                errorText: _dailyGoalError(loc),
-              ),
-            ),
-            const SizedBox(height: 28),
-            Text(loc.notificationMessageTitle, style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: 8),
-            TextField(
-              controller: _messageController,
-              decoration: InputDecoration(
-                hintText: loc.notificationDefaultMessage,
-              ),
-            ),
-            const SizedBox(height: 28),
-            Text(loc.alcoholProfileTitle, style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: 4),
-            Text(
-              loc.alcoholProfileDescription,
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-            const SizedBox(height: 8),
-            OutlinedButton.icon(
-              onPressed: _isImportingFromHealthConnect
-                  ? null
-                  : () => _importProfileFromHealthConnect(loc),
-              icon: const Icon(Icons.download_rounded),
-              label: Text(loc.importFromHealthConnect),
-            ),
-            if (_isImportingFromHealthConnect) ...[
-              const SizedBox(height: 8),
-              const Center(child: CircularProgressIndicator()),
-            ],
-            const SizedBox(height: 12),
-            SegmentedButton<Sex>(
-              segments: [
-                ButtonSegment(value: Sex.male, label: Text(loc.maleLabel)),
-                ButtonSegment(value: Sex.female, label: Text(loc.femaleLabel)),
-                ButtonSegment(value: Sex.other, label: Text(loc.otherLabel)),
-              ],
-              selected: {_sex},
-              onSelectionChanged: (selection) =>
-                  setState(() => _sex = selection.first),
+            _SettingsSection(
+              icon: Icons.palette_rounded,
+              title: loc.appearanceTitle,
+              children: const [_AppearanceSectionBody()],
             ),
             const SizedBox(height: 16),
-            Row(
+            _SettingsSection(
+              icon: Icons.health_and_safety_rounded,
+              title: loc.healthConnectTitle,
               children: [
-                Expanded(
-                  child: TextField(
-                    controller: _ageController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      labelText: loc.ageLabel,
-                      suffixText: loc.yearsUnit,
-                    ),
+                Text(
+                  loc.importFromHealthConnectDescription,
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                const SizedBox(height: 8),
+                OutlinedButton.icon(
+                  onPressed: _isImportingFromHealthConnect
+                      ? null
+                      : () => _importFromHealthConnect(loc),
+                  icon: const Icon(Icons.download_rounded),
+                  label: Text(loc.importFromHealthConnect),
+                ),
+                if (_isImportingFromHealthConnect) ...[
+                  const SizedBox(height: 8),
+                  const Center(child: CircularProgressIndicator()),
+                ],
+                const SizedBox(height: 20),
+                const _HealthConnectSectionBody(),
+              ],
+            ),
+            const SizedBox(height: 16),
+            _SettingsSection(
+              icon: Icons.notifications_active_rounded,
+              title: loc.reminderIntervalTitle,
+              children: [
+                Text(
+                  loc.reminderIntervalChangeNote,
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: _intervalController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    suffixText: loc.minutesUnit,
+                    hintText: loc.intervalHint,
                   ),
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: TextField(
-                    controller: _weightController,
-                    keyboardType:
-                        const TextInputType.numberWithOptions(decimal: true),
-                    decoration: InputDecoration(
-                      labelText: loc.weightLabel,
-                      suffixText: loc.kgUnit,
+                const SizedBox(height: 20),
+                Text(loc.activeHoursTitle, style: Theme.of(context).textTheme.titleSmall),
+                const SizedBox(height: 4),
+                Text(
+                  loc.activeHoursDescription,
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Expanded(
+                      child: _TimeField(
+                        label: loc.fromLabel,
+                        minutes: _activeStartMinutes,
+                        onTap: () => _pickTime(true),
+                      ),
                     ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: _TimeField(
+                        label: loc.untilLabel,
+                        minutes: _activeEndMinutes,
+                        onTap: () => _pickTime(false),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Text(loc.notificationMessageTitle, style: Theme.of(context).textTheme.titleSmall),
+                const SizedBox(height: 8),
+                TextField(
+                  controller: _messageController,
+                  decoration: InputDecoration(
+                    hintText: loc.notificationDefaultMessage,
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 16),
+            _SettingsSection(
+              icon: Icons.local_drink_rounded,
+              title: loc.dailyGoalTitle,
+              children: [
+                Text(
+                  loc.dailyGoalDescription,
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                const SizedBox(height: 8),
+                TextField(
+                  controller: _dailyGoalController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    suffixText: loc.mlUnit,
+                    hintText: loc.dailyGoalHint,
+                    errorText: _dailyGoalError(loc),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            _SettingsSection(
+              icon: Icons.wine_bar_rounded,
+              title: loc.alcoholProfileTitle,
+              children: [
+                Text(
+                  loc.alcoholProfileDescription,
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                const SizedBox(height: 12),
+                SegmentedButton<Sex>(
+                  segments: [
+                    ButtonSegment(value: Sex.male, label: Text(loc.maleLabel)),
+                    ButtonSegment(value: Sex.female, label: Text(loc.femaleLabel)),
+                    ButtonSegment(value: Sex.other, label: Text(loc.otherLabel)),
+                  ],
+                  selected: {_sex},
+                  onSelectionChanged: (selection) =>
+                      setState(() => _sex = selection.first),
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _ageController,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          labelText: loc.ageLabel,
+                          suffixText: loc.yearsUnit,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: TextField(
+                        controller: _weightController,
+                        keyboardType:
+                            const TextInputType.numberWithOptions(decimal: true),
+                        decoration: InputDecoration(
+                          labelText: loc.weightLabel,
+                          suffixText: loc.kgUnit,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
             FilledButton(
               onPressed: () => _save(loc),
               child: Padding(
@@ -360,12 +484,39 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 child: Text(loc.save),
               ),
             ),
-            const SizedBox(height: 28),
-            const _AppearanceSection(),
-            const SizedBox(height: 28),
-            const _HealthConnectSection(),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// One collapsible, icon-labelled settings group -- the Flutter equivalent
+/// of a Qt QToolBox pane. Independent of its siblings: each section keeps
+/// its own expanded/collapsed state rather than acting as an accordion.
+class _SettingsSection extends StatelessWidget {
+  const _SettingsSection({
+    required this.icon,
+    required this.title,
+    required this.children,
+  });
+
+  final IconData icon;
+  final String title;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      clipBehavior: Clip.antiAlias,
+      margin: EdgeInsets.zero,
+      child: ExpansionTile(
+        leading: Icon(icon),
+        title: Text(title, style: Theme.of(context).textTheme.titleMedium),
+        initiallyExpanded: false,
+        childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+        expandedCrossAxisAlignment: CrossAxisAlignment.start,
+        children: children,
       ),
     );
   }
@@ -402,10 +553,10 @@ class _TimeField extends StatelessWidget {
 }
 
 /// Appearance options (device accent color, font). Applies immediately on
-/// change rather than being gated behind the Save button above, matching
-/// how a live theme preview is normally expected to behave.
-class _AppearanceSection extends ConsumerWidget {
-  const _AppearanceSection();
+/// change rather than being gated behind the Save button, matching how a
+/// live theme preview is normally expected to behave.
+class _AppearanceSectionBody extends ConsumerWidget {
+  const _AppearanceSectionBody();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -415,8 +566,6 @@ class _AppearanceSection extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(loc.appearanceTitle, style: Theme.of(context).textTheme.titleMedium),
-        const SizedBox(height: 8),
         SwitchListTile(
           contentPadding: EdgeInsets.zero,
           title: Text(loc.useDynamicColorTitle),
@@ -458,11 +607,11 @@ class _AppearanceSection extends ConsumerWidget {
 }
 
 /// Opt-in toggle for mirroring logged water intake into Google Health
-/// Connect. Applies immediately, same as [_AppearanceSection] -- there's
+/// Connect. Applies immediately, same as [_AppearanceSectionBody] -- there's
 /// nothing to gate behind the Save button since this doesn't affect the
-/// reminder/profile fields above it.
-class _HealthConnectSection extends ConsumerWidget {
-  const _HealthConnectSection();
+/// reminder/profile fields in the other sections.
+class _HealthConnectSectionBody extends ConsumerWidget {
+  const _HealthConnectSectionBody();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -472,8 +621,6 @@ class _HealthConnectSection extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(loc.healthConnectTitle, style: Theme.of(context).textTheme.titleMedium),
-        const SizedBox(height: 4),
         Text(
           loc.healthConnectDescription,
           style: Theme.of(context).textTheme.bodySmall,
