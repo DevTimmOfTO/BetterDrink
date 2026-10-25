@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../l10n/gen/app_localizations.dart';
 import '../models/sugar_entry.dart';
@@ -56,7 +57,8 @@ class SugarHistoryList extends StatelessWidget {
                 subtitle: Text(
                   loc.sugarHistorySubtitle(
                     drink.volumeMl.toStringAsFixed(0),
-                    drink.sugarPer100ml.toStringAsFixed(1),
+                    NumberFormat('0.0', Localizations.localeOf(context).toString())
+                        .format(drink.sugarPer100ml),
                     formatRelativeTime(drink.timestamp, loc),
                   ),
                 ),

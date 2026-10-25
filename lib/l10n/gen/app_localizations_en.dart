@@ -576,7 +576,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get importFromHealthConnectDescription =>
-      'Load your age, gender, and weight from Google Health Connect to personalize your BAC estimate.';
+      'Load your age, sex, and weight from Google Health Connect to personalize your BAC estimate.';
 
   @override
   String get healthConnectProfileImportSuccess =>

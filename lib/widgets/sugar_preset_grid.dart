@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../data/typical_sugar_drinks.dart';
 import '../l10n/gen/app_localizations.dart';
@@ -154,7 +155,8 @@ class _PresetButton extends StatelessWidget {
                     ),
                     Text(
                       '${drink.volumeMl.toStringAsFixed(0)} ml · '
-                      '${drink.sugarPer100ml.toStringAsFixed(1)} g/100ml',
+                      '${NumberFormat('0.0', Localizations.localeOf(context).toString()).format(drink.sugarPer100ml)} '
+                      '${AppLocalizations.of(context)!.sugarPer100mlSuffix}',
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ],

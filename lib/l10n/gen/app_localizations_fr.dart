@@ -27,7 +27,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get homeAppBarTitle => 'BetterDrink';
 
   @override
-  String get homeReminderDue => 'rappel dû';
+  String get homeReminderDue => 'c\'est l\'heure de boire';
 
   @override
   String get homeUntilNextReminder => 'avant le prochain rappel';
@@ -435,7 +435,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get importSheetDescription =>
-      'Collez le code qu\'un ami vous a partagé.';
+      'Collez le code qu\'un ami a partagé avec vous.';
 
   @override
   String get pasteCodeHint => 'Collez le code ici';
@@ -611,7 +611,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get notificationDefaultMessage => 'Il est temps de boire de l\'eau 💧';
 
   @override
-  String get notificationActionLabel => 'Bu 💧';
+  String get notificationActionLabel => 'J\'ai bu 💧';
 
   @override
   String get notificationChannelDescription => 'Rappels pour boire de l\'eau';

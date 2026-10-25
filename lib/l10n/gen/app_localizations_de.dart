@@ -282,7 +282,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get helpSheetIntro =>
-      'Wenn dir das Trinken schwerfällt zu kontrollieren, bist du nicht allein — hier ein paar Anlaufstellen. Bei akuter Gefahr kontaktiere den lokalen Notruf.';
+      'Wenn es dir schwerfällt, dein Trinken zu kontrollieren, bist du nicht allein — hier ein paar Anlaufstellen. Bei akuter Gefahr wende dich an den örtlichen Notruf.';
 
   @override
   String get copyLinkTooltip => 'Link kopieren';
@@ -521,7 +521,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get useDynamicColorDescription =>
-      'Themt die App mit der Akzentfarbe deines Hintergrundbilds (Android 12+) statt dem eingebauten Türkis.';
+      'Färbt die App in der Akzentfarbe deines Hintergrundbilds ein (Android 12+), anstelle des eingebauten Türkis.';
 
   @override
   String get fontFamilyTitle => 'Schriftart';

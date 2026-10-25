@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import '../l10n/gen/app_localizations.dart';
 import '../providers/alcohol_history_provider.dart';
@@ -179,7 +180,10 @@ class _BacOverview extends StatelessWidget {
             remaining: remaining,
             total: total,
             timeLabel: _formatDuration(remaining),
-            subLabel: loc.bacUntilZero(currentBac.toStringAsFixed(2)),
+            subLabel: loc.bacUntilZero(
+              NumberFormat('0.00', Localizations.localeOf(context).toString())
+                  .format(currentBac),
+            ),
           ),
           const SizedBox(height: 12),
           Text(

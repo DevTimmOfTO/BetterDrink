@@ -91,7 +91,7 @@
   "drinkSportsDrink": "Sportgetränk",
 
   "helpSheetTitle": "Brauchst du Unterstützung?",
-  "helpSheetIntro": "Wenn dir das Trinken schwerfällt zu kontrollieren, bist du nicht allein — hier ein paar Anlaufstellen. Bei akuter Gefahr kontaktiere den lokalen Notruf.",
+  "helpSheetIntro": "Wenn es dir schwerfällt, dein Trinken zu kontrollieren, bist du nicht allein — hier ein paar Anlaufstellen. Bei akuter Gefahr wende dich an den örtlichen Notruf.",
   "copyLinkTooltip": "Link kopieren",
   "copiedToClipboard": "In die Zwischenablage kopiert",
   "resourceAaDetail": "Selbsthilfegruppen weltweit",
@@ -166,7 +166,7 @@
   "kgUnit": "kg",
   "appearanceTitle": "Darstellung",
   "useDynamicColorTitle": "Geräte-Akzentfarbe verwenden",
-  "useDynamicColorDescription": "Themt die App mit der Akzentfarbe deines Hintergrundbilds (Android 12+) statt dem eingebauten Türkis.",
+  "useDynamicColorDescription": "Färbt die App in der Akzentfarbe deines Hintergrundbilds ein (Android 12+), anstelle des eingebauten Türkis.",
   "fontFamilyTitle": "Schriftart",
   "fontFamilyDefault": "Standard",
   "fontFamilySerif": "Serif",

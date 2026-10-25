@@ -8,7 +8,7 @@
   "navSettings": "Réglages",
 
   "homeAppBarTitle": "BetterDrink",
-  "homeReminderDue": "rappel dû",
+  "homeReminderDue": "c'est l'heure de boire",
   "homeUntilNextReminder": "avant le prochain rappel",
   "homeNow": "Maintenant",
   "homeTodayMl": "{ml} ml aujourd'hui",
@@ -137,7 +137,7 @@
   "copyCodeTooltip": "Copier le code",
   "codeCopiedSnackbar": "Code copié",
   "importSheetTitle": "Ajouter un ami",
-  "importSheetDescription": "Collez le code qu'un ami vous a partagé.",
+  "importSheetDescription": "Collez le code qu'un ami a partagé avec vous.",
   "pasteCodeHint": "Collez le code ici",
   "invalidCodeError": "Ce code ne semble pas correct — vérifiez-le et réessayez.",
 
@@ -196,6 +196,6 @@
 
   "notificationTitle": "Restez hydraté·e 💧",
   "notificationDefaultMessage": "Il est temps de boire de l'eau 💧",
-  "notificationActionLabel": "Bu 💧",
+  "notificationActionLabel": "J'ai bu 💧",
   "notificationChannelDescription": "Rappels pour boire de l'eau"
 }
