@@ -8,6 +8,7 @@ import 'package:intl/intl.dart' as intl;
 import 'app_localizations_de.dart';
 import 'app_localizations_en.dart';
 import 'app_localizations_fr.dart';
+import 'app_localizations_nl.dart';
 
 // ignore_for_file: type=lint
 
@@ -98,6 +99,7 @@ abstract class AppLocalizations {
     Locale('de'),
     Locale('en'),
     Locale('fr'),
+    Locale('nl'),
   ];
 
   /// No description provided for @navHydration.
@@ -1101,7 +1103,7 @@ abstract class AppLocalizations {
   /// No description provided for @importFromHealthConnectDescription.
   ///
   /// In en, this message translates to:
-  /// **'Load your age, gender, and weight from Google Health Connect to personalize your BAC estimate.'**
+  /// **'Load your age, sex, and weight from Google Health Connect to personalize your BAC estimate.'**
   String get importFromHealthConnectDescription;
 
   /// No description provided for @healthConnectProfileImportSuccess.
@@ -1170,7 +1172,7 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
-      <String>['de', 'en', 'fr'].contains(locale.languageCode);
+      <String>['de', 'en', 'fr', 'nl'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -1185,6 +1187,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsEn();
     case 'fr':
       return AppLocalizationsFr();
+    case 'nl':
+      return AppLocalizationsNl();
   }
 
   throw FlutterError(
